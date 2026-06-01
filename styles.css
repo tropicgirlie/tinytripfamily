@@ -745,6 +745,32 @@ h3 {
   box-shadow: var(--shadow-hover);
 }
 
+.component-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.match-meter,
+.fit-strip {
+  overflow: hidden;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: oklch(0.22 0.026 196 / 0.08);
+}
+
+.match-meter span,
+.fit-strip span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--coral), var(--sun));
+}
+
 .family-section {
   width: min(1180px, 100%);
   margin: 0 auto var(--space-7);
@@ -865,6 +891,15 @@ h3 {
   color: var(--coral);
   font-size: 0.84rem;
   font-weight: 900;
+}
+
+.match-card {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.match-card .component-row span:last-child {
+  color: var(--muted);
 }
 
 .flight-card-top {
@@ -1196,15 +1231,37 @@ input[type="range"] {
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
-.villa-card img {
+.villa-media {
+  position: relative;
+  min-height: 260px;
+}
+
+.villa-media img {
   width: 100%;
   height: 100%;
   min-height: 260px;
   object-fit: cover;
 }
 
+.villa-media span {
+  position: absolute;
+  left: var(--space-3);
+  right: var(--space-3);
+  bottom: var(--space-3);
+  border-radius: 999px;
+  padding: 0.45rem 0.65rem;
+  color: var(--deep);
+  background: oklch(1 0 0 / 0.88);
+  font-size: 0.72rem;
+  font-weight: 850;
+  backdrop-filter: blur(0.75rem);
+}
+
 .villa-copy {
-  padding: 22px;
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  padding: var(--space-5);
 }
 
 .villa-head {
@@ -1216,12 +1273,19 @@ input[type="range"] {
 .villa-price {
   color: var(--coral);
   font-family: var(--font-sans);
+  font-size: 1.05rem;
   font-weight: 900;
   white-space: nowrap;
 }
 
+.villa-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
 .pin-button {
-  min-height: 42px;
+  min-height: 2.75rem;
   border: 0;
   border-radius: 999px;
   padding: 0 16px;
@@ -1233,9 +1297,7 @@ input[type="range"] {
 }
 
 .guess-button {
-  min-height: 42px;
-  margin-right: 8px;
-  margin-bottom: 8px;
+  min-height: 2.75rem;
   border: 1px solid var(--deep);
   border-radius: 999px;
   padding: 0 16px;
@@ -1338,6 +1400,14 @@ input[type="range"] {
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
+.activity-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
 .activity-card p {
   font-family: var(--font-sans);
   line-height: 1.62;
@@ -1346,7 +1416,6 @@ input[type="range"] {
 .status-pill {
   display: inline-flex;
   border-radius: 999px;
-  margin-bottom: 14px;
   padding: 7px 10px;
   color: #fff;
   background: var(--coral);
@@ -1511,7 +1580,8 @@ code {
     grid-template-columns: 1fr;
   }
 
-  .villa-card img {
+  .villa-media,
+  .villa-media img {
     min-height: 220px;
   }
 }

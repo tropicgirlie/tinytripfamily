@@ -418,7 +418,10 @@ function renderVillas() {
     .map(
       (villa) => `
         <article class="villa-card">
-          <img src="${villa.image}" alt="${villa.area} villa with family-sized outdoor space" loading="lazy" />
+          <div class="villa-media">
+            <img src="${villa.image}" alt="${villa.area} villa with family-sized outdoor space" loading="lazy" />
+            <span>${villa.source}</span>
+          </div>
           <div class="villa-copy">
             <div class="villa-head">
               <div>
@@ -426,6 +429,9 @@ function renderVillas() {
                 <h3>${villa.name}</h3>
               </div>
               <div class="villa-price">${currency.format(villa.price)}</div>
+            </div>
+            <div class="fit-strip" aria-label="${villa.fit}% family fit">
+              <span style="width: ${villa.fit}%"></span>
             </div>
             <p>${villa.note}</p>
             <div class="chips">
@@ -438,12 +444,14 @@ function renderVillas() {
               <div class="stat"><strong>${villa.fit}%</strong><span>family fit</span></div>
             </div>
             <p><b>Nearby:</b> ${villa.distance}. <b>Data source:</b> ${villa.source}.</p>
-            <button class="guess-button" type="button" data-guess="${villa.name}">
-              Guess this is the final villa
-            </button>
-            <button class="pin-button" type="button" data-pin="${villa.name}">
-              ${villa.name === pinnedVillaName ? "Pinned as family plan" : "Pin this as admin choice"}
-            </button>
+            <div class="villa-actions">
+              <button class="guess-button" type="button" data-guess="${villa.name}">
+                Guess final villa
+              </button>
+              <button class="pin-button" type="button" data-pin="${villa.name}">
+                ${villa.name === pinnedVillaName ? "Pinned as plan" : "Pin as host choice"}
+              </button>
+            </div>
           </div>
         </article>
       `,
@@ -584,6 +592,11 @@ function getInitials(name) {
     .join("");
 }
 
+function getMatchPercent(score) {
+  if (!familyMembers.length) return 0;
+  return Math.round((score / familyMembers.length) * 100);
+}
+
 function saveAndRenderFamily() {
   localStorage.setItem("tinyTripFamilyMembers", JSON.stringify(familyMembers));
   renderFamily();
@@ -643,8 +656,14 @@ function renderFamily() {
       .map(
         (activity) => `
           <article class="match-card">
-            <span>${activity.score} family match${activity.score === 1 ? "" : "es"}</span>
+            <div class="component-row">
+              <span>${activity.score} family match${activity.score === 1 ? "" : "es"}</span>
+              <span>${activity.area}</span>
+            </div>
             <strong>${activity.name}</strong>
+            <div class="match-meter" aria-label="${activity.score} family matches">
+              <span style="width: ${getMatchPercent(activity.score)}%"></span>
+            </div>
             <p>${activity.note}</p>
           </article>
         `,
@@ -821,8 +840,10 @@ function renderFlights() {
             <span>${alert.status}</span>
             <strong>${alert.action}</strong>
           </div>
-          <h3>${alert.airline}</h3>
-          <p><b>${alert.route}</b> - ${alert.nudge}</p>
+          <div>
+            <h3>${alert.airline}</h3>
+            <p><b>${alert.route}</b> - ${alert.nudge}</p>
+          </div>
           <div class="flight-meta">
             <span>${alert.trend}</span>
             <span>Faro airport</span>
@@ -845,9 +866,14 @@ function renderActivities() {
       (activity) => `
         <article class="activity-card">
           <div>
-            <span class="status-pill">${activity.status}</span>
+            <div class="activity-card-top">
+              <span class="status-pill">${activity.status}</span>
+              <span class="match-score">${activity.score}/${familyMembers.length || 0}</span>
+            </div>
             <h3>${activity.name}</h3>
-            <p class="match-score">${activity.score} personalized match${activity.score === 1 ? "" : "es"}</p>
+            <div class="match-meter" aria-label="${activity.score} personalized matches">
+              <span style="width: ${getMatchPercent(activity.score)}%"></span>
+            </div>
             <p><b>${activity.area}</b> - ${activity.note}</p>
           </div>
           <div class="chips">
