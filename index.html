@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Luana's Family Trip</title>
+    <title>Micheau Family Trip</title>
     <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
     <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css" />
     <link rel="stylesheet" href="./styles.css" />
@@ -13,7 +13,14 @@
       <header class="hero" id="landingHero">
         <div class="powered-strip">
           <span>Trip planner by TinyTripIndex</span>
-          <strong id="subdomainPreview">luana.tinytripindex.com</strong>
+          <nav class="primary-nav guest-only" aria-label="Trip sections">
+            <a href="#overview">Overview</a>
+            <a href="#pinned">Stay</a>
+            <a href="#activitiesTitle">Things to Do</a>
+            <a href="#amenities">Eat & Shop</a>
+            <a href="#plan">Plan</a>
+          </nav>
+          <strong id="subdomainPreview">micheau.tinytripindex.com</strong>
           <nav class="view-switch" aria-label="View mode">
             <a id="hostViewLink" href="?view=host">Host view</a>
             <a id="guestViewLink" href="?view=guest">Guest link</a>
@@ -21,11 +28,11 @@
         </div>
         <section class="hero-grid">
           <div class="hero-copy">
-            <a class="logo-lockup" href="#pinned" aria-label="Luana's Family Trip home">
-              <img id="brandLogo" src="./assets/micheau-logo.svg" alt="Luana's Family Trip" />
+            <a class="logo-lockup" href="#pinned" aria-label="Micheau Family Trip home">
+              <img id="brandLogo" src="./assets/micheau-logo.svg" alt="Micheau Family Trip" />
             </a>
-            <p class="hero-kicker">Guest trip page prepared by Luana</p>
-            <h1 id="brandHeroTitle">Algarve family escape</h1>
+            <p class="hero-kicker">Algarve 2026/27</p>
+            <h1 id="brandHeroTitle">Our Algarve family escape</h1>
             <div class="hero-countdown">
               <span>Trip starts in</span>
               <strong id="heroCountdownDays">Calculating...</strong>
@@ -38,7 +45,7 @@
               <a class="button primary" href="#pinned"><i class="ph ph-map-trifold" aria-hidden="true"></i>View trip plan</a>
               <a class="button secondary" href="#activitiesTitle"><i class="ph ph-sparkle" aria-hidden="true"></i>See activities</a>
             </div>
-            <p class="guest-ready">Luana will pin the final villa here. Until then, the family can check timing, flights, and activity ideas.</p>
+            <p class="guest-ready">Sun, sea and memories. Luana will pin the final villa here when the stay is ready.</p>
             <div class="hero-pills" aria-label="Family trip needs">
               <span><i class="ph ph-house-line" aria-hidden="true"></i>Family-friendly villas</span>
               <span><i class="ph ph-shopping-cart" aria-hidden="true"></i>Nearby supermarkets</span>
@@ -52,7 +59,7 @@
           <aside class="hero-app-card" aria-label="Pinned property preview">
             <div class="phone-top">
               <span class="menu-lines">=</span>
-              <strong id="phoneBrandName">Luana's Family Trip</strong>
+              <strong id="phoneBrandName">Micheau Family Trip</strong>
               <span class="user-ring"></span>
             </div>
             <div class="mock-grid">
@@ -95,6 +102,20 @@
       </header>
 
       <main>
+        <section class="trip-search guest-only" aria-label="Trip search summary">
+          <div class="search-heading">
+            <strong>Find the perfect place to stay</strong>
+            <span>Private family planning, not a live booking checkout yet.</span>
+          </div>
+          <div class="search-pill">
+            <span><i class="ph ph-map-pin" aria-hidden="true"></i><b>Where</b> Algarve, Portugal</span>
+            <span><i class="ph ph-calendar" aria-hidden="true"></i><b>Departure</b> Dec 27, 2026</span>
+            <span><i class="ph ph-calendar-check" aria-hidden="true"></i><b>Return</b> Jan 7, 2027</span>
+            <span><i class="ph ph-users-three" aria-hidden="true"></i><b>Guests</b> 10+ family</span>
+            <a class="button primary" href="#pinned">Search</a>
+          </div>
+        </section>
+
         <section class="guest-snapshot guest-only" aria-label="Guest trip snapshot">
           <article>
             <i class="ph ph-house-line" aria-hidden="true"></i>
@@ -119,6 +140,50 @@
           </article>
         </section>
 
+        <section class="overview-board guest-only" id="overview" aria-label="Algarve trip overview">
+          <aside class="why-card">
+            <p class="eyebrow">Why Algarve in winter?</p>
+            <h2>Sunny, calmer, and easier for a big family.</h2>
+            <div class="reason-list">
+              <span><i class="ph ph-sun" aria-hidden="true"></i><b>Mild days</b> 16-20C for exploring</span>
+              <span><i class="ph ph-waves" aria-hidden="true"></i><b>Less crowded</b> beaches and towns</span>
+              <span><i class="ph ph-tag" aria-hidden="true"></i><b>Better value</b> winter villa pricing</span>
+              <span><i class="ph ph-mountains" aria-hidden="true"></i><b>Nature</b> cliffs, caves and walks</span>
+            </div>
+          </aside>
+          <section class="villa-preview-panel" aria-label="Top rated villa placeholders">
+            <div class="section-row">
+              <div>
+                <p class="eyebrow">Top rated villas</p>
+                <h2>Shortlist preview</h2>
+              </div>
+              <a href="#pinned">View reveal</a>
+            </div>
+            <div class="preview-villas">
+              <article>
+                <div class="villa-placeholder"></div>
+                <strong>Casa da Luz</strong>
+                <span>Lagos - 4.9 rating - EUR 342 / night</span>
+              </article>
+              <article>
+                <div class="villa-placeholder"></div>
+                <strong>Villa Salema Sea View</strong>
+                <span>Salema - 4.8 rating - EUR 287 / night</span>
+              </article>
+              <article>
+                <div class="villa-placeholder"></div>
+                <strong>Vale da Lapa Retreat</strong>
+                <span>Carvoeiro - 4.9 rating - EUR 395 / night</span>
+              </article>
+              <article>
+                <div class="villa-placeholder"></div>
+                <strong>Casa Sunshine</strong>
+                <span>Albufeira - 4.8 rating - EUR 310 / night</span>
+              </article>
+            </div>
+          </section>
+        </section>
+
         <section class="planner-band host-only host-workspace" aria-label="Host workspace">
           <div class="planner-heading">
             <p class="eyebrow">Luana host workspace</p>
@@ -129,12 +194,12 @@
           <form class="filters" id="filters">
             <label>
               Trip name
-              <input id="brandNameInput" type="text" value="Luana's Family Trip" />
+              <input id="brandNameInput" type="text" value="Micheau Family Trip" />
             </label>
 
             <label>
               Subdomain
-              <input id="subdomainInput" type="text" value="luana" />
+              <input id="subdomainInput" type="text" value="micheau" />
             </label>
 
             <label>
@@ -299,6 +364,55 @@
           <div class="activity-grid" id="activityGrid"></div>
         </section>
 
+        <section class="amenities-board guest-only" id="amenities" aria-label="Nearby amenities">
+          <div class="section-row">
+            <div>
+              <p class="eyebrow">Nearby amenities</p>
+              <h2>Everything guests will ask for first.</h2>
+            </div>
+            <a href="#pinned">View map</a>
+          </div>
+          <div class="amenity-grid">
+            <span><i class="ph ph-shopping-cart" aria-hidden="true"></i><b>Supermarket</b> 2 min</span>
+            <span><i class="ph ph-umbrella" aria-hidden="true"></i><b>Beach</b> 5 min</span>
+            <span><i class="ph ph-first-aid-kit" aria-hidden="true"></i><b>Pharmacy</b> 3 min</span>
+            <span><i class="ph ph-coffee" aria-hidden="true"></i><b>Cafe</b> 2 min</span>
+            <span><i class="ph ph-fork-knife" aria-hidden="true"></i><b>Restaurant</b> 3 min</span>
+            <span><i class="ph ph-baby" aria-hidden="true"></i><b>Kids park</b> 4 min</span>
+            <span><i class="ph ph-golf" aria-hidden="true"></i><b>Golf</b> 8 min</span>
+            <span><i class="ph ph-gas-pump" aria-hidden="true"></i><b>Fuel</b> 4 min</span>
+          </div>
+        </section>
+
+        <section class="plan-banner guest-only" id="plan" aria-label="Trip planning callout">
+          <div class="banner-art" aria-hidden="true"></div>
+          <div>
+            <h2>Let's make this trip unforgettable.</h2>
+            <p>Plan together, save favorites, and keep the villa reveal, flights, amenities and activities in one place.</p>
+          </div>
+          <a class="button primary" href="#pinned">Start planning together</a>
+        </section>
+
+        <section class="travel-weather guest-only" aria-label="Flights and weather">
+          <article>
+            <p class="eyebrow">Flights & travel tips</p>
+            <h2>Find the best routes into Faro.</h2>
+            <p>Direct Dublin to Faro flights are the easiest option for the family. Add flight numbers here once booked.</p>
+            <a class="button secondary" href="#plan"><i class="ph ph-airplane-takeoff" aria-hidden="true"></i>Search flights</a>
+          </article>
+          <article>
+            <p class="eyebrow">Algarve in late December</p>
+            <h2>Mild days, cool evenings.</h2>
+            <div class="weather-row">
+              <span><i class="ph ph-sun" aria-hidden="true"></i>Mon 18C</span>
+              <span><i class="ph ph-cloud-sun" aria-hidden="true"></i>Tue 17C</span>
+              <span><i class="ph ph-sun" aria-hidden="true"></i>Wed 18C</span>
+              <span><i class="ph ph-cloud" aria-hidden="true"></i>Thu 17C</span>
+              <span><i class="ph ph-cloud" aria-hidden="true"></i>Fri 16C</span>
+            </div>
+          </article>
+        </section>
+
         <section class="api-section host-only" id="api">
           <div>
             <p class="eyebrow">API setup guide</p>
@@ -333,7 +447,7 @@
         </section>
       </main>
       <footer class="site-footer">
-        <span id="footerBrandName">Luana's Family Trip</span>
+        <span id="footerBrandName">Micheau Family Trip</span>
         <strong>Powered by TinyTripIndex</strong>
       </footer>
     </div>

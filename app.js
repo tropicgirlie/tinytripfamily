@@ -13,8 +13,8 @@ let familyMembers = JSON.parse(localStorage.getItem("tinyTripFamilyMembers") || 
 ];
 
 const brandDefaults = {
-  name: "Luana's Family Trip",
-  subdomain: "luana",
+  name: "Micheau Family Trip",
+  subdomain: "micheau",
   logo: "./assets/micheau-logo.svg",
 };
 
@@ -23,11 +23,11 @@ let brandState = {
   ...(JSON.parse(localStorage.getItem("tinyTripIndexBrand") || "null") || {}),
 };
 
-if (brandState.name === "Micheau Family Trip") {
+if (brandState.name === "Luana's Family Trip") {
   brandState.name = brandDefaults.name;
 }
 
-if (brandState.subdomain === "micheau") {
+if (brandState.subdomain === "luana") {
   brandState.subdomain = brandDefaults.subdomain;
 }
 
@@ -594,7 +594,7 @@ function renderBrand() {
   document.title = `${title} | TinyTripIndex`;
 
   const destination = document.querySelector("#destinationInput")?.value.replace(", Portugal", "") || "Algarve";
-  brandHeroTitle.textContent = `${destination} family escape`;
+  brandHeroTitle.textContent = `Our ${destination} family escape`;
 }
 
 function renderList(items) {
@@ -958,4 +958,4 @@ renderFlights();
 renderActivities();
 renderVillas();
 
-console.info("Luana's Family Trip search defaults", trip);
+console.info("Micheau Family Trip search defaults", trip);

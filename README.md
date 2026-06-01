@@ -1,4 +1,4 @@
-# Luana's Family Trip
+# Micheau Family Trip
 
 A first-version family villa planning web app for Algarve trips of 10+ people.
 
