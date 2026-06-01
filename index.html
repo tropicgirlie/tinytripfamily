@@ -13,22 +13,31 @@
         <div class="powered-strip">
           <span>Trip planner by TinyTripIndex</span>
           <strong id="subdomainPreview">micheau.tinytripindex.com</strong>
+          <nav class="view-switch" aria-label="View mode">
+            <a id="hostViewLink" href="?view=host">Host view</a>
+            <a id="guestViewLink" href="?view=guest">Guest link</a>
+          </nav>
         </div>
         <section class="hero-grid">
           <div class="hero-copy">
             <a class="logo-lockup" href="#pinned" aria-label="Micheau Family Trip home">
               <img id="brandLogo" src="./assets/micheau-logo.svg" alt="Micheau Family Trip" />
             </a>
-            <p class="hero-kicker">Winter family getaway planner</p>
+            <p class="hero-kicker">Shared family trip page</p>
             <h1 id="brandHeroTitle">Algarve family escape</h1>
+            <div class="hero-countdown">
+              <span>Trip starts in</span>
+              <strong id="heroCountdownDays">Calculating...</strong>
+            </div>
             <p class="hero-text">
               Planning our 11-day stay from 27 Dec 2026 to 7 Jan 2027,
               with family villas, nearby amenities, and festive winter activities.
             </p>
             <div class="hero-actions">
-              <a class="button primary" href="#results">Explore villas</a>
-              <a class="button secondary" href="#areaGrid">See nearby activities</a>
+              <a class="button primary" href="#pinned">View trip plan</a>
+              <a class="button secondary" href="#activitiesTitle">See activities</a>
             </div>
+            <p class="guest-ready">Information ready for guests: countdown, flights, family profile, activities, and villa reveal.</p>
             <p class="best-bases">Best winter bases: Lagos - Vilamoura - Albufeira - Tavira</p>
             <div class="hero-pills" aria-label="Family trip needs">
               <span>Family-friendly villas</span>
@@ -86,9 +95,9 @@
       </header>
 
       <main>
-        <section class="planner-band" aria-label="Trip filters">
+        <section class="planner-band host-only" aria-label="Trip filters">
           <div class="planner-heading">
-            <p class="eyebrow">Search setup</p>
+            <p class="eyebrow">Host setup</p>
             <h2>Algarve only, tuned for December school-holiday dates.</h2>
           </div>
 
@@ -218,7 +227,7 @@
           </div>
         </section>
 
-        <section class="content-grid" id="results">
+        <section class="content-grid host-only" id="results">
           <div class="section-intro">
             <p class="eyebrow">Shortlist</p>
             <h2>Suggested Algarve villa bases</h2>
@@ -237,7 +246,7 @@
           </div>
         </section>
 
-        <section class="area-band" aria-labelledby="areasTitle">
+        <section class="area-band host-only" aria-labelledby="areasTitle">
           <div>
             <p class="eyebrow">Area intelligence</p>
             <h2 id="areasTitle">Where to focus the first search</h2>
@@ -265,7 +274,7 @@
           <div class="activity-grid" id="activityGrid"></div>
         </section>
 
-        <section class="api-section" id="api">
+        <section class="api-section host-only" id="api">
           <div>
             <p class="eyebrow">Data plan</p>
             <h2>Live villa data should come through approved travel partners.</h2>

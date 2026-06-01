@@ -332,6 +332,7 @@ const pinnedName = document.querySelector("#pinnedName");
 const pinnedContent = document.querySelector("#pinnedContent");
 const countdownDays = document.querySelector("#countdownDays");
 const flightWatch = document.querySelector("#flightWatch");
+const heroCountdownDays = document.querySelector("#heroCountdownDays");
 const landingHero = document.querySelector("#landingHero");
 const brandNameInput = document.querySelector("#brandNameInput");
 const subdomainInput = document.querySelector("#subdomainInput");
@@ -351,6 +352,8 @@ const memberName = document.querySelector("#memberName");
 const memberAge = document.querySelector("#memberAge");
 const memberList = document.querySelector("#memberList");
 const matchedActivities = document.querySelector("#matchedActivities");
+const hostViewLink = document.querySelector("#hostViewLink");
+const guestViewLink = document.querySelector("#guestViewLink");
 
 function initAreaOptions() {
   areas.forEach((area) => {
@@ -502,6 +505,22 @@ function bindFilters() {
     memberAge.value = "";
     saveAndRenderFamily();
   });
+}
+
+function getViewMode() {
+  const params = new URLSearchParams(window.location.search);
+  const requested = params.get("view");
+  if (requested === "guest" || requested === "host") return requested;
+  return localStorage.getItem("tinyTripViewMode") || "guest";
+}
+
+function renderViewMode() {
+  const mode = getViewMode();
+  localStorage.setItem("tinyTripViewMode", mode);
+  document.body.classList.toggle("guest-view", mode === "guest");
+  document.body.classList.toggle("host-view", mode === "host");
+  hostViewLink.classList.toggle("active", mode === "host");
+  guestViewLink.classList.toggle("active", mode === "guest");
 }
 
 function normalizeSubdomain(value) {
@@ -772,6 +791,7 @@ function renderCountdown() {
   const millisecondsPerDay = 1000 * 60 * 60 * 24;
   const remaining = Math.max(0, Math.ceil((start - today) / millisecondsPerDay));
   countdownDays.textContent = `${remaining} days`;
+  heroCountdownDays.textContent = `${remaining} days`;
 }
 
 function renderFlights() {
@@ -815,6 +835,7 @@ function renderActivities() {
 }
 
 initAreaOptions();
+renderViewMode();
 renderAreas();
 bindFilters();
 renderBrand();

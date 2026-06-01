@@ -24,8 +24,8 @@ body {
   margin: 0;
   color: var(--ink);
   background:
-    radial-gradient(circle at 10% 0%, rgba(255, 200, 87, 0.24), transparent 34rem),
-    linear-gradient(180deg, #f4fff9 0%, #fffdf7 42%, #e9f8f3 100%);
+    radial-gradient(circle at 8% 0%, rgba(95, 177, 181, 0.18), transparent 34rem),
+    linear-gradient(180deg, #f7f9f8 0%, #ffffff 44%, #eef7f5 100%);
   font-family: Georgia, "Times New Roman", serif;
 }
 
@@ -47,8 +47,8 @@ a {
   --pinned-property-image: url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=80");
   position: relative;
   overflow: hidden;
-  min-height: 840px;
-  padding: 54px clamp(28px, 5.4vw, 92px) 68px;
+  min-height: 760px;
+  padding: 34px clamp(28px, 5.4vw, 92px) 76px;
   color: var(--ink);
   background:
     linear-gradient(90deg, rgba(255, 253, 247, 0.98) 0%, rgba(255, 253, 247, 0.9) 28%, rgba(255, 253, 247, 0.24) 55%, rgba(255, 253, 247, 0) 100%),
@@ -62,7 +62,7 @@ a {
   z-index: 2;
   display: flex;
   width: min(1180px, 100%);
-  margin: 0 auto 26px;
+  margin: 0 auto 28px;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
@@ -70,11 +70,30 @@ a {
   border-radius: 999px;
   padding: 9px 14px;
   color: var(--teal);
-  background: rgba(255, 253, 247, 0.72);
+  background: rgba(255, 255, 255, 0.84);
   font-family: "Trebuchet MS", Verdana, sans-serif;
   font-size: 0.82rem;
   font-weight: 900;
   backdrop-filter: blur(14px);
+}
+
+.view-switch {
+  display: inline-flex;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 4px;
+  background: rgba(7, 95, 101, 0.08);
+}
+
+.view-switch a {
+  border-radius: 999px;
+  padding: 6px 10px;
+  text-decoration: none;
+}
+
+.view-switch a.active {
+  color: #fff;
+  background: var(--teal);
 }
 
 .hero::after {
@@ -147,31 +166,31 @@ a {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(440px, 0.78fr) minmax(520px, 0.82fr);
+  grid-template-columns: minmax(420px, 0.78fr) minmax(480px, 0.82fr);
   align-items: center;
-  gap: clamp(36px, 5vw, 82px);
+  gap: clamp(30px, 4.4vw, 66px);
   min-height: 0;
 }
 
 .hero-copy {
-  max-width: 620px;
+  max-width: 600px;
 }
 
 .logo-lockup {
   display: inline-block;
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 }
 
 .logo-lockup img {
-  width: min(290px, 56vw);
-  max-height: 170px;
+  width: min(210px, 48vw);
+  max-height: 126px;
   height: auto;
   display: block;
   object-fit: contain;
 }
 
 .hero-kicker {
-  margin-bottom: 18px;
+  margin-bottom: 14px;
   color: var(--coral);
   font-family: "Trebuchet MS", Verdana, sans-serif;
   font-size: clamp(1.05rem, 1.8vw, 1.35rem);
@@ -195,11 +214,32 @@ p {
 }
 
 h1 {
-  margin-bottom: 18px;
+  margin-bottom: 16px;
   color: var(--teal);
-  font-size: clamp(3.6rem, 5.2vw, 5.8rem);
+  font-size: clamp(3.2rem, 5vw, 5.6rem);
   line-height: 0.9;
   max-width: 600px;
+  text-wrap: balance;
+}
+
+.hero-countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(7, 95, 101, 0.16);
+  border-radius: 999px;
+  padding: 10px 16px;
+  color: var(--teal);
+  background: rgba(255, 253, 247, 0.82);
+  box-shadow: 0 12px 28px rgba(19, 32, 29, 0.1);
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  font-weight: 900;
+}
+
+.hero-countdown strong {
+  color: var(--coral);
+  font-size: 1.35rem;
 }
 
 h2 {
@@ -216,16 +256,17 @@ h3 {
 .hero-text {
   max-width: 650px;
   font-family: "Trebuchet MS", Verdana, sans-serif;
-  font-size: clamp(1.02rem, 1.45vw, 1.25rem);
-  line-height: 1.7;
+  font-size: 1.06rem;
+  line-height: 1.6;
   color: #30364a;
+  text-wrap: pretty;
 }
 
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 24px;
+  margin-top: 20px;
 }
 
 .button {
@@ -252,8 +293,17 @@ h3 {
   background: rgba(255, 253, 247, 0.74);
 }
 
+.guest-ready {
+  max-width: 620px;
+  margin: 16px 0 0;
+  color: var(--teal);
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 900;
+}
+
 .best-bases {
-  margin: 24px 0 20px;
+  margin: 18px 0 16px;
   color: #5e6680;
   font-family: "Trebuchet MS", Verdana, sans-serif;
   font-size: 1rem;
@@ -275,29 +325,29 @@ h3 {
 .hero-pills {
   display: grid;
   grid-template-columns: repeat(3, minmax(160px, 1fr));
-  gap: 14px;
+  gap: 10px;
 }
 
 .hero-pills span {
-  min-height: 48px;
+  min-height: 42px;
   display: flex;
   align-items: center;
   border-radius: 8px;
   padding: 0 18px;
   color: var(--teal);
   background: rgba(255, 253, 247, 0.86);
-  box-shadow: 0 14px 34px rgba(19, 32, 29, 0.11);
+  border: 1px solid rgba(7, 95, 101, 0.12);
   font-family: "Trebuchet MS", Verdana, sans-serif;
   font-size: 0.9rem;
   font-weight: 800;
 }
 
 .hero-app-card {
-  border: 1px solid rgba(255, 253, 247, 0.68);
+  border: 1px solid rgba(7, 95, 101, 0.14);
   border-radius: 8px;
   padding: 18px;
-  background: rgba(255, 253, 247, 0.82);
-  box-shadow: 0 26px 80px rgba(72, 49, 31, 0.22);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 18px rgba(19, 32, 29, 0.1);
   backdrop-filter: blur(16px);
 }
 
@@ -527,7 +577,7 @@ h3 {
   z-index: 1;
   width: fit-content;
   max-width: calc(100% - 40px);
-  margin: -42px auto 0;
+  margin: -38px auto 0;
   border-radius: 999px;
   padding: 16px 34px;
   color: var(--teal);
@@ -558,12 +608,27 @@ h3 {
   display: grid;
   grid-template-columns: 0.8fr 1.2fr;
   gap: 28px;
-  transform: translateY(-58px);
+  transform: translateY(-66px);
   border-radius: 8px;
   padding: clamp(20px, 4vw, 34px);
   background: var(--paper);
   box-shadow: var(--shadow);
 }
+
+.guest-view .host-only {
+  display: none;
+}
+
+.guest-view .pinned-plan {
+  margin-top: -38px;
+}
+
+.guest-view .family-section,
+.guest-view .activities-section,
+.guest-view .trip-pulse {
+  margin-top: 0;
+}
+
 
 .pinned-plan {
   margin-top: -26px;
