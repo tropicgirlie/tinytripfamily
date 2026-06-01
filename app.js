@@ -427,6 +427,7 @@ function renderVillas() {
               <div>
                 <p class="eyebrow">${villa.area}</p>
                 <h3>${villa.name}</h3>
+                <span class="listing-rating">Rating target ${villa.rating} - ${villa.fit}% family fit</span>
               </div>
               <div class="villa-price">${currency.format(villa.price)}</div>
             </div>
@@ -443,7 +444,7 @@ function renderVillas() {
               <div class="stat"><strong>${villa.rating}</strong><span>rating target</span></div>
               <div class="stat"><strong>${villa.fit}%</strong><span>family fit</span></div>
             </div>
-            <p><b>Nearby:</b> ${villa.distance}. <b>Data source:</b> ${villa.source}.</p>
+            <p><b>Nearby:</b> ${villa.distance}.</p>
             <div class="villa-actions">
               <button class="guess-button" type="button" data-guess="${villa.name}">
                 Guess final villa

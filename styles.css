@@ -1469,6 +1469,307 @@ code {
   font-family: var(--font-sans);
 }
 
+/* Airbnb / Google Flights product skin */
+:root {
+  --ink: #222222;
+  --muted: #6a6a6a;
+  --deep: #222222;
+  --teal: #222222;
+  --pine: #111111;
+  --foam: #f7f7f7;
+  --mint: #e9f6f4;
+  --coral: #ff385c;
+  --sun: #fbbc04;
+  --paper: #ffffff;
+  --surface: #ffffff;
+  --line: #dddddd;
+  --shadow: none;
+  --shadow-hover: none;
+  --focus: 0 0 0 3px rgba(34, 34, 34, 0.18);
+  --flight-blue: #1a73e8;
+  --flight-blue-soft: #e8f0fe;
+}
+
+body {
+  background: #ffffff;
+}
+
+.hero {
+  min-height: auto;
+  padding: var(--space-4) clamp(1.5rem, 5vw, 5rem) var(--space-6);
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.92) 42%, rgba(255, 255, 255, 0.18) 100%),
+    url("https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&fit=crop&w=2200&q=86")
+      center/cover;
+}
+
+.hero::before,
+.hero::after {
+  display: none;
+}
+
+.powered-strip {
+  border-color: var(--line);
+  padding: 0.625rem 0.875rem;
+  color: var(--ink);
+  background: #ffffff;
+  backdrop-filter: none;
+}
+
+.view-switch {
+  background: #f7f7f7;
+}
+
+.view-switch a.active {
+  background: var(--ink);
+}
+
+.hero-grid {
+  grid-template-columns: minmax(24rem, 0.74fr) minmax(28rem, 0.86fr);
+  gap: clamp(2rem, 5vw, 5rem);
+}
+
+.logo-lockup img {
+  width: min(8.25rem, 42vw);
+}
+
+.hero-kicker,
+.guest-ready,
+.best-bases,
+.weather-pill,
+.mock-itinerary h3,
+.mock-icons,
+.map-pin,
+.phone-top {
+  color: var(--muted);
+}
+
+h1 {
+  color: var(--ink);
+  font-size: 4rem;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+h2,
+h3 {
+  color: var(--ink);
+}
+
+.hero-text {
+  color: var(--muted);
+}
+
+.hero-countdown {
+  border-color: var(--line);
+  color: var(--muted);
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.hero-countdown strong,
+.countdown-card strong,
+.villa-price,
+.match-card span,
+.match-score {
+  color: var(--coral);
+}
+
+.button.primary,
+.pin-button {
+  background: var(--coral);
+  box-shadow: none;
+}
+
+.button.secondary,
+.guess-button {
+  border-color: var(--ink);
+  color: var(--ink);
+  background: #ffffff;
+}
+
+.hero-pills span,
+.chip,
+.flight-meta span,
+.member-card button {
+  color: var(--ink);
+  background: #f7f7f7;
+}
+
+.hero-app-card,
+.pinned-plan,
+.planner-band,
+.countdown-card,
+.flight-card,
+.member-form,
+.member-card,
+.match-card,
+.matched-activities,
+.area-card,
+.activity-card,
+.api-cards article,
+.villa-card,
+.admin-board article {
+  border-color: var(--line);
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.hero-app-card,
+.pinned-plan,
+.planner-band {
+  border-radius: 1.25rem;
+}
+
+.mock-property,
+.mock-map,
+.mock-itinerary,
+.mock-activity {
+  border-color: var(--line);
+  border-radius: 1rem;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.flight-card:hover,
+.villa-card:hover,
+.activity-card:hover {
+  transform: none;
+  border-color: #b0b0b0;
+}
+
+.flight-card {
+  min-height: 11rem;
+  border-radius: 0.875rem;
+}
+
+.flight-card-top > span {
+  color: var(--flight-blue);
+  background: var(--flight-blue-soft);
+}
+
+.flight-card-top strong {
+  color: var(--flight-blue);
+}
+
+.countdown-card {
+  border-radius: 0.875rem;
+}
+
+.villa-list {
+  gap: var(--space-5);
+}
+
+.villa-card {
+  grid-template-columns: 19rem minmax(0, 1fr);
+  border-radius: 1rem;
+}
+
+.villa-media,
+.villa-media img {
+  min-height: 18.5rem;
+}
+
+.villa-media img {
+  aspect-ratio: 1 / 1;
+}
+
+.villa-media span {
+  left: var(--space-3);
+  right: auto;
+  max-width: calc(100% - 1.5rem);
+  border: 1px solid rgba(34, 34, 34, 0.1);
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.92);
+  font-size: 0.75rem;
+}
+
+.villa-copy {
+  gap: var(--space-3);
+  padding: var(--space-5);
+}
+
+.villa-head {
+  align-items: start;
+}
+
+.villa-head h3 {
+  margin-bottom: var(--space-1);
+  font-size: 1.2rem;
+}
+
+.listing-rating {
+  display: inline-block;
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 650;
+}
+
+.villa-price {
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.fit-strip,
+.match-meter {
+  height: 0.25rem;
+  background: #ebebeb;
+}
+
+.fit-strip span,
+.match-meter span {
+  background: var(--coral);
+}
+
+.villa-stats {
+  gap: var(--space-2);
+}
+
+.stat {
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  padding: var(--space-3);
+}
+
+.stat strong {
+  font-size: 1rem;
+}
+
+.child-chip {
+  color: #8a4b00;
+  background: #fff4e3;
+}
+
+.age-chip {
+  color: var(--flight-blue);
+  background: var(--flight-blue-soft);
+}
+
+.member-avatar {
+  color: var(--ink);
+  background: #f7f7f7;
+}
+
+.matched-activities {
+  background: #ffffff;
+}
+
+.status-pill {
+  color: var(--ink);
+  background: #f7f7f7;
+}
+
+.admin-badge,
+code {
+  background: var(--ink);
+}
+
+.white-label-note {
+  color: var(--ink);
+  background: #f7f7f7;
+}
+
 @media (max-width: 920px) {
   .hero-grid,
   .planner-band,
