@@ -3,8 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Michelle's Family Trip</title>
-    <link rel="preconnect" href="https://images.unsplash.com" />
+    <title>Luana's Family Trip</title>
     <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
     <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css" />
     <link rel="stylesheet" href="./styles.css" />
@@ -14,7 +13,7 @@
       <header class="hero" id="landingHero">
         <div class="powered-strip">
           <span>Trip planner by TinyTripIndex</span>
-          <strong id="subdomainPreview">micheau.tinytripindex.com</strong>
+          <strong id="subdomainPreview">luana.tinytripindex.com</strong>
           <nav class="view-switch" aria-label="View mode">
             <a id="hostViewLink" href="?view=host">Host view</a>
             <a id="guestViewLink" href="?view=guest">Guest link</a>
@@ -22,10 +21,10 @@
         </div>
         <section class="hero-grid">
           <div class="hero-copy">
-            <a class="logo-lockup" href="#pinned" aria-label="Micheau Family Trip home">
-              <img id="brandLogo" src="./assets/micheau-logo.svg" alt="Micheau Family Trip" />
+            <a class="logo-lockup" href="#pinned" aria-label="Luana's Family Trip home">
+              <img id="brandLogo" src="./assets/micheau-logo.svg" alt="Luana's Family Trip" />
             </a>
-            <p class="hero-kicker">Shared family trip page</p>
+            <p class="hero-kicker">Guest trip page prepared by Luana</p>
             <h1 id="brandHeroTitle">Algarve family escape</h1>
             <div class="hero-countdown">
               <span>Trip starts in</span>
@@ -54,7 +53,7 @@
           <aside class="hero-app-card" aria-label="Pinned property preview">
             <div class="phone-top">
               <span class="menu-lines">=</span>
-              <strong id="phoneBrandName">Micheau Family Trip</strong>
+              <strong id="phoneBrandName">Luana's Family Trip</strong>
               <span class="user-ring"></span>
             </div>
             <div class="mock-grid">
@@ -85,7 +84,7 @@
                 <div class="progress-bars"><span></span><span></span><span></span><span></span></div>
               </article>
               <article class="mock-activity">
-                <img src="https://images.unsplash.com/photo-1570240266973-f64350bc9bfe?auto=format&fit=crop&w=700&q=80" alt="Benagil cave kayaking" />
+                <div class="mock-activity-placeholder" role="img" aria-label="Activity placeholder"></div>
                 <span class="heart">&hearts;</span>
                 <h3>Benagil Cave Kayak Tour</h3>
                 <p>Family activity - 2.5 hrs</p>
@@ -97,21 +96,22 @@
       </header>
 
       <main>
-        <section class="planner-band host-only" aria-label="Trip filters">
+        <section class="planner-band host-only host-workspace" aria-label="Host workspace">
           <div class="planner-heading">
-            <p class="eyebrow">Host setup</p>
-            <h2>Algarve only, tuned for December school-holiday dates.</h2>
+            <p class="eyebrow">Luana host workspace</p>
+            <h2>Search, compare, and pin the family villa before guests see it.</h2>
+            <p>These controls are private to the host link. Guests should only see the trip plan, reveal, flights, and activity ideas.</p>
           </div>
 
           <form class="filters" id="filters">
             <label>
               Trip name
-              <input id="brandNameInput" type="text" value="Micheau Family Trip" />
+              <input id="brandNameInput" type="text" value="Luana's Family Trip" />
             </label>
 
             <label>
               Subdomain
-              <input id="subdomainInput" type="text" value="micheau" />
+              <input id="subdomainInput" type="text" value="luana" />
             </label>
 
             <label>
@@ -196,7 +196,7 @@
           <div id="pinnedContent"></div>
         </section>
 
-        <section class="trip-pulse" aria-label="Trip countdown and flight reminders">
+        <section class="trip-pulse guest-only" aria-label="Trip countdown and flight reminders">
           <article class="countdown-card">
             <p class="eyebrow">Countdown</p>
             <strong id="countdownDays">Calculating...</strong>
@@ -205,7 +205,7 @@
           <div class="flight-watch" id="flightWatch"></div>
         </section>
 
-        <section class="family-section" aria-labelledby="familyTitle">
+        <section class="family-section guest-only" aria-labelledby="familyTitle">
           <div class="family-heading">
             <div>
               <p class="eyebrow">Family profile</p>
@@ -256,7 +256,7 @@
           <div class="area-grid" id="areaGrid"></div>
         </section>
 
-        <section class="activities-section" aria-labelledby="activitiesTitle">
+        <section class="activities-section guest-only" aria-labelledby="activitiesTitle">
           <div class="activities-heading">
             <div>
               <p class="eyebrow">Things to do</p>
@@ -278,34 +278,39 @@
 
         <section class="api-section host-only" id="api">
           <div>
-            <p class="eyebrow">Data plan</p>
-            <h2>Live villa data should come through approved travel partners.</h2>
+            <p class="eyebrow">API setup guide</p>
+            <h2>Connect inventory first, then use AI for ranking and itinerary logic.</h2>
             <p>
-              Airbnb does not offer a simple public search API for general apps. This version is ready for adapters
-              that normalize multiple suppliers into one villa card.
+              Do not scrape Airbnb or Booking pages. Use approved partner APIs for prices, availability, and reviews,
+              then use an AI API to summarize fit for families, toddlers, weather, and activity timing.
             </p>
           </div>
           <div class="api-cards">
             <article>
-              <h3>Booking.com Demand API</h3>
-              <p>Use for accommodation search, real-time availability, prices, property details, and reviews.</p>
-              <code>/accommodations/search</code>
+              <h3><i class="ph ph-bed" aria-hidden="true"></i>Stays inventory</h3>
+              <p><b>Best first step:</b> Booking.com Demand API or Expedia Rapid/Lodging for search, details, availability, rates, and reviews.</p>
+              <code>BOOKING_TOKEN / EXPEDIA_KEY</code>
             </article>
             <article>
-              <h3>Expedia Rapid + Vrbo</h3>
-              <p>Use for lodging inventory, rates, availability, property-level content, room details, and reviews.</p>
-              <code>Rapid lodging shopping</code>
+              <h3><i class="ph ph-map-pin" aria-hidden="true"></i>Places and activities</h3>
+              <p>Use Google Places or Viator/GetYourGuide partner feeds for nearby restaurants, pharmacies, playgrounds, tours, and opening hours.</p>
+              <code>GOOGLE_PLACES_KEY</code>
             </article>
             <article>
-              <h3>Airbnb partner route</h3>
-              <p>Only viable with approved partner access or via a property manager/channel manager integration.</p>
-              <code>restricted partner API</code>
+              <h3><i class="ph ph-airplane-tilt" aria-hidden="true"></i>Flights</h3>
+              <p>Use Amadeus, Duffel, or a metasearch affiliate feed for fare watch cards. Keep booking deep links separate from family planning.</p>
+              <code>FLIGHT_API_KEY</code>
+            </article>
+            <article>
+              <h3><i class="ph ph-sparkle" aria-hidden="true"></i>AI planner</h3>
+              <p>Use OpenAI for structured trip scoring and itinerary JSON. Gemini is useful if you specifically want Google Search grounding.</p>
+              <code>OPENAI_API_KEY</code>
             </article>
           </div>
         </section>
       </main>
       <footer class="site-footer">
-        <span id="footerBrandName">Micheau Family Trip</span>
+        <span id="footerBrandName">Luana's Family Trip</span>
         <strong>Powered by TinyTripIndex</strong>
       </footer>
     </div>

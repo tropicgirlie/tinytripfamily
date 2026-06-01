@@ -78,7 +78,7 @@ input:focus-visible {
 }
 
 .hero {
-  --pinned-property-image: url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=80");
+  --pinned-property-image: linear-gradient(135deg, #f7f7f7, #efefef);
   position: relative;
   overflow: hidden;
   min-height: 40rem;
@@ -87,8 +87,7 @@ input:focus-visible {
   background:
     linear-gradient(90deg, oklch(1 0 0 / 0.98) 0%, oklch(1 0 0 / 0.9) 28%, oklch(1 0 0 / 0.24) 55%, oklch(1 0 0 / 0) 100%),
     linear-gradient(180deg, oklch(1 0 0 / 0.04), oklch(1 0 0 / 0.2)),
-    url("https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&fit=crop&w=2200&q=86")
-      center/cover;
+    linear-gradient(135deg, #f7f7f7, #efefef);
 }
 
 .powered-strip {
@@ -1499,8 +1498,7 @@ body {
   padding: var(--space-4) clamp(1.5rem, 5vw, 5rem) var(--space-6);
   background:
     linear-gradient(90deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.92) 42%, rgba(255, 255, 255, 0.18) 100%),
-    url("https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&fit=crop&w=2200&q=86")
-      center/cover;
+    linear-gradient(135deg, #ffffff, #f7f7f7);
 }
 
 .hero::before,
@@ -2200,5 +2198,502 @@ input[type="file"],
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Final travel-product redesign: Airbnb-style listings, clean host workspace, placeholders */
+:root {
+  --app-bg: #ffffff;
+  --app-panel: #ffffff;
+  --app-text: #1f1f1f;
+  --app-muted: #717171;
+  --app-line: #dddddd;
+  --app-line-strong: #b0b0b0;
+  --app-soft: #f7f7f7;
+  --app-red: #ff385c;
+  --app-blue: #1a73e8;
+  --app-blue-soft: #e8f0fe;
+  --app-radius: 14px;
+}
+
+body {
+  color: var(--app-text);
+  background: var(--app-bg);
+}
+
+.host-view .guest-only,
+.guest-view .host-only {
+  display: none !important;
+}
+
+.host-view .hero {
+  border-bottom: 1px solid var(--app-line);
+}
+
+.hero {
+  min-height: auto;
+  border-bottom: 1px solid var(--app-line);
+  padding: 18px clamp(20px, 5vw, 72px) 34px;
+  background:
+    linear-gradient(135deg, #ffffff 0%, #ffffff 54%, #f7f7f7 54%, #f7f7f7 100%);
+}
+
+.hero::before,
+.hero::after {
+  display: none;
+}
+
+.powered-strip {
+  width: min(1120px, 100%);
+  margin-bottom: 28px;
+  border: 0;
+  border-bottom: 1px solid var(--app-line);
+  border-radius: 0;
+  padding: 0 0 14px;
+  background: transparent;
+}
+
+.view-switch {
+  border: 1px solid var(--app-line);
+  background: #ffffff;
+}
+
+.view-switch a {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  color: var(--app-muted);
+}
+
+.view-switch a.active {
+  color: #ffffff;
+  background: var(--app-text);
+}
+
+.hero-grid {
+  width: min(1120px, 100%);
+  grid-template-columns: minmax(0, 0.92fr) minmax(320px, 0.72fr);
+  align-items: start;
+  gap: clamp(28px, 5vw, 68px);
+}
+
+.logo-lockup img {
+  width: 112px;
+}
+
+.hero-kicker,
+.eyebrow {
+  color: var(--app-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+h1 {
+  max-width: 620px;
+  margin-bottom: 18px;
+  color: var(--app-text);
+  font-size: clamp(2.75rem, 6vw, 4.9rem);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+h2 {
+  color: var(--app-text);
+  font-size: clamp(1.55rem, 3vw, 2.35rem);
+  letter-spacing: -0.035em;
+}
+
+h3 {
+  color: var(--app-text);
+  letter-spacing: -0.02em;
+}
+
+.hero-text,
+.planner-heading p,
+.section-intro p,
+.api-section p,
+.area-band p,
+.villa-copy p,
+.activity-card p,
+.flight-card p {
+  color: var(--app-muted);
+  font-size: 0.98rem;
+}
+
+.hero-countdown,
+.weather-pill,
+.guest-ready,
+.best-bases {
+  box-shadow: none;
+}
+
+.hero-countdown {
+  border-color: var(--app-line);
+  background: #ffffff;
+}
+
+.hero-countdown strong,
+.countdown-card strong {
+  color: var(--app-red);
+}
+
+.button,
+.pin-button,
+.guess-button {
+  min-height: 44px;
+  border-radius: 10px;
+  padding: 0 16px;
+  font-weight: 700;
+}
+
+.button.primary,
+.pin-button {
+  background: var(--app-red);
+}
+
+.button.secondary,
+.guess-button {
+  border: 1px solid var(--app-text);
+  color: var(--app-text);
+  background: #ffffff;
+}
+
+.hero-pills,
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.hero-pills span,
+.chip,
+.status-pill,
+.flight-meta span,
+.pinned-meta span {
+  min-height: 32px;
+  border: 1px solid var(--app-line);
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: var(--app-text);
+  background: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.child-chip {
+  border-color: #ffd7ad;
+  background: #fff8ef;
+}
+
+.age-chip,
+.flight-card-top > span,
+.flight-meta span {
+  border-color: #d7e3ff;
+  color: var(--app-blue);
+  background: var(--app-blue-soft);
+}
+
+.hero-app-card,
+.planner-band,
+.pinned-plan,
+.countdown-card,
+.flight-card,
+.member-form,
+.member-card,
+.match-card,
+.matched-activities,
+.area-card,
+.activity-card,
+.api-cards article,
+.villa-card,
+.admin-board article {
+  border: 1px solid var(--app-line);
+  border-radius: var(--app-radius);
+  background: var(--app-panel);
+  box-shadow: none;
+}
+
+.hero-app-card {
+  padding: 14px;
+}
+
+.mock-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.mock-property,
+.mock-map,
+.mock-itinerary,
+.mock-activity {
+  flex: 1 1 180px;
+  border: 1px solid var(--app-line);
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.mock-image-wrap,
+.mock-activity-placeholder,
+.villa-media,
+.pinned-layout img,
+.guess-card img {
+  background:
+    linear-gradient(135deg, #f7f7f7, #efefef),
+    repeating-linear-gradient(45deg, transparent 0 10px, rgba(0, 0, 0, 0.03) 10px 20px);
+}
+
+.mock-activity-placeholder {
+  height: 136px;
+  border-bottom: 1px solid var(--app-line);
+}
+
+.heart {
+  display: none;
+}
+
+.planner-band {
+  transform: none;
+  width: min(1120px, calc(100% - 32px));
+  margin-top: 28px;
+  padding: 24px;
+}
+
+.host-workspace {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.45fr) minmax(0, 1fr);
+  gap: 24px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.filters label {
+  flex: 1 1 210px;
+}
+
+label {
+  color: var(--app-text);
+  font-size: 0.86rem;
+}
+
+select,
+input[type="text"],
+input[type="file"],
+.member-form input[type="number"] {
+  min-height: 44px;
+  border: 1px solid var(--app-line-strong);
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.pinned-plan,
+.trip-pulse,
+.family-section,
+.content-grid,
+.area-band,
+.activities-section,
+.api-section {
+  width: min(1120px, calc(100% - 32px));
+  margin: 32px auto;
+  padding: 0;
+}
+
+.pinned-plan {
+  padding: 24px;
+}
+
+.content-grid,
+.api-section {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.34fr) minmax(0, 1fr);
+  gap: 28px;
+}
+
+.flight-watch,
+.activity-grid,
+.area-grid,
+.api-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.flight-card,
+.activity-card,
+.area-card,
+.api-cards article {
+  flex: 1 1 240px;
+  padding: 18px;
+}
+
+.api-cards article h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.villa-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.villa-card {
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+  overflow: hidden;
+}
+
+.villa-media {
+  min-height: 290px;
+}
+
+.villa-media img,
+.pinned-layout img,
+.guess-card img,
+.mock-property img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.villa-media span {
+  border: 1px solid var(--app-line);
+  color: var(--app-muted);
+  background: #ffffff;
+}
+
+.villa-copy {
+  padding: 22px;
+}
+
+.villa-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.listing-rating {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  color: var(--app-muted);
+  font-size: 0.88rem;
+}
+
+.villa-price {
+  color: var(--app-text);
+  font-weight: 800;
+}
+
+.fit-strip,
+.match-meter {
+  height: 4px;
+  background: #eeeeee;
+}
+
+.fit-strip span,
+.match-meter span {
+  background: var(--app-red);
+}
+
+.villa-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.stat {
+  min-width: 104px;
+  flex: 1 1 104px;
+  border: 1px solid var(--app-line);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.villa-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.admin-board {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.admin-board article {
+  flex: 1 1 220px;
+  padding: 18px;
+}
+
+.site-footer {
+  width: min(1120px, calc(100% - 32px));
+  border-color: var(--app-line);
+}
+
+@media (max-width: 920px) {
+  .hero-grid,
+  .host-workspace,
+  .content-grid,
+  .api-section,
+  .pinned-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .villa-card {
+    grid-template-columns: 1fr;
+  }
+
+  .villa-media {
+    min-height: 240px;
+  }
+}
+
+@media (max-width: 680px) {
+  .hero {
+    padding: 16px 16px 28px;
+  }
+
+  .powered-strip,
+  .villa-head,
+  .pinned-topline,
+  .result-meta,
+  .member-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .hero-app-card {
+    display: none;
+  }
+
+  .button,
+  .pin-button,
+  .guess-button {
+    width: 100%;
+  }
+
+  .planner-band,
+  .pinned-plan,
+  .trip-pulse,
+  .family-section,
+  .content-grid,
+  .area-band,
+  .activities-section,
+  .api-section {
+    width: calc(100% - 24px);
+    margin: 24px auto;
   }
 }

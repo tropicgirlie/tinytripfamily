@@ -9,12 +9,12 @@ let pinnedVillaName = localStorage.getItem("michellesFamilyTripPinned") || "";
 let selectedGuessName = "";
 let familyMembers = JSON.parse(localStorage.getItem("tinyTripFamilyMembers") || "null") || [
   { name: "Toddler", age: 2 },
-  { name: "Michelle", age: 36 },
+  { name: "Luana", age: 36 },
 ];
 
 const brandDefaults = {
-  name: "Micheau Family Trip",
-  subdomain: "micheau",
+  name: "Luana's Family Trip",
+  subdomain: "luana",
   logo: "./assets/micheau-logo.svg",
 };
 
@@ -22,6 +22,37 @@ let brandState = {
   ...brandDefaults,
   ...(JSON.parse(localStorage.getItem("tinyTripIndexBrand") || "null") || {}),
 };
+
+if (brandState.name === "Micheau Family Trip") {
+  brandState.name = brandDefaults.name;
+}
+
+if (brandState.subdomain === "micheau") {
+  brandState.subdomain = brandDefaults.subdomain;
+}
+
+if (familyMembers.some((member) => member.name === "Michelle")) {
+  familyMembers = familyMembers.map((member) =>
+    member.name === "Michelle" ? { ...member, name: "Luana" } : member,
+  );
+  localStorage.setItem("tinyTripFamilyMembers", JSON.stringify(familyMembers));
+}
+
+function placeholderImage(label, tone = "villa") {
+  const palette =
+    tone === "activity"
+      ? { bg: "#eef6ff", line: "#c9ddff", text: "#315aa8" }
+      : { bg: "#f7f7f7", line: "#d8d8d8", text: "#6f6f6f" };
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 650">
+      <rect width="900" height="650" rx="32" fill="${palette.bg}"/>
+      <path d="M120 462 286 310l116 104 88-82 290 214H120Z" fill="#fff" stroke="${palette.line}" stroke-width="10"/>
+      <circle cx="642" cy="188" r="58" fill="#fff" stroke="${palette.line}" stroke-width="10"/>
+      <rect x="80" y="78" width="740" height="494" rx="28" fill="none" stroke="${palette.line}" stroke-width="10" stroke-dasharray="18 18"/>
+      <text x="450" y="596" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700" fill="${palette.text}">${label}</text>
+    </svg>`;
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
 
 const areas = [
   {
@@ -85,8 +116,7 @@ const villas = [
     flights: "Fly into Faro Airport, then plan a 45-55 minute transfer or hire cars for day trips.",
     note:
       "The strongest first pick: central, practical for groceries and restaurants, and friendly for mixed ages.",
-    image:
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=80",
+    image: placeholderImage("Villa placeholder 1"),
   },
   {
     name: "Marina Walk Villa",
@@ -110,8 +140,7 @@ const villas = [
     flights: "Fly into Faro Airport, then plan a 25-35 minute transfer. Cars are still useful for beaches.",
     note:
       "Great if the family wants easy dinners without driving. Usually more polished, sometimes less characterful.",
-    image:
-      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=900&q=80",
+    image: placeholderImage("Villa placeholder 2"),
   },
   {
     name: "Praia da Luz Long Table Villa",
@@ -135,8 +164,7 @@ const villas = [
     flights: "Fly into Faro Airport, then plan a 60-75 minute transfer. This base benefits from car hire.",
     note:
       "A scenic western option with excellent beaches nearby, but it is a longer run from Faro airport.",
-    image:
-      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=900&q=80",
+    image: placeholderImage("Villa placeholder 3"),
   },
   {
     name: "Golden Triangle Resort Villa",
@@ -160,8 +188,7 @@ const villas = [
     flights: "Fly into Faro Airport, then plan a 20-30 minute transfer. Private transfers work well here.",
     note:
       "Excellent for comfort and services, but it pushes the budget and may need cars for most outings.",
-    image:
-      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=80",
+    image: placeholderImage("Villa placeholder 4"),
   },
   {
     name: "Olhos de Agua Family Base",
@@ -185,8 +212,7 @@ const villas = [
     flights: "Fly into Faro Airport, then plan a 35-45 minute transfer. Check the exact street for calm.",
     note:
       "Good value and broad inventory. Best when the exact street is calm and away from late-night zones.",
-    image:
-      "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=900&q=80",
+    image: placeholderImage("Villa placeholder 5"),
   },
   {
     name: "Tavira Slow Winter House",
@@ -210,8 +236,7 @@ const villas = [
     flights: "Fly into Faro Airport, then plan a 35-45 minute transfer. Cars help for wider Algarve outings.",
     note:
       "A beautiful quieter suggestion if the family wants slower days. Less central for classic Algarve touring.",
-    image:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80",
+    image: placeholderImage("Villa placeholder 6"),
   },
 ];
 
@@ -427,7 +452,7 @@ function renderVillas() {
               <div>
                 <p class="eyebrow">${villa.area}</p>
                 <h3>${villa.name}</h3>
-                <span class="listing-rating">Rating target ${villa.rating} - ${villa.fit}% family fit</span>
+                <span class="listing-rating"><i class="ph ph-star" aria-hidden="true"></i>${villa.rating} rating target - <i class="ph ph-sparkle" aria-hidden="true"></i>${villa.fit}% AI family fit</span>
               </div>
               <div class="villa-price">${currency.format(villa.price)}</div>
             </div>
@@ -442,7 +467,7 @@ function renderVillas() {
             <div class="villa-stats">
               <div class="stat"><i class="ph ph-bed" aria-hidden="true"></i><strong>${villa.bedrooms}</strong><span>bedrooms</span></div>
               <div class="stat"><i class="ph ph-star" aria-hidden="true"></i><strong>${villa.rating}</strong><span>rating target</span></div>
-              <div class="stat"><i class="ph ph-heart" aria-hidden="true"></i><strong>${villa.fit}%</strong><span>family fit</span></div>
+              <div class="stat"><i class="ph ph-sparkle" aria-hidden="true"></i><strong>${villa.fit}%</strong><span>AI fit</span></div>
             </div>
             <p><b>Nearby:</b> ${villa.distance}.</p>
             <div class="villa-actions">
@@ -755,7 +780,7 @@ function renderPinnedPlan() {
       <div class="mystery-board">
         <div>
           <p class="mystery-copy">
-            Michelle is still holding the final choice. Pick which villa you think will win, then spin the reveal.
+            Luana is still holding the final choice. Pick which villa you think will win, then spin the reveal.
           </p>
           <div class="guess-grid">
             ${villas
@@ -790,7 +815,7 @@ function renderPinnedPlan() {
     document.querySelector("#spinReveal").addEventListener("click", () => {
       document.querySelector("#wheel").classList.add("spinning");
       document.querySelector("#revealResult").textContent = selectedGuessName
-        ? "Guess locked. Michelle has not revealed the answer yet."
+        ? "Guess locked. Luana has not revealed the answer yet."
         : "Pick villa 1, 2, or 3 first, then spin again.";
     });
     return;
@@ -815,7 +840,7 @@ function renderPinnedPlan() {
     <div class="admin-board">
       <article>
         <h3>Organizer and payment</h3>
-        <p><b>Michelle is the organizer and payer.</b> She researches, pins the final choice, and shares one clean plan with the family.</p>
+        <p><b>Luana is the organizer and payer.</b> She researches, pins the final choice, and shares one clean plan with the family.</p>
         <p><b>Decision status:</b> ${selectedGuessName === villa.name ? "Your guess was right." : "Pinned and ready for family review."}</p>
         <button class="guess-button" type="button" id="resetMystery">Reset to mystery mode</button>
       </article>
@@ -930,4 +955,4 @@ renderFlights();
 renderActivities();
 renderVillas();
 
-console.info("Michelle's Family Trip search defaults", trip);
+console.info("Luana's Family Trip search defaults", trip);

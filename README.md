@@ -1,4 +1,4 @@
-# Michelle's Family Trip
+# Luana's Family Trip
 
 A first-version family villa planning web app for Algarve trips of 10+ people.
 
@@ -28,6 +28,9 @@ Airbnb does not provide a simple public search API for general-purpose apps. For
 - Booking.com Demand API for search, availability, pricing, details, and reviews
 - Expedia Rapid API / Vrbo inventory for lodging rates, availability, content, and reviews
 - Airbnb only through approved partner or channel-manager access
+- Google Places, Viator, or GetYourGuide partner feeds for activities, amenities, and opening-hour context
+- OpenAI Responses API for structured villa scoring, family-fit explanations, and itinerary JSON
+- Gemini API with Google Search grounding if the product needs Google-grounded answers for live/opening-hour style questions
 
 The UI data model in `app.js` is intentionally shaped like normalized provider results so the sample records can be replaced by API responses later.
 
