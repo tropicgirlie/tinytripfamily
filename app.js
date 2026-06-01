@@ -5,7 +5,8 @@ const trip = {
   nights: 11,
 };
 
-let pinnedVillaName = localStorage.getItem("michellesFamilyTripPinned") || "";
+const pinnedStorageKey = "micheauFamilyTripPinned";
+let pinnedVillaName = localStorage.getItem(pinnedStorageKey) || "";
 let selectedGuessName = "";
 let familyMembers = JSON.parse(localStorage.getItem("tinyTripFamilyMembers") || "null") || [
   { name: "Toddler", age: 2 },
@@ -29,13 +30,6 @@ if (brandState.name === "Luana's Family Trip") {
 
 if (brandState.subdomain === "luana") {
   brandState.subdomain = brandDefaults.subdomain;
-}
-
-if (familyMembers.some((member) => member.name === "Michelle")) {
-  familyMembers = familyMembers.map((member) =>
-    member.name === "Michelle" ? { ...member, name: "Luana" } : member,
-  );
-  localStorage.setItem("tinyTripFamilyMembers", JSON.stringify(familyMembers));
 }
 
 function placeholderImage(label, tone = "villa") {
@@ -487,7 +481,7 @@ function renderVillas() {
   document.querySelectorAll("[data-pin]").forEach((button) => {
     button.addEventListener("click", () => {
       pinnedVillaName = button.dataset.pin;
-      localStorage.setItem("michellesFamilyTripPinned", pinnedVillaName);
+      localStorage.setItem(pinnedStorageKey, pinnedVillaName);
       renderPinnedPlan();
       renderVillas();
       document.querySelector("#pinned").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -876,7 +870,7 @@ function renderPinnedPlan() {
   document.querySelector("#resetMystery").addEventListener("click", () => {
     pinnedVillaName = "";
     selectedGuessName = "";
-    localStorage.removeItem("michellesFamilyTripPinned");
+    localStorage.removeItem(pinnedStorageKey);
     renderPinnedPlan();
     renderVillas();
   });
