@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" role="img" aria-labelledby="title desc">
+  <title id="title">Micheau Family Trip</title>
+  <desc id="desc">Sun, villa, map pin, cliff and wave mark with Micheau Family Trip wordmark.</desc>
+  <defs>
+    <linearGradient id="wave" x1="70" y1="190" x2="260" y2="245" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#76c8c4"/>
+      <stop offset="1" stop-color="#16808a"/>
+    </linearGradient>
+    <linearGradient id="roof" x1="92" y1="102" x2="270" y2="98" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f6a83d"/>
+      <stop offset="1" stop-color="#e7654f"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(18 14)">
+    <path d="M116 30c37 0 67 30 67 67 0 10-2 20-7 29l-43-2V92h-29v46l-48 24a67 67 0 0 1 60-132Z" fill="#f7b844"/>
+    <path d="M116 4v32M62 18l16 28M20 63l29 15M14 124l32-6M174 18l-16 28M214 63l-29 15" fill="none" stroke="#f4a637" stroke-width="8" stroke-linecap="round"/>
+    <path d="M58 152 152 83l129 84h-48l-82-51-69 51H34Z" fill="url(#roof)"/>
+    <path d="M108 112h25v31h-25zM157 126h22v22h-22zM188 126h22v22h-22z" fill="#d3b895"/>
+    <path d="M280 53c20 0 36 16 36 36 0 28-36 72-36 72s-36-44-36-72c0-20 16-36 36-36Zm0 22a14 14 0 1 0 0 28 14 14 0 0 0 0-28Z" fill="#e86850"/>
+    <path d="M46 164c74 1 145-4 187 8 22 7 35 26 47 48-63 0-123 4-176 2-31-1-49-12-58-58Z" fill="#cfb38e"/>
+    <path d="M42 199c58 16 107 7 174-9 31-7 60 2 82 22-44 5-82 12-113 24-35 14-64 21-103 10-21-6-34-20-40-47Z" fill="#fff"/>
+    <path d="M40 210c77 24 133 3 197-13 41-10 78 11 89 42-23 43-67 61-125 55-75-8-137-39-161-84Z" fill="url(#wave)"/>
+    <path d="M116 246c61-18 107-25 151 14 18 16 42 17 56 3" fill="none" stroke="#fff" stroke-width="13" stroke-linecap="round"/>
+    <path d="M260 172c-22 18-35 35-35 56 0 14-9 22-22 22" fill="none" stroke="#cbb18c" stroke-width="8" stroke-linecap="round" stroke-dasharray="18 18"/>
+  </g>
+  <text x="356" y="145" fill="#075f65" font-family="Georgia, Times New Roman, serif" font-size="68" letter-spacing="1">Micheau</text>
+  <path d="M356 174h42M592 174h42" stroke="#cbb18c" stroke-width="4" stroke-linecap="round"/>
+  <text x="417" y="185" fill="#e86850" font-family="Trebuchet MS, Verdana, sans-serif" font-size="22" font-weight="700" letter-spacing="12">FAMILY TRIP</text>
+</svg>

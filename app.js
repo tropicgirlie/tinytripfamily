@@ -1,0 +1,670 @@
+const trip = {
+  guests: 10,
+  checkIn: "2026-12-27",
+  checkOut: "2027-01-07",
+  nights: 11,
+};
+
+let pinnedVillaName = localStorage.getItem("michellesFamilyTripPinned") || "";
+let selectedGuessName = "";
+
+const brandDefaults = {
+  name: "Micheau Family Trip",
+  subdomain: "micheau",
+  logo: "./assets/micheau-logo.svg",
+};
+
+let brandState = {
+  ...brandDefaults,
+  ...(JSON.parse(localStorage.getItem("tinyTripIndexBrand") || "null") || {}),
+};
+
+const areas = [
+  {
+    name: "Carvoeiro / Ferragudo",
+    verdict: "Best overall first search",
+    detail:
+      "Central Algarve base with coves, restaurants, supermarkets, and easy day trips to Lagos, Albufeira, and Faro.",
+  },
+  {
+    name: "Vilamoura / Quarteira",
+    verdict: "Best for walkable marina evenings",
+    detail:
+      "Polished, convenient, and close to golf, beaches, restaurants, pharmacies, and bigger supermarkets.",
+  },
+  {
+    name: "Lagos / Praia da Luz",
+    verdict: "Best scenery and town energy",
+    detail:
+      "Excellent beaches and restaurants, but farther west for Faro airport and eastern Algarve day trips.",
+  },
+  {
+    name: "Vale do Lobo / Quinta do Lago",
+    verdict: "Best luxury option",
+    detail:
+      "High-end villas, resort amenities, golf, beach clubs, and strong services, usually at a higher price.",
+  },
+  {
+    name: "Tavira / Cabanas",
+    verdict: "Best quieter suggestion",
+    detail:
+      "Lovely eastern Algarve towns with a local feel; farther from many classic central/western beach outings.",
+  },
+  {
+    name: "Albufeira / Olhos de Agua",
+    verdict: "Best for broad inventory",
+    detail:
+      "Large supply of villas and restaurants; choose carefully for winter calm and family-friendly surroundings.",
+  },
+];
+
+const villas = [
+  {
+    name: "Cove House for a Christmas Crew",
+    area: "Carvoeiro / Ferragudo",
+    price: 9800,
+    bedrooms: 6,
+    bathrooms: 5,
+    rating: 4.9,
+    distance: "8 min drive to Carvoeiro beach",
+    fit: 96,
+    source: "Booking.com / Vrbo style match",
+    amenities: ["heated pool", "beach nearby", "supermarket nearby", "games room"],
+    childAmenities: ["crib available", "high chair", "toddler-safe pool gate", "playground nearby"],
+    bestFor: ["toddler", "balanced base", "short drives"],
+    activities: [
+      "Benagil and Carvoeiro coastal walk",
+      "Ferragudo lunch and marina stroll",
+      "Slide & Splash or Zoomarine if open for the season",
+    ],
+    bring: ["warm layers for evenings", "pool towels", "walking shoes", "family board games"],
+    flights: "Fly into Faro Airport, then plan a 45-55 minute transfer or hire cars for day trips.",
+    note:
+      "The strongest first pick: central, practical for groceries and restaurants, and friendly for mixed ages.",
+    image:
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    name: "Marina Walk Villa",
+    area: "Vilamoura / Quarteira",
+    price: 11200,
+    bedrooms: 6,
+    bathrooms: 6,
+    rating: 4.8,
+    distance: "12 min walk to marina restaurants",
+    fit: 92,
+    source: "Expedia Rapid / Vrbo style match",
+    amenities: ["heated pool", "walkable restaurants", "supermarket nearby", "golf nearby"],
+    childAmenities: ["crib available", "high chair", "playground nearby"],
+    bestFor: ["toddler", "walkable dinners", "easy airport transfer"],
+    activities: [
+      "Vilamoura marina dinners",
+      "Quarteira promenade walk",
+      "Golf lesson or spa afternoon",
+    ],
+    bring: ["smart-casual dinner clothes", "swimwear", "light rain jackets", "golf gear if needed"],
+    flights: "Fly into Faro Airport, then plan a 25-35 minute transfer. Cars are still useful for beaches.",
+    note:
+      "Great if the family wants easy dinners without driving. Usually more polished, sometimes less characterful.",
+    image:
+      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    name: "Praia da Luz Long Table Villa",
+    area: "Lagos / Praia da Luz",
+    price: 8700,
+    bedrooms: 5,
+    bathrooms: 4,
+    rating: 4.7,
+    distance: "10 min drive to Lagos old town",
+    fit: 88,
+    source: "Booking.com / direct villa agency style match",
+    amenities: ["beach nearby", "walkable restaurants", "family kitchen", "sea view"],
+    childAmenities: ["crib available", "high chair"],
+    bestFor: ["scenery", "older kids", "beach walks"],
+    activities: [
+      "Lagos old town and marina",
+      "Ponta da Piedade viewpoints",
+      "Praia da Luz beach walks",
+    ],
+    bring: ["windbreakers", "walking shoes", "binoculars for viewpoints", "car seats if hiring cars"],
+    flights: "Fly into Faro Airport, then plan a 60-75 minute transfer. This base benefits from car hire.",
+    note:
+      "A scenic western option with excellent beaches nearby, but it is a longer run from Faro airport.",
+    image:
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    name: "Golden Triangle Resort Villa",
+    area: "Vale do Lobo / Quinta do Lago",
+    price: 16500,
+    bedrooms: 7,
+    bathrooms: 7,
+    rating: 4.9,
+    distance: "6 min drive to beach clubs",
+    fit: 86,
+    source: "Vrbo / luxury villa partner style match",
+    amenities: ["heated pool", "golf nearby", "private chef option", "supermarket nearby"],
+    childAmenities: ["crib available", "high chair", "toddler-safe pool gate"],
+    bestFor: ["luxury", "toddler", "resort services"],
+    activities: [
+      "Quinta do Lago nature trail",
+      "Vale do Lobo beach afternoon",
+      "Private chef dinner at the villa",
+    ],
+    bring: ["restaurant outfits", "trainers for resort paths", "swimwear", "booking confirmations"],
+    flights: "Fly into Faro Airport, then plan a 20-30 minute transfer. Private transfers work well here.",
+    note:
+      "Excellent for comfort and services, but it pushes the budget and may need cars for most outings.",
+    image:
+      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    name: "Olhos de Agua Family Base",
+    area: "Albufeira / Olhos de Agua",
+    price: 7600,
+    bedrooms: 5,
+    bathrooms: 4,
+    rating: 4.6,
+    distance: "15 min walk to local beach",
+    fit: 84,
+    source: "Booking.com / Expedia style match",
+    amenities: ["walkable restaurants", "beach nearby", "supermarket nearby", "pool"],
+    childAmenities: ["high chair", "playground nearby"],
+    bestFor: ["value", "walkable basics", "broad inventory"],
+    activities: [
+      "Olhos de Agua beach",
+      "Albufeira old town lunch",
+      "Clifftop walks toward Falesia",
+    ],
+    bring: ["comfortable shoes", "beach layers", "shared grocery list", "portable chargers"],
+    flights: "Fly into Faro Airport, then plan a 35-45 minute transfer. Check the exact street for calm.",
+    note:
+      "Good value and broad inventory. Best when the exact street is calm and away from late-night zones.",
+    image:
+      "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    name: "Tavira Slow Winter House",
+    area: "Tavira / Cabanas",
+    price: 6900,
+    bedrooms: 5,
+    bathrooms: 4,
+    rating: 4.8,
+    distance: "9 min drive to Tavira centre",
+    fit: 78,
+    source: "Direct villa agency style match",
+    amenities: ["supermarket nearby", "quiet area", "heated pool", "historic town"],
+    childAmenities: ["crib available", "high chair"],
+    bestFor: ["quiet stay", "slow travel", "winter town walks"],
+    activities: [
+      "Tavira historic centre",
+      "Ria Formosa boat trip",
+      "Cabanas waterfront lunch",
+    ],
+    bring: ["warm layers", "books", "walking shoes", "birdwatching or camera gear"],
+    flights: "Fly into Faro Airport, then plan a 35-45 minute transfer. Cars help for wider Algarve outings.",
+    note:
+      "A beautiful quieter suggestion if the family wants slower days. Less central for classic Algarve touring.",
+    image:
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80",
+  },
+];
+
+const activities = [
+  {
+    name: "Lagos Christmas market and old town lights",
+    area: "Lagos",
+    type: ["christmas", "toddler", "rainy"],
+    status: "2026 dates to verify",
+    note:
+      "Good family evening option if the market returns in late December. Keep this as a festive candidate until official 2026 dates are published.",
+  },
+  {
+    name: "Vila Real de Santo Antonio Vila Natal",
+    area: "Eastern Algarve",
+    type: ["christmas", "toddler"],
+    status: "Likely seasonal pattern",
+    note:
+      "Past editions have run from late November into early January, which makes it useful for the 27 Dec to 7 Jan trip window.",
+  },
+  {
+    name: "Portimao Christmas village",
+    area: "Portimao",
+    type: ["christmas", "toddler", "rainy"],
+    status: "2026 dates to verify",
+    note:
+      "A practical family option when running, with Santa-style programming, lights, and simple child-friendly entertainment.",
+  },
+  {
+    name: "Benagil or Carvoeiro coastal viewpoint",
+    area: "Carvoeiro",
+    type: ["outdoors"],
+    status: "Weather dependent",
+    note:
+      "Best for calm dry days. With a 2-year-old, plan a short viewpoint stop rather than a long cliff walk.",
+  },
+  {
+    name: "Zoomarine or indoor play backup",
+    area: "Albufeira / Guia",
+    type: ["toddler", "rainy"],
+    status: "Seasonal opening to verify",
+    note:
+      "Keep as a rainy-day candidate, but opening calendars should be checked close to travel.",
+  },
+  {
+    name: "Supermarket and pharmacy setup run",
+    area: "Pinned villa area",
+    type: ["toddler", "rainy"],
+    status: "Day-one essential",
+    note:
+      "Add nappies, snacks, milk, wipes, child medicine basics, and breakfast food before everyone arrives.",
+  },
+];
+
+const flightAlerts = [
+  {
+    airline: "Aer Lingus",
+    route: "Dublin to Faro",
+    status: "Seats showing",
+    nudge: "Book soon for the Christmas week return window.",
+  },
+  {
+    airline: "Ryanair",
+    route: "Dublin to Faro",
+    status: "Low fare watch",
+    nudge: "Good option for family members booking separately.",
+  },
+  {
+    airline: "TAP / connection",
+    route: "Lisbon or Porto to Faro",
+    status: "Backup route",
+    nudge: "Useful if direct flights get expensive.",
+  },
+];
+
+const currency = new Intl.NumberFormat("en-IE", {
+  style: "currency",
+  currency: "EUR",
+  maximumFractionDigits: 0,
+});
+
+const areaFilter = document.querySelector("#areaFilter");
+const priceFilter = document.querySelector("#priceFilter");
+const priceValue = document.querySelector("#priceValue");
+const bedFilter = document.querySelector("#bedFilter");
+const amenityFilter = document.querySelector("#amenityFilter");
+const childFilter = document.querySelector("#childFilter");
+const villaList = document.querySelector("#villaList");
+const resultCount = document.querySelector("#resultCount");
+const areaGrid = document.querySelector("#areaGrid");
+const activityFilter = document.querySelector("#activityFilter");
+const activityGrid = document.querySelector("#activityGrid");
+const pinnedName = document.querySelector("#pinnedName");
+const pinnedContent = document.querySelector("#pinnedContent");
+const countdownDays = document.querySelector("#countdownDays");
+const flightWatch = document.querySelector("#flightWatch");
+const landingHero = document.querySelector("#landingHero");
+const brandNameInput = document.querySelector("#brandNameInput");
+const subdomainInput = document.querySelector("#subdomainInput");
+const brandLogoInput = document.querySelector("#brandLogoInput");
+const brandLogoUpload = document.querySelector("#brandLogoUpload");
+const brandLogo = document.querySelector("#brandLogo");
+const brandHeroTitle = document.querySelector("#brandHeroTitle");
+const phoneBrandName = document.querySelector("#phoneBrandName");
+const footerBrandName = document.querySelector("#footerBrandName");
+const subdomainPreview = document.querySelector("#subdomainPreview");
+const heroVillaImage = document.querySelector("#heroVillaImage");
+const heroVillaName = document.querySelector("#heroVillaName");
+const heroVillaMeta = document.querySelector("#heroVillaMeta");
+const heroBeds = document.querySelector("#heroBeds");
+
+function initAreaOptions() {
+  areas.forEach((area) => {
+    const option = document.createElement("option");
+    option.value = area.name;
+    option.textContent = area.name;
+    areaFilter.append(option);
+  });
+}
+
+function renderAreas() {
+  areaGrid.innerHTML = areas
+    .map(
+      (area) => `
+        <article class="area-card">
+          <strong>${area.name}</strong>
+          <p><b>${area.verdict}.</b> ${area.detail}</p>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function villaMatches(villa) {
+  const maxPrice = Number(priceFilter.value);
+  const minBeds = Number(bedFilter.value);
+  const amenity = amenityFilter.value;
+  const childAmenity = childFilter.value;
+  const area = areaFilter.value;
+
+  return (
+    villa.price <= maxPrice &&
+    villa.bedrooms >= minBeds &&
+    (amenity === "all" || villa.amenities.includes(amenity)) &&
+    (childAmenity === "all" || villa.childAmenities.includes(childAmenity)) &&
+    (area === "all" || villa.area === area)
+  );
+}
+
+function renderVillas() {
+  priceValue.textContent = `${currency.format(Number(priceFilter.value))} total`;
+  const matches = villas.filter(villaMatches).sort((a, b) => b.fit - a.fit || b.rating - a.rating);
+
+  resultCount.textContent = `${matches.length} ${matches.length === 1 ? "match" : "matches"}`;
+
+  if (!matches.length) {
+    villaList.innerHTML = `
+      <div class="empty">
+        No villas match those filters yet. Raise the budget, lower the bedroom count, or remove the amenity filter.
+      </div>
+    `;
+    return;
+  }
+
+  villaList.innerHTML = matches
+    .map(
+      (villa) => `
+        <article class="villa-card">
+          <img src="${villa.image}" alt="${villa.area} villa with family-sized outdoor space" loading="lazy" />
+          <div class="villa-copy">
+            <div class="villa-head">
+              <div>
+                <p class="eyebrow">${villa.area}</p>
+                <h3>${villa.name}</h3>
+              </div>
+              <div class="villa-price">${currency.format(villa.price)}</div>
+            </div>
+            <p>${villa.note}</p>
+            <div class="chips">
+              ${villa.amenities.map((amenity) => `<span class="chip">${amenity}</span>`).join("")}
+              ${villa.childAmenities.map((amenity) => `<span class="chip child-chip">${amenity}</span>`).join("")}
+            </div>
+            <div class="villa-stats">
+              <div class="stat"><strong>${villa.bedrooms}</strong><span>bedrooms</span></div>
+              <div class="stat"><strong>${villa.rating}</strong><span>rating target</span></div>
+              <div class="stat"><strong>${villa.fit}%</strong><span>family fit</span></div>
+            </div>
+            <p><b>Nearby:</b> ${villa.distance}. <b>Data source:</b> ${villa.source}.</p>
+            <button class="guess-button" type="button" data-guess="${villa.name}">
+              Guess this is the final villa
+            </button>
+            <button class="pin-button" type="button" data-pin="${villa.name}">
+              ${villa.name === pinnedVillaName ? "Pinned as family plan" : "Pin this as admin choice"}
+            </button>
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+
+  document.querySelectorAll("[data-pin]").forEach((button) => {
+    button.addEventListener("click", () => {
+      pinnedVillaName = button.dataset.pin;
+      localStorage.setItem("michellesFamilyTripPinned", pinnedVillaName);
+      renderPinnedPlan();
+      renderVillas();
+      document.querySelector("#pinned").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+
+  document.querySelectorAll("[data-guess]").forEach((button) => {
+    button.addEventListener("click", () => {
+      selectedGuessName = button.dataset.guess;
+      renderPinnedPlan();
+      document.querySelector("#pinned").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+}
+
+function bindFilters() {
+  [areaFilter, priceFilter, bedFilter, amenityFilter, childFilter].forEach((input) => {
+    input.addEventListener("input", renderVillas);
+  });
+  activityFilter.addEventListener("input", renderActivities);
+  document.querySelector("#destinationInput").addEventListener("input", renderBrand);
+
+  [brandNameInput, subdomainInput, brandLogoInput].forEach((input) => {
+    input.addEventListener("input", () => {
+      brandState = {
+        name: brandNameInput.value.trim() || brandDefaults.name,
+        subdomain: normalizeSubdomain(subdomainInput.value),
+        logo: brandLogoInput.value.trim() || brandDefaults.logo,
+      };
+      saveAndRenderBrand();
+    });
+  });
+
+  brandLogoUpload.addEventListener("change", () => {
+    const file = brandLogoUpload.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      brandState.logo = reader.result;
+      brandLogoInput.value = "Uploaded image";
+      saveAndRenderBrand();
+    });
+    reader.readAsDataURL(file);
+  });
+}
+
+function normalizeSubdomain(value) {
+  return (value || brandDefaults.subdomain)
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 42) || brandDefaults.subdomain;
+}
+
+function saveAndRenderBrand() {
+  localStorage.setItem("tinyTripIndexBrand", JSON.stringify(brandState));
+  renderBrand();
+}
+
+function renderBrand() {
+  const cleanSubdomain = normalizeSubdomain(brandState.subdomain);
+  const title = brandState.name || brandDefaults.name;
+  brandState.subdomain = cleanSubdomain;
+  brandNameInput.value = title;
+  subdomainInput.value = cleanSubdomain;
+  if (!brandState.logo.startsWith("data:")) {
+    brandLogoInput.value = brandState.logo;
+  }
+  brandLogo.src = brandState.logo || brandDefaults.logo;
+  brandLogo.alt = title;
+  phoneBrandName.textContent = title;
+  footerBrandName.textContent = title;
+  subdomainPreview.textContent = `${cleanSubdomain}.tinytripindex.com`;
+  document.title = `${title} | TinyTripIndex`;
+
+  const destination = document.querySelector("#destinationInput")?.value.replace(", Portugal", "") || "Algarve";
+  brandHeroTitle.textContent = `${destination} family escape`;
+}
+
+function renderList(items) {
+  return items.map((item) => `<li>${item}</li>`).join("");
+}
+
+function renderPinnedPlan() {
+  const villa = villas.find((option) => option.name === pinnedVillaName) || villas[0];
+  const hasPinnedVilla = Boolean(pinnedVillaName);
+  landingHero.classList.toggle("is-mystery", !hasPinnedVilla);
+  landingHero.style.setProperty("--pinned-property-image", `url("${villa.image}")`);
+  heroVillaImage.src = villa.image;
+  heroVillaName.textContent = hasPinnedVilla ? villa.name : "Mystery Villa";
+  heroVillaMeta.textContent = hasPinnedVilla
+    ? `${villa.area} - ${villa.bedrooms} bed - pool - sea view`
+    : "The organizer has not revealed the final choice yet";
+  heroBeds.textContent = `${villa.bedrooms} bed`;
+  pinnedName.textContent = hasPinnedVilla ? villa.name : "Mystery villa reveal";
+
+  if (!hasPinnedVilla) {
+    pinnedContent.innerHTML = `
+      <div class="mystery-board">
+        <div>
+          <p class="mystery-copy">
+            Michelle is still holding the final choice. Pick which villa you think will win, then spin the reveal.
+          </p>
+          <div class="guess-grid">
+            ${villas
+              .slice(0, 3)
+              .map(
+                (option, index) => `
+                  <button class="guess-card ${selectedGuessName === option.name ? "selected" : ""}" type="button" data-mystery-guess="${option.name}">
+                    <span>Villa ${index + 1}</span>
+                    <img src="${option.image}" alt="Blurred mystery villa ${index + 1}" />
+                    <strong>${option.area}</strong>
+                  </button>
+                `,
+              )
+              .join("")}
+          </div>
+        </div>
+        <div class="reveal-wheel">
+          <div class="wheel" id="wheel">?</div>
+          <button class="button primary" type="button" id="spinReveal">Spin the reveal</button>
+          <p id="revealResult">No final villa has been revealed yet. The spin will tell the family to keep guessing.</p>
+        </div>
+      </div>
+    `;
+
+    document.querySelectorAll("[data-mystery-guess]").forEach((button) => {
+      button.addEventListener("click", () => {
+        selectedGuessName = button.dataset.mysteryGuess;
+        renderPinnedPlan();
+      });
+    });
+
+    document.querySelector("#spinReveal").addEventListener("click", () => {
+      document.querySelector("#wheel").classList.add("spinning");
+      document.querySelector("#revealResult").textContent = selectedGuessName
+        ? "Guess locked. Michelle has not revealed the answer yet."
+        : "Pick villa 1, 2, or 3 first, then spin again.";
+    });
+    return;
+  }
+
+  pinnedContent.innerHTML = `
+    <div class="pinned-layout">
+      <img src="${villa.image}" alt="${villa.area} pinned villa location" />
+      <div class="pinned-summary">
+        <div class="pinned-meta">
+          <span>${villa.area}</span>
+          <span>${currency.format(villa.price)} total estimate</span>
+          <span>${villa.bedrooms} bedrooms</span>
+          <span>${villa.rating} rating target</span>
+        </div>
+        <p>${villa.note}</p>
+        <div class="chips">
+          ${villa.amenities.map((amenity) => `<span class="chip">${amenity}</span>`).join("")}
+        </div>
+      </div>
+    </div>
+    <div class="admin-board">
+      <article>
+        <h3>Organizer and payment</h3>
+        <p><b>Michelle is the organizer and payer.</b> She researches, pins the final choice, and shares one clean plan with the family.</p>
+        <p><b>Decision status:</b> ${selectedGuessName === villa.name ? "Your guess was right." : "Pinned and ready for family review."}</p>
+        <button class="guess-button" type="button" id="resetMystery">Reset to mystery mode</button>
+      </article>
+      <article>
+        <h3>Reveal game</h3>
+        <div class="mini-wheel ${selectedGuessName === villa.name ? "right" : ""}">${selectedGuessName === villa.name ? "Right" : "Pinned"}</div>
+        <p>${selectedGuessName ? `Family guess: ${selectedGuessName}.` : "No family guess has been locked yet."}</p>
+      </article>
+      <article>
+        <h3>Nearby activities</h3>
+        <ul>${renderList(villa.activities)}</ul>
+      </article>
+      <article>
+        <h3>What to bring</h3>
+        <ul>${renderList(villa.bring)}</ul>
+      </article>
+      <article>
+        <h3>2-year-old checklist</h3>
+        <ul>${renderList(villa.childAmenities)}</ul>
+      </article>
+      <article>
+        <h3>Flights and arrival</h3>
+        <p>${villa.flights}</p>
+        <p><b>Planning note:</b> Add family flight numbers here once booked so everyone can coordinate arrivals.</p>
+      </article>
+    </div>
+  `;
+
+  document.querySelector("#resetMystery").addEventListener("click", () => {
+    pinnedVillaName = "";
+    selectedGuessName = "";
+    localStorage.removeItem("michellesFamilyTripPinned");
+    renderPinnedPlan();
+    renderVillas();
+  });
+}
+
+function renderCountdown() {
+  const today = new Date();
+  const start = new Date(`${trip.checkIn}T00:00:00`);
+  const millisecondsPerDay = 1000 * 60 * 60 * 24;
+  const remaining = Math.max(0, Math.ceil((start - today) / millisecondsPerDay));
+  countdownDays.textContent = `${remaining} days`;
+}
+
+function renderFlights() {
+  flightWatch.innerHTML = flightAlerts
+    .map(
+      (alert) => `
+        <article class="flight-card">
+          <span>${alert.status}</span>
+          <h3>${alert.airline}</h3>
+          <p><b>${alert.route}</b> - ${alert.nudge}</p>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function renderActivities() {
+  const selectedType = activityFilter.value;
+  const visible = activities.filter((activity) => selectedType === "all" || activity.type.includes(selectedType));
+
+  activityGrid.innerHTML = visible
+    .map(
+      (activity) => `
+        <article class="activity-card">
+          <div>
+            <span class="status-pill">${activity.status}</span>
+            <h3>${activity.name}</h3>
+            <p><b>${activity.area}</b> - ${activity.note}</p>
+          </div>
+          <div class="chips">
+            ${activity.type.map((type) => `<span class="chip">${type}</span>`).join("")}
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+initAreaOptions();
+renderAreas();
+bindFilters();
+renderBrand();
+renderPinnedPlan();
+renderCountdown();
+renderFlights();
+renderActivities();
+renderVillas();
+
+console.info("Michelle's Family Trip search defaults", trip);

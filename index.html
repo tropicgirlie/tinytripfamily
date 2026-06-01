@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Michelle's Family Trip</title>
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero" id="landingHero">
+        <div class="powered-strip">
+          <span>Trip planner by TinyTripIndex</span>
+          <strong id="subdomainPreview">micheau.tinytripindex.com</strong>
+        </div>
+        <section class="hero-grid">
+          <div class="hero-copy">
+            <a class="logo-lockup" href="#pinned" aria-label="Micheau Family Trip home">
+              <img id="brandLogo" src="./assets/micheau-logo.svg" alt="Micheau Family Trip" />
+            </a>
+            <p class="hero-kicker">Winter family getaway planner</p>
+            <h1 id="brandHeroTitle">Algarve family escape</h1>
+            <p class="hero-text">
+              Planning our 11-day stay from 27 Dec 2026 to 7 Jan 2027,
+              with family villas, nearby amenities, and festive winter activities.
+            </p>
+            <div class="hero-actions">
+              <a class="button primary" href="#results">Explore villas</a>
+              <a class="button secondary" href="#areaGrid">See nearby activities</a>
+            </div>
+            <p class="best-bases">Best winter bases: Lagos - Vilamoura - Albufeira - Tavira</p>
+            <div class="hero-pills" aria-label="Family trip needs">
+              <span>Family-friendly villas</span>
+              <span>Nearby supermarkets</span>
+              <span>Pharmacies</span>
+              <span>Playgrounds</span>
+              <span>Coastal walks</span>
+              <span>New Year events</span>
+            </div>
+          </div>
+
+          <aside class="hero-app-card" aria-label="Pinned property preview">
+            <div class="phone-top">
+              <span class="menu-lines">=</span>
+              <strong id="phoneBrandName">Micheau Family Trip</strong>
+              <span class="user-ring"></span>
+            </div>
+            <div class="mock-grid">
+              <article class="mock-property">
+                <div class="mock-image-wrap">
+                  <img id="heroVillaImage" src="" alt="Pinned family villa" />
+                  <span class="heart">&hearts;</span>
+                </div>
+                <h2 id="heroVillaName">Pinned villa</h2>
+                <p id="heroVillaMeta">Algarve - Villa - Pool</p>
+                <div class="mock-icons" aria-label="Villa highlights">
+                  <span>10+</span>
+                  <span id="heroBeds">6 bed</span>
+                  <span>pool</span>
+                  <span>wifi</span>
+                </div>
+              </article>
+              <article class="mock-map" aria-label="Algarve location map">
+                <div class="map-pin lagos">Lagos</div>
+                <div class="map-pin vilamoura">Vilamoura</div>
+                <div class="map-pin albufeira">Albufeira</div>
+                <div class="map-pin tavira">Tavira</div>
+              </article>
+              <article class="mock-itinerary">
+                <h3>Itinerary overview</h3>
+                <p>27 DEC 2026 - 7 JAN 2027</p>
+                <strong>11 days</strong>
+                <div class="progress-bars"><span></span><span></span><span></span><span></span></div>
+              </article>
+              <article class="mock-activity">
+                <img src="https://images.unsplash.com/photo-1570240266973-f64350bc9bfe?auto=format&fit=crop&w=700&q=80" alt="Benagil cave kayaking" />
+                <span class="heart">&hearts;</span>
+                <h3>Benagil Cave Kayak Tour</h3>
+                <p>Family activity - 2.5 hrs</p>
+              </article>
+            </div>
+          </aside>
+        </section>
+        <div class="weather-pill">Mild winter days, golden cliffs, festive nights.</div>
+      </header>
+
+      <main>
+        <section class="planner-band" aria-label="Trip filters">
+          <div class="planner-heading">
+            <p class="eyebrow">Search setup</p>
+            <h2>Algarve only, tuned for December school-holiday dates.</h2>
+          </div>
+
+          <form class="filters" id="filters">
+            <label>
+              Trip name
+              <input id="brandNameInput" type="text" value="Micheau Family Trip" />
+            </label>
+
+            <label>
+              Subdomain
+              <input id="subdomainInput" type="text" value="micheau" />
+            </label>
+
+            <label>
+              Logo or picture URL
+              <input id="brandLogoInput" type="text" value="./assets/micheau-logo.svg" />
+            </label>
+
+            <label>
+              Upload logo
+              <input id="brandLogoUpload" type="file" accept="image/*" />
+            </label>
+
+            <label>
+              Destination
+              <input id="destinationInput" type="text" value="Algarve, Portugal" />
+            </label>
+
+            <label>
+              Dates
+              <input id="dateInput" type="text" value="27 Dec 2026 - 7 Jan 2027" />
+            </label>
+
+            <label>
+              Area
+              <select id="areaFilter">
+                <option value="all">All Algarve areas</option>
+              </select>
+            </label>
+
+            <label>
+              Max total price
+              <input id="priceFilter" type="range" min="4500" max="18000" step="500" value="12000" />
+              <span id="priceValue" class="range-value"></span>
+            </label>
+
+            <label>
+              Bedrooms
+              <select id="bedFilter">
+                <option value="0">Any</option>
+                <option value="5">5+</option>
+                <option value="6">6+</option>
+                <option value="7">7+</option>
+              </select>
+            </label>
+
+            <label>
+              Must have
+              <select id="amenityFilter">
+                <option value="all">Any amenity</option>
+                <option value="heated pool">Heated pool</option>
+                <option value="walkable restaurants">Walkable restaurants</option>
+                <option value="beach nearby">Beach nearby</option>
+                <option value="supermarket nearby">Supermarket nearby</option>
+              </select>
+            </label>
+
+            <label>
+              Child needs
+              <select id="childFilter">
+                <option value="all">Any child amenity</option>
+                <option value="crib available">Crib available</option>
+                <option value="high chair">High chair</option>
+                <option value="toddler-safe pool gate">Toddler-safe pool gate</option>
+                <option value="playground nearby">Playground nearby</option>
+              </select>
+            </label>
+          </form>
+          <div class="white-label-note">
+            <strong>White-label trip page</strong>
+            <span>Families can personalize the logo, name, and subdomain while the product remains powered by TinyTripIndex.</span>
+          </div>
+        </section>
+
+        <section class="pinned-plan" id="pinned" aria-live="polite">
+          <div class="pinned-topline">
+            <div>
+              <p class="eyebrow">Admin pinned choice</p>
+              <h2 id="pinnedName">No villa pinned yet</h2>
+            </div>
+            <span class="admin-badge">Shared family view</span>
+          </div>
+          <div id="pinnedContent"></div>
+        </section>
+
+        <section class="trip-pulse" aria-label="Trip countdown and flight reminders">
+          <article class="countdown-card">
+            <p class="eyebrow">Countdown</p>
+            <strong id="countdownDays">Calculating...</strong>
+            <span>until the Algarve family escape</span>
+          </article>
+          <div class="flight-watch" id="flightWatch"></div>
+        </section>
+
+        <section class="content-grid" id="results">
+          <div class="section-intro">
+            <p class="eyebrow">Shortlist</p>
+            <h2>Suggested Algarve villa bases</h2>
+            <p>
+              These are planning records, not live inventory. They show the type of listings the app should fetch
+              once Booking.com, Expedia/Vrbo, or another partner API is connected.
+            </p>
+          </div>
+
+          <div class="results-panel">
+            <div class="result-meta">
+              <strong id="resultCount">0 matches</strong>
+              <span>Sorted by family fit, rating, and amenity access</span>
+            </div>
+            <div class="villa-list" id="villaList"></div>
+          </div>
+        </section>
+
+        <section class="area-band" aria-labelledby="areasTitle">
+          <div>
+            <p class="eyebrow">Area intelligence</p>
+            <h2 id="areasTitle">Where to focus the first search</h2>
+          </div>
+          <div class="area-grid" id="areaGrid"></div>
+        </section>
+
+        <section class="activities-section" aria-labelledby="activitiesTitle">
+          <div class="activities-heading">
+            <div>
+              <p class="eyebrow">Things to do</p>
+              <h2 id="activitiesTitle">Seasonal ideas for adults, kids, and a 2-year-old.</h2>
+            </div>
+            <label>
+              Activity type
+              <select id="activityFilter">
+                <option value="all">All ideas</option>
+                <option value="toddler">Toddler-friendly</option>
+                <option value="christmas">Christmas / New Year</option>
+                <option value="rainy">Rainy day backup</option>
+                <option value="outdoors">Outdoor gentle day</option>
+              </select>
+            </label>
+          </div>
+          <div class="activity-grid" id="activityGrid"></div>
+        </section>
+
+        <section class="api-section" id="api">
+          <div>
+            <p class="eyebrow">Data plan</p>
+            <h2>Live villa data should come through approved travel partners.</h2>
+            <p>
+              Airbnb does not offer a simple public search API for general apps. This version is ready for adapters
+              that normalize multiple suppliers into one villa card.
+            </p>
+          </div>
+          <div class="api-cards">
+            <article>
+              <h3>Booking.com Demand API</h3>
+              <p>Use for accommodation search, real-time availability, prices, property details, and reviews.</p>
+              <code>/accommodations/search</code>
+            </article>
+            <article>
+              <h3>Expedia Rapid + Vrbo</h3>
+              <p>Use for lodging inventory, rates, availability, property-level content, room details, and reviews.</p>
+              <code>Rapid lodging shopping</code>
+            </article>
+            <article>
+              <h3>Airbnb partner route</h3>
+              <p>Only viable with approved partner access or via a property manager/channel manager integration.</p>
+              <code>restricted partner API</code>
+            </article>
+          </div>
+        </section>
+      </main>
+      <footer class="site-footer">
+        <span id="footerBrandName">Micheau Family Trip</span>
+        <strong>Powered by TinyTripIndex</strong>
+      </footer>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
