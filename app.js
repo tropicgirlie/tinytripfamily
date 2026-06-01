@@ -16,7 +16,7 @@ let familyMembers = JSON.parse(localStorage.getItem("tinyTripFamilyMembers") || 
 const brandDefaults = {
   name: "Micheau Family Trip",
   subdomain: "micheau",
-  logo: "./assets/micheau-logo.svg",
+  logo: "./assets/micheau-logo.jpg",
 };
 
 let brandState = {
@@ -110,7 +110,9 @@ const villas = [
     flights: "Fly into Faro Airport, then plan a 45-55 minute transfer or hire cars for day trips.",
     note:
       "The strongest first pick: central, practical for groceries and restaurants, and friendly for mixed ages.",
-    image: placeholderImage("Villa placeholder 1"),
+    image:
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&h=650&q=80",
+    imageFallback: "Villa placeholder 1",
   },
   {
     name: "Marina Walk Villa",
@@ -134,7 +136,9 @@ const villas = [
     flights: "Fly into Faro Airport, then plan a 25-35 minute transfer. Cars are still useful for beaches.",
     note:
       "Great if the family wants easy dinners without driving. Usually more polished, sometimes less characterful.",
-    image: placeholderImage("Villa placeholder 2"),
+    image:
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&h=650&q=80",
+    imageFallback: "Villa placeholder 2",
   },
   {
     name: "Praia da Luz Long Table Villa",
@@ -158,7 +162,9 @@ const villas = [
     flights: "Fly into Faro Airport, then plan a 60-75 minute transfer. This base benefits from car hire.",
     note:
       "A scenic western option with excellent beaches nearby, but it is a longer run from Faro airport.",
-    image: placeholderImage("Villa placeholder 3"),
+    image:
+      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6a3?auto=format&fit=crop&w=900&h=650&q=80",
+    imageFallback: "Villa placeholder 3",
   },
   {
     name: "Golden Triangle Resort Villa",
@@ -182,7 +188,9 @@ const villas = [
     flights: "Fly into Faro Airport, then plan a 20-30 minute transfer. Private transfers work well here.",
     note:
       "Excellent for comfort and services, but it pushes the budget and may need cars for most outings.",
-    image: placeholderImage("Villa placeholder 4"),
+    image:
+      "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=900&h=650&q=80",
+    imageFallback: "Villa placeholder 4",
   },
   {
     name: "Olhos de Agua Family Base",
@@ -206,7 +214,9 @@ const villas = [
     flights: "Fly into Faro Airport, then plan a 35-45 minute transfer. Check the exact street for calm.",
     note:
       "Good value and broad inventory. Best when the exact street is calm and away from late-night zones.",
-    image: placeholderImage("Villa placeholder 5"),
+    image:
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=900&h=650&q=80",
+    imageFallback: "Villa placeholder 5",
   },
   {
     name: "Tavira Slow Winter House",
@@ -230,9 +240,19 @@ const villas = [
     flights: "Fly into Faro Airport, then plan a 35-45 minute transfer. Cars help for wider Algarve outings.",
     note:
       "A beautiful quieter suggestion if the family wants slower days. Less central for classic Algarve touring.",
-    image: placeholderImage("Villa placeholder 6"),
+    image:
+      "https://images.unsplash.com/photo-1600047509807-ba8f99d2cd7a?auto=format&fit=crop&w=900&h=650&q=80",
+    imageFallback: "Villa placeholder 6",
   },
 ];
+
+function villaImageSrc(villa) {
+  return villa.image || placeholderImage(villa.imageFallback || "Villa");
+}
+
+function villaPricePerNight(villa) {
+  return Math.round(villa.price / trip.nights);
+}
 
 const activities = [
   {
@@ -358,20 +378,18 @@ const pinnedContent = document.querySelector("#pinnedContent");
 const countdownDays = document.querySelector("#countdownDays");
 const flightWatch = document.querySelector("#flightWatch");
 const heroCountdownDays = document.querySelector("#heroCountdownDays");
+const heroNights = document.querySelector("#heroNights");
+const heroDestination = document.querySelector("#heroDestination");
+const heroDestinationHost = document.querySelector("#heroDestinationHost");
 const landingHero = document.querySelector("#landingHero");
+const searchGuestSummary = document.querySelector("#searchGuestSummary");
 const brandNameInput = document.querySelector("#brandNameInput");
 const subdomainInput = document.querySelector("#subdomainInput");
 const brandLogoInput = document.querySelector("#brandLogoInput");
 const brandLogoUpload = document.querySelector("#brandLogoUpload");
 const brandLogo = document.querySelector("#brandLogo");
-const brandHeroTitle = document.querySelector("#brandHeroTitle");
-const phoneBrandName = document.querySelector("#phoneBrandName");
 const footerBrandName = document.querySelector("#footerBrandName");
 const subdomainPreview = document.querySelector("#subdomainPreview");
-const heroVillaImage = document.querySelector("#heroVillaImage");
-const heroVillaName = document.querySelector("#heroVillaName");
-const heroVillaMeta = document.querySelector("#heroVillaMeta");
-const heroBeds = document.querySelector("#heroBeds");
 const memberForm = document.querySelector("#memberForm");
 const memberName = document.querySelector("#memberName");
 const memberAge = document.querySelector("#memberAge");
@@ -438,32 +456,45 @@ function renderVillas() {
       (villa) => `
         <article class="villa-card">
           <div class="villa-media">
-            <img src="${villa.image}" alt="${villa.area} villa with family-sized outdoor space" loading="lazy" />
-            <span>${villa.source}</span>
+            <img
+              src="${villaImageSrc(villa)}"
+              data-fallback="${placeholderImage(villa.imageFallback || "Villa")}"
+              alt="${villa.name} in ${villa.area}"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="villa-source-badge"><i class="ph ph-plugs-connected" aria-hidden="true"></i>${villa.source}</span>
           </div>
           <div class="villa-copy">
             <div class="villa-head">
-              <div>
+              <div class="villa-head-copy">
                 <p class="eyebrow">${villa.area}</p>
                 <h3>${villa.name}</h3>
-                <span class="listing-rating"><i class="ph ph-star" aria-hidden="true"></i>${villa.rating} rating target - <i class="ph ph-sparkle" aria-hidden="true"></i>${villa.fit}% AI family fit</span>
+                <span class="listing-rating">
+                  <i class="ph ph-star" aria-hidden="true"></i>${villa.rating}
+                  <span class="listing-rating-sep" aria-hidden="true">·</span>
+                  <i class="ph ph-sparkle" aria-hidden="true"></i>${villa.fit}% family fit
+                </span>
               </div>
-              <div class="villa-price">${currency.format(villa.price)}</div>
+              <div class="villa-price-block">
+                <div class="villa-price">${currency.format(villaPricePerNight(villa))}<span class="villa-price-unit">/ night</span></div>
+                <span class="villa-price-total">${currency.format(villa.price)} total · ${trip.nights} nights</span>
+              </div>
             </div>
             <div class="fit-strip" aria-label="${villa.fit}% family fit">
               <span style="width: ${villa.fit}%"></span>
             </div>
-            <p>${villa.note}</p>
-            <div class="chips">
+            <p class="villa-note">${villa.note}</p>
+            <div class="villa-chips" aria-label="Amenities and child needs">
               ${villa.amenities.map((amenity) => renderChip(amenity)).join("")}
               ${villa.childAmenities.map((amenity) => renderChip(amenity, "chip child-chip")).join("")}
             </div>
             <div class="villa-stats">
               <div class="stat"><i class="ph ph-bed" aria-hidden="true"></i><strong>${villa.bedrooms}</strong><span>bedrooms</span></div>
-              <div class="stat"><i class="ph ph-star" aria-hidden="true"></i><strong>${villa.rating}</strong><span>rating target</span></div>
-              <div class="stat"><i class="ph ph-sparkle" aria-hidden="true"></i><strong>${villa.fit}%</strong><span>AI fit</span></div>
+              <div class="stat"><i class="ph ph-star" aria-hidden="true"></i><strong>${villa.rating}</strong><span>rating</span></div>
+              <div class="stat"><i class="ph ph-sparkle" aria-hidden="true"></i><strong>${villa.fit}%</strong><span>family fit</span></div>
             </div>
-            <p><b>Nearby:</b> ${villa.distance}.</p>
+            <p class="villa-distance"><b>Nearby:</b> ${villa.distance}.</p>
             <div class="villa-actions">
               <button class="guess-button" type="button" data-guess="${villa.name}">
                 <i class="ph ph-question" aria-hidden="true"></i>Guess final villa
@@ -477,6 +508,13 @@ function renderVillas() {
       `,
     )
     .join("");
+
+  villaList.querySelectorAll(".villa-media img").forEach((img) => {
+    img.addEventListener("error", () => {
+      const fallback = img.dataset.fallback;
+      if (fallback && img.src !== fallback) img.src = fallback;
+    });
+  });
 
   document.querySelectorAll("[data-pin]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -582,13 +620,14 @@ function renderBrand() {
   }
   brandLogo.src = brandState.logo || brandDefaults.logo;
   brandLogo.alt = title;
-  phoneBrandName.textContent = title;
   footerBrandName.textContent = title;
   subdomainPreview.textContent = `${cleanSubdomain}.tinytripindex.com`;
   document.title = `${title} | TinyTripIndex`;
 
-  const destination = document.querySelector("#destinationInput")?.value.replace(", Portugal", "") || "Algarve";
-  brandHeroTitle.textContent = `Our ${destination} family escape`;
+  const destination = document.querySelector("#destinationInput")?.value.replace(", Portugal", "").trim() || "Algarve";
+  if (heroDestination) heroDestination.textContent = destination;
+  if (heroDestinationHost) heroDestinationHost.textContent = destination;
+  if (heroNights) heroNights.textContent = String(trip.nights);
 }
 
 function renderList(items) {
@@ -623,7 +662,7 @@ const chipIconMap = {
 
 function renderChip(label, className = "chip") {
   const icon = chipIconMap[label] || "ph-check-circle";
-  return `<span class="${className}"><i class="ph ${icon}" aria-hidden="true"></i>${label}</span>`;
+  return `<span class="${className}"><i class="ph ${icon}" aria-hidden="true"></i><span class="chip-label">${label}</span></span>`;
 }
 
 function getAgeGroup(age) {
@@ -666,7 +705,31 @@ function getActivityScore(activity) {
   return matches;
 }
 
+function renderGuestSummary() {
+  if (!searchGuestSummary) return;
+
+  if (!familyMembers.length) {
+    searchGuestSummary.textContent = `${trip.guests}+ family`;
+    return;
+  }
+
+  const adults = familyMembers.filter((member) => getAgeGroup(member.age) === "adults").length;
+  const kids = familyMembers.filter((member) => {
+    const group = getAgeGroup(member.age);
+    return group === "kids" || group === "toddler" || group === "teens";
+  }).length;
+
+  if (adults && kids) {
+    searchGuestSummary.textContent = `${adults} adult${adults === 1 ? "" : "s"}, ${kids} kid${kids === 1 ? "" : "s"}`;
+    return;
+  }
+
+  searchGuestSummary.textContent = `${familyMembers.length} guest${familyMembers.length === 1 ? "" : "s"}`;
+}
+
 function renderFamily() {
+  renderGuestSummary();
+
   if (!familyMembers.length) {
     memberList.innerHTML = `
       <article class="empty">
@@ -759,14 +822,7 @@ function renderRoomPreferences(villa) {
 function renderPinnedPlan() {
   const villa = villas.find((option) => option.name === pinnedVillaName) || villas[0];
   const hasPinnedVilla = Boolean(pinnedVillaName);
-  landingHero.classList.toggle("is-mystery", !hasPinnedVilla);
-  landingHero.style.setProperty("--pinned-property-image", `url("${villa.image}")`);
-  heroVillaImage.src = villa.image;
-  heroVillaName.textContent = hasPinnedVilla ? villa.name : "Mystery Villa";
-  heroVillaMeta.textContent = hasPinnedVilla
-    ? `${villa.area} - ${villa.bedrooms} bed - pool - sea view`
-    : "The organizer has not revealed the final choice yet";
-  heroBeds.textContent = `${villa.bedrooms} bed`;
+  if (landingHero) landingHero.classList.toggle("is-mystery", !hasPinnedVilla);
   pinnedName.textContent = hasPinnedVilla ? villa.name : "Mystery villa reveal";
 
   if (!hasPinnedVilla) {
@@ -784,7 +840,7 @@ function renderPinnedPlan() {
                 (option, index) => `
                   <button class="guess-card ${selectedGuessName === option.name ? "selected" : ""}" type="button" data-mystery-guess="${option.name}">
                     <span>Option ${index + 1}</span>
-                    <img src="${option.image}" alt="Blurred mystery villa ${index + 1}" />
+                    <img src="${villaImageSrc(option)}" alt="Blurred mystery villa ${index + 1}" loading="lazy" />
                     <strong>${option.area}</strong>
                     <small>${currency.format(option.price)} estimate - ${option.bedrooms} bedrooms</small>
                   </button>
@@ -819,7 +875,7 @@ function renderPinnedPlan() {
 
   pinnedContent.innerHTML = `
     <div class="pinned-layout">
-      <img src="${villa.image}" alt="${villa.area} pinned villa location" />
+      <img src="${villaImageSrc(villa)}" data-fallback="${placeholderImage(villa.imageFallback || "Villa")}" alt="${villa.area} pinned villa location" loading="lazy" />
       <div class="pinned-summary">
         <span class="status-pill"><i class="ph ph-check-circle" aria-hidden="true"></i>Final villa pinned</span>
         <div class="pinned-meta">
@@ -882,7 +938,7 @@ function renderCountdown() {
   const millisecondsPerDay = 1000 * 60 * 60 * 24;
   const remaining = Math.max(0, Math.ceil((start - today) / millisecondsPerDay));
   countdownDays.textContent = `${remaining} days`;
-  heroCountdownDays.textContent = `${remaining} days`;
+  if (heroCountdownDays) heroCountdownDays.textContent = String(remaining);
 }
 
 function renderFlights() {

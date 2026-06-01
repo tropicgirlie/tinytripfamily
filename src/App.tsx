@@ -1,0 +1,355 @@
+import { useMemo, useState } from "react";
+import { Box, Card, Flex, Grid, Heading, Select, Slider, Text, TextField } from "@radix-ui/themes";
+import { AirplaneTakeoff, MapPin, Sparkle } from "@phosphor-icons/react";
+import { currency } from "./lib/format";
+import { buildGoogleFlightsUrl } from "./lib/flights";
+import { useTripPlanner } from "./hooks/useTripPlanner";
+import { AppSections } from "./AppSections";
+import { GuestDashboard } from "./components/dashboard/GuestDashboard";
+import { HostDashboard } from "./components/dashboard/HostDashboard";
+import { PinnedSection } from "./components/PinnedSection";
+
+export default function App() {
+  const planner = useTripPlanner();
+  const [memberName, setMemberName] = useState("");
+  const [memberAge, setMemberAge] = useState("");
+  const [spinning, setSpinning] = useState(false);
+
+  const {
+    viewMode,
+    switchView,
+    brand,
+    setBrand,
+    destination,
+    destinationInput,
+    setDestinationInput,
+    dateInput,
+    setDateInput,
+    originCity,
+    setOriginCity,
+    trip,
+    maxPrice,
+    setMaxPrice,
+    areaFilter,
+    setAreaFilter,
+    bedFilter,
+    setBedFilter,
+    amenityFilter,
+    setAmenityFilter,
+    childFilter,
+    setChildFilter,
+    pinnedVillaName,
+    selectedGuessName,
+    setSelectedGuessName,
+    pinVilla,
+    resetMystery,
+    familyMembers,
+    matchedVillas,
+    flightInsights,
+    countdownDays,
+    activeAreas,
+    getAgeGroup,
+    villaImageSrc,
+    normalizeSubdomain,
+  } = planner;
+
+  const pinnedVilla =
+    matchedVillas.find((villa) => villa.name === pinnedVillaName) ||
+    matchedVillas[0] ||
+    null;
+  const hasPinnedVilla = Boolean(pinnedVillaName && pinnedVilla);
+
+  const guestSummary = useMemo(() => {
+    if (!familyMembers.length) return `${trip.guests}+ family`;
+    const adults = familyMembers.filter((m) => getAgeGroup(m.age) === "adults").length;
+    const kids = familyMembers.filter((m) => {
+      const g = getAgeGroup(m.age);
+      return g === "kids" || g === "toddler" || g === "teens";
+    }).length;
+    if (adults && kids) return `${adults} adult${adults === 1 ? "" : "s"}, ${kids} kid${kids === 1 ? "" : "s"}`;
+    return `${familyMembers.length} guest${familyMembers.length === 1 ? "" : "s"}`;
+  }, [familyMembers, getAgeGroup, trip.guests]);
+
+  const googleFlightsSearchUrl = buildGoogleFlightsUrl({
+    originCity,
+    originCode: "DUB",
+    destinationCity: destination.airport.city,
+    destinationCode: destination.airport.code,
+    departDate: trip.checkIn,
+    returnDate: trip.checkOut,
+  });
+
+  const isHost = viewMode === "host";
+
+  const hostPlanning = (
+    <Grid columns={{ initial: "1", sm: "2", lg: "3" }} gap="4" className="host-workspace-form">
+      <Box>
+        <Text className="md-label" as="label" htmlFor="brandNameInput">
+          Trip name
+        </Text>
+        <TextField.Root
+          id="brandNameInput"
+          value={brand.name}
+          onChange={(e) => setBrand({ ...brand, name: e.target.value })}
+          size="3"
+        />
+      </Box>
+      <Box>
+        <Text className="md-label" as="label" htmlFor="subdomainInput">
+          Subdomain
+        </Text>
+        <TextField.Root
+          id="subdomainInput"
+          value={brand.subdomain}
+          onChange={(e) => setBrand({ ...brand, subdomain: normalizeSubdomain(e.target.value) })}
+          size="3"
+        />
+      </Box>
+      <Box>
+        <Text className="md-label" as="label" htmlFor="brandLogoInput">
+          Logo or picture URL
+        </Text>
+        <TextField.Root
+          id="brandLogoInput"
+          value={brand.logo.startsWith("data:") ? "Uploaded image" : brand.logo}
+          onChange={(e) => setBrand({ ...brand, logo: e.target.value })}
+          size="3"
+        />
+      </Box>
+      <Box>
+        <Text className="md-label" as="label">
+          Upload logo
+        </Text>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+              if (typeof reader.result === "string") {
+                setBrand({ ...brand, logo: reader.result });
+              }
+            };
+            reader.readAsDataURL(file);
+          }}
+        />
+      </Box>
+      <Box>
+        <Text className="md-label" as="label" htmlFor="destinationInput">
+          Destination
+        </Text>
+        <TextField.Root
+          id="destinationInput"
+          value={destinationInput}
+          onChange={(e) => setDestinationInput(e.target.value)}
+          size="3"
+        />
+      </Box>
+      <Box>
+        <Text className="md-label" as="label" htmlFor="originCityInput">
+          Flying from
+        </Text>
+        <TextField.Root
+          id="originCityInput"
+          value={originCity}
+          onChange={(e) => setOriginCity(e.target.value)}
+          placeholder="Dublin"
+          size="3"
+        />
+      </Box>
+      <Box>
+        <Text className="md-label" as="label" htmlFor="dateInput">
+          Dates
+        </Text>
+        <TextField.Root
+          id="dateInput"
+          value={dateInput}
+          onChange={(e) => setDateInput(e.target.value)}
+          size="3"
+        />
+      </Box>
+      <Box>
+        <Text className="md-label" as="label">
+          Area
+        </Text>
+        <Select.Root value={areaFilter} onValueChange={setAreaFilter}>
+          <Select.Trigger />
+          <Select.Content>
+            <Select.Item value="all">All {destination.label} areas</Select.Item>
+            {activeAreas.map((area) => (
+              <Select.Item key={area.name} value={area.name}>
+                {area.name}
+              </Select.Item>
+            ))}
+          </Select.Content>
+        </Select.Root>
+      </Box>
+      <Box>
+        <Text className="md-label" as="label">
+          Max total price — {currency.format(maxPrice)}
+        </Text>
+        <Slider
+          value={[maxPrice]}
+          onValueChange={([value]) => setMaxPrice(value)}
+          min={4500}
+          max={18000}
+          step={500}
+        />
+      </Box>
+      <Box>
+        <Text className="md-label" as="label">
+          Bedrooms
+        </Text>
+        <Select.Root value={String(bedFilter)} onValueChange={(v) => setBedFilter(Number(v))}>
+          <Select.Trigger />
+          <Select.Content>
+            <Select.Item value="0">Any</Select.Item>
+            <Select.Item value="5">5+</Select.Item>
+            <Select.Item value="6">6+</Select.Item>
+            <Select.Item value="7">7+</Select.Item>
+          </Select.Content>
+        </Select.Root>
+      </Box>
+      <Box style={{ gridColumn: "span 2" }}>
+        <Text className="md-label" as="label">
+          Must have
+        </Text>
+        <Select.Root value={amenityFilter} onValueChange={setAmenityFilter}>
+          <Select.Trigger />
+          <Select.Content>
+            <Select.Item value="all">Any amenity</Select.Item>
+            <Select.Item value="heated pool">Heated pool</Select.Item>
+            <Select.Item value="walkable restaurants">Walkable restaurants</Select.Item>
+            <Select.Item value="beach nearby">Beach nearby</Select.Item>
+            <Select.Item value="supermarket nearby">Supermarket nearby</Select.Item>
+          </Select.Content>
+        </Select.Root>
+      </Box>
+      <Box>
+        <Text className="md-label" as="label">
+          Child needs
+        </Text>
+        <Select.Root value={childFilter} onValueChange={setChildFilter}>
+          <Select.Trigger />
+          <Select.Content>
+            <Select.Item value="all">Any child amenity</Select.Item>
+            <Select.Item value="crib available">Crib available</Select.Item>
+            <Select.Item value="high chair">High chair</Select.Item>
+            <Select.Item value="toddler-safe pool gate">Toddler-safe pool gate</Select.Item>
+            <Select.Item value="playground nearby">Playground nearby</Select.Item>
+          </Select.Content>
+        </Select.Root>
+      </Box>
+    </Grid>
+  );
+
+  if (isHost) {
+    return (
+      <HostDashboard
+        planner={planner}
+        hostPlanning={hostPlanning}
+        matchedVillas={matchedVillas}
+        tripNights={trip.nights}
+        pinnedVillaName={pinnedVillaName}
+        onPinVilla={pinVilla}
+        villaImageSrc={villaImageSrc}
+        hasPinnedVilla={hasPinnedVilla}
+        pinnedVilla={pinnedVilla}
+        selectedGuessName={selectedGuessName}
+        setSelectedGuessName={setSelectedGuessName}
+        resetMystery={resetMystery}
+        spinning={spinning}
+        setSpinning={setSpinning}
+        pinVilla={pinVilla}
+        brandSubdomain={normalizeSubdomain(brand.subdomain)}
+      />
+    );
+  }
+
+  const displayVilla = hasPinnedVilla ? pinnedVilla : matchedVillas[0] ?? null;
+
+  const guestDeepSections = (
+    <>
+      {!hasPinnedVilla && pinnedVilla ? (
+        <PinnedSection
+          hasPinnedVilla={hasPinnedVilla}
+          pinnedVilla={pinnedVilla}
+          pinnedVillaName={pinnedVillaName}
+          selectedGuessName={selectedGuessName}
+          setSelectedGuessName={setSelectedGuessName}
+          matchedVillas={matchedVillas}
+          resetMystery={resetMystery}
+          spinning={spinning}
+          setSpinning={setSpinning}
+          villaImageSrc={villaImageSrc}
+        />
+      ) : null}
+      <section className="trip-pulse guest-only" aria-label="Flight reminders">
+        <div className="flight-watch">
+          {flightInsights.map((flight) => (
+            <Card key={flight.airline + flight.route} className="flight-card">
+              <Flex justify="between" wrap="wrap" gap="2" className="flight-card-top">
+                <Text size="1" className="status-pill" as="span">
+                  <AirplaneTakeoff size={14} aria-hidden /> {flight.status}
+                </Text>
+                <Text size="1" weight="bold" color="blue" as="span">
+                  {flight.action}
+                </Text>
+              </Flex>
+              <Heading size="4">{flight.airline}</Heading>
+              <Text size="2" as="p">
+                <Text weight="bold" as="span">
+                  {flight.route}
+                </Text>{" "}
+                — {flight.nudge}
+              </Text>
+              <Flex gap="2" wrap="wrap" className="flight-meta">
+                <span className="chip">
+                  <Sparkle size={14} aria-hidden /> {flight.trend}
+                </span>
+                <span className="chip">
+                  <MapPin size={14} aria-hidden /> {destination.airport.name}
+                </span>
+              </Flex>
+              <a
+                href={flight.searchUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flight-card-link"
+              >
+                Search on Google Flights
+              </a>
+            </Card>
+          ))}
+        </div>
+      </section>
+      <AppSections
+        planner={planner}
+        memberName={memberName}
+        setMemberName={setMemberName}
+        memberAge={memberAge}
+        setMemberAge={setMemberAge}
+        guestSummary={guestSummary}
+        googleFlightsSearchUrl={googleFlightsSearchUrl}
+        sectionsOnly
+      />
+    </>
+  );
+
+  return (
+    <GuestDashboard
+      planner={planner}
+      brand={brand}
+      switchView={switchView}
+      guestSummary={guestSummary}
+      countdownDays={countdownDays}
+      displayVilla={displayVilla}
+      hasPinnedVilla={hasPinnedVilla}
+      villaImageSrc={villaImageSrc}
+      deepSections={guestDeepSections}
+    />
+  );
+}
+

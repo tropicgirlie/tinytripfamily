@@ -19,7 +19,16 @@ The app is currently a static prototype focused on:
 
 ## Run
 
-Open `index.html` directly in a browser, or serve the folder with any static web server.
+```bash
+npm install
+npm run dev
+```
+
+Opens at [http://localhost:8080](http://localhost:8080) with React, Radix UI Themes, Phosphor icons, and Material Design 3 styling.
+
+Production build: `npm run build` then `npm run preview`.
+
+Legacy static files (`app.js`, old flow) are kept for reference; the app entry is `src/main.tsx`.
 
 ## API Direction
 
@@ -28,11 +37,12 @@ Airbnb does not provide a simple public search API for general-purpose apps. For
 - Booking.com Demand API for search, availability, pricing, details, and reviews
 - Expedia Rapid API / Vrbo inventory for lodging rates, availability, content, and reviews
 - Airbnb only through approved partner or channel-manager access
+- Google Flights: no public API — use dated deep links in the UI; add Amadeus, Duffel, or SerpApi on a server for live fares
 - Google Places, Viator, or GetYourGuide partner feeds for activities, amenities, and opening-hour context
 - OpenAI Responses API for structured villa scoring, family-fit explanations, and itinerary JSON
 - Gemini API with Google Search grounding if the product needs Google-grounded answers for live/opening-hour style questions
 
-The UI data model in `app.js` is intentionally shaped like normalized provider results so the sample records can be replaced by API responses later.
+The UI data model in `src/data/trip.ts` is shaped like normalized provider results so sample records can be replaced by API responses later.
 
 ## Backlog
 
