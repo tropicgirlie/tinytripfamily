@@ -436,21 +436,21 @@ function renderVillas() {
             </div>
             <p>${villa.note}</p>
             <div class="chips">
-              ${villa.amenities.map((amenity) => `<span class="chip">${amenity}</span>`).join("")}
-              ${villa.childAmenities.map((amenity) => `<span class="chip child-chip">${amenity}</span>`).join("")}
+              ${villa.amenities.map((amenity) => renderChip(amenity)).join("")}
+              ${villa.childAmenities.map((amenity) => renderChip(amenity, "chip child-chip")).join("")}
             </div>
             <div class="villa-stats">
-              <div class="stat"><strong>${villa.bedrooms}</strong><span>bedrooms</span></div>
-              <div class="stat"><strong>${villa.rating}</strong><span>rating target</span></div>
-              <div class="stat"><strong>${villa.fit}%</strong><span>family fit</span></div>
+              <div class="stat"><i class="ph ph-bed" aria-hidden="true"></i><strong>${villa.bedrooms}</strong><span>bedrooms</span></div>
+              <div class="stat"><i class="ph ph-star" aria-hidden="true"></i><strong>${villa.rating}</strong><span>rating target</span></div>
+              <div class="stat"><i class="ph ph-heart" aria-hidden="true"></i><strong>${villa.fit}%</strong><span>family fit</span></div>
             </div>
             <p><b>Nearby:</b> ${villa.distance}.</p>
             <div class="villa-actions">
               <button class="guess-button" type="button" data-guess="${villa.name}">
-                Guess final villa
+                <i class="ph ph-question" aria-hidden="true"></i>Guess final villa
               </button>
               <button class="pin-button" type="button" data-pin="${villa.name}">
-                ${villa.name === pinnedVillaName ? "Pinned as plan" : "Pin as host choice"}
+                <i class="ph ph-push-pin" aria-hidden="true"></i>${villa.name === pinnedVillaName ? "Pinned as plan" : "Pin as host choice"}
               </button>
             </div>
           </div>
@@ -574,6 +574,37 @@ function renderBrand() {
 
 function renderList(items) {
   return items.map((item) => `<li>${item}</li>`).join("");
+}
+
+const chipIconMap = {
+  adults: "ph-user",
+  "beach nearby": "ph-umbrella",
+  "crib available": "ph-baby-carriage",
+  christmas: "ph-confetti",
+  "family kitchen": "ph-cooking-pot",
+  "games room": "ph-game-controller",
+  "golf nearby": "ph-golf",
+  "heated pool": "ph-swimming-pool",
+  "high chair": "ph-baby",
+  "historic town": "ph-buildings",
+  kids: "ph-users-three",
+  outdoors: "ph-tree",
+  "playground nearby": "ph-baby",
+  pool: "ph-swimming-pool",
+  "private chef option": "ph-chef-hat",
+  "quiet area": "ph-moon",
+  rainy: "ph-cloud-rain",
+  "sea view": "ph-waves",
+  "supermarket nearby": "ph-shopping-cart",
+  teens: "ph-user-circle",
+  toddler: "ph-baby",
+  "toddler-safe pool gate": "ph-shield-check",
+  "walkable restaurants": "ph-fork-knife",
+};
+
+function renderChip(label, className = "chip") {
+  const icon = chipIconMap[label] || "ph-check-circle";
+  return `<span class="${className}"><i class="ph ${icon}" aria-hidden="true"></i>${label}</span>`;
 }
 
 function getAgeGroup(age) {
@@ -777,7 +808,7 @@ function renderPinnedPlan() {
         </div>
         <p>${villa.note}</p>
         <div class="chips">
-          ${villa.amenities.map((amenity) => `<span class="chip">${amenity}</span>`).join("")}
+          ${villa.amenities.map((amenity) => renderChip(amenity)).join("")}
         </div>
       </div>
     </div>
@@ -838,16 +869,16 @@ function renderFlights() {
       (alert) => `
         <article class="flight-card">
           <div class="flight-card-top">
-            <span>${alert.status}</span>
-            <strong>${alert.action}</strong>
+            <span><i class="ph ph-airplane-takeoff" aria-hidden="true"></i>${alert.status}</span>
+            <strong><i class="ph ph-bell-ringing" aria-hidden="true"></i>${alert.action}</strong>
           </div>
           <div>
             <h3>${alert.airline}</h3>
             <p><b>${alert.route}</b> - ${alert.nudge}</p>
           </div>
           <div class="flight-meta">
-            <span>${alert.trend}</span>
-            <span>Faro airport</span>
+            <span><i class="ph ph-trend-up" aria-hidden="true"></i>${alert.trend}</span>
+            <span><i class="ph ph-map-pin" aria-hidden="true"></i>Faro airport</span>
           </div>
         </article>
       `,
@@ -878,8 +909,8 @@ function renderActivities() {
             <p><b>${activity.area}</b> - ${activity.note}</p>
           </div>
           <div class="chips">
-            ${activity.ages.map((age) => `<span class="chip age-chip">${age}</span>`).join("")}
-            ${activity.type.map((type) => `<span class="chip">${type}</span>`).join("")}
+            ${activity.ages.map((age) => renderChip(age, "chip age-chip")).join("")}
+            ${activity.type.map((type) => renderChip(type)).join("")}
           </div>
         </article>
       `,

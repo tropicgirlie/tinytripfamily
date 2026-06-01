@@ -1770,6 +1770,311 @@ code {
   background: #f7f7f7;
 }
 
+/* Radix-style component spacing and Phosphor icon polish */
+:root {
+  --radius-1: 0.25rem;
+  --radius-2: 0.375rem;
+  --radius-3: 0.5rem;
+  --radius-4: 0.75rem;
+  --radius-5: 1rem;
+  --gray-1: #fcfcfc;
+  --gray-2: #f9f9f9;
+  --gray-3: #f0f0f0;
+  --gray-4: #e8e8e8;
+  --gray-5: #e0e0e0;
+  --gray-9: #8d8d8d;
+  --gray-11: #6f6f6f;
+  --gray-12: #1f1f1f;
+  --red-9: #e5484d;
+  --blue-9: #3e63dd;
+  --blue-a3: rgba(62, 99, 221, 0.12);
+}
+
+.ph {
+  flex: 0 0 auto;
+  font-size: 1.05em;
+  line-height: 1;
+}
+
+.button,
+.pin-button,
+.guess-button,
+.chip,
+.hero-pills span,
+.mock-icons span,
+.flight-card-top > span,
+.flight-card-top strong,
+.flight-meta span,
+.status-pill,
+.admin-badge,
+.pinned-meta span,
+.member-card button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  white-space: nowrap;
+}
+
+.chip,
+.hero-pills span,
+.flight-meta span,
+.pinned-meta span,
+.status-pill {
+  min-height: 2rem;
+  border: 1px solid var(--gray-4);
+  border-radius: 999px;
+  padding: 0.375rem 0.625rem;
+  color: var(--gray-12);
+  background: var(--gray-2);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.chips,
+.hero-pills,
+.villa-actions,
+.flight-meta,
+.pinned-meta,
+.mock-icons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.hero-pills {
+  max-width: 44rem;
+}
+
+.hero-pills span {
+  flex: 0 1 auto;
+}
+
+.child-chip {
+  border-color: #ffd7ad;
+  color: #7c3e00;
+  background: #fff7ed;
+}
+
+.age-chip {
+  border-color: rgba(62, 99, 221, 0.18);
+  color: var(--blue-9);
+  background: var(--blue-a3);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-4);
+}
+
+.filters label {
+  flex: 1 1 13.5rem;
+  min-width: 0;
+}
+
+.filters label:has(input[type="range"]) {
+  flex-basis: 18rem;
+}
+
+.member-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+
+.member-form label:first-child {
+  flex: 1 1 12rem;
+}
+
+.member-form label:nth-child(2) {
+  flex: 0 1 7rem;
+}
+
+.member-form .button {
+  flex: 0 0 auto;
+}
+
+.flight-watch,
+.area-grid,
+.activity-grid,
+.api-cards {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: var(--space-4);
+}
+
+.flight-card,
+.area-card,
+.activity-card,
+.api-cards article {
+  flex: 1 1 16rem;
+}
+
+.flight-card-top,
+.activity-card-top,
+.component-row,
+.result-meta,
+.pinned-topline,
+.villa-head,
+.member-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.flight-card-top,
+.activity-card-top,
+.component-row,
+.result-meta,
+.pinned-topline,
+.villa-head,
+.member-card {
+  justify-content: space-between;
+}
+
+.flight-card-top > span,
+.flight-card-top strong {
+  border-radius: 999px;
+  min-height: 2rem;
+  padding: 0.375rem 0.625rem;
+}
+
+.flight-card-top > span {
+  color: var(--blue-9);
+  background: var(--blue-a3);
+}
+
+.flight-card-top strong {
+  color: var(--blue-9);
+  background: transparent;
+}
+
+.villa-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.stat {
+  display: flex;
+  min-width: 7.5rem;
+  flex: 1 1 7.5rem;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.stat i {
+  color: var(--gray-11);
+}
+
+.stat strong {
+  display: inline;
+}
+
+.stat span {
+  color: var(--gray-11);
+  font-size: 0.8125rem;
+}
+
+.villa-card,
+.pinned-plan,
+.planner-band,
+.hero-app-card,
+.countdown-card,
+.flight-card,
+.member-form,
+.member-card,
+.match-card,
+.matched-activities,
+.area-card,
+.activity-card,
+.api-cards article {
+  border-color: var(--gray-4);
+  border-radius: var(--radius-5);
+}
+
+select,
+input[type="text"],
+input[type="file"],
+.member-form input[type="number"] {
+  border-color: var(--gray-5);
+  border-radius: var(--radius-3);
+  background: #ffffff;
+}
+
+@media (max-width: 920px) {
+  .hero-grid,
+  .trip-pulse,
+  .family-heading,
+  .family-grid,
+  .content-grid,
+  .api-section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .villa-card {
+    grid-template-columns: 1fr;
+  }
+
+  .villa-media,
+  .villa-media img {
+    min-height: 16rem;
+  }
+}
+
+@media (max-width: 680px) {
+  .powered-strip,
+  .pinned-topline,
+  .result-meta,
+  .villa-head,
+  .member-card,
+  .flight-card-top,
+  .activity-card-top {
+    align-items: stretch;
+  }
+
+  .powered-strip,
+  .pinned-topline,
+  .result-meta,
+  .villa-head,
+  .member-card {
+    flex-direction: column;
+  }
+
+  .view-switch,
+  .villa-actions,
+  .hero-actions,
+  .member-form .button,
+  .pin-button,
+  .guess-button {
+    width: 100%;
+  }
+
+  .view-switch a,
+  .hero-actions .button,
+  .villa-actions button {
+    flex: 1 1 0;
+  }
+
+  .filters label,
+  .member-form label,
+  .member-form .button {
+    flex-basis: 100%;
+  }
+
+  .chips,
+  .hero-pills {
+    gap: var(--space-2);
+  }
+}
+
 @media (max-width: 920px) {
   .hero-grid,
   .planner-band,
