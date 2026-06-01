@@ -43,7 +43,7 @@ function placeholderImage(label, tone = "villa") {
       <path d="M120 462 286 310l116 104 88-82 290 214H120Z" fill="#fff" stroke="${palette.line}" stroke-width="10"/>
       <circle cx="642" cy="188" r="58" fill="#fff" stroke="${palette.line}" stroke-width="10"/>
       <rect x="80" y="78" width="740" height="494" rx="28" fill="none" stroke="${palette.line}" stroke-width="10" stroke-dasharray="18 18"/>
-      <text x="450" y="596" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700" fill="${palette.text}">${label}</text>
+      <text x="450" y="596" text-anchor="middle" font-family="Nunito Sans, sans-serif" font-size="34" font-weight="700" fill="${palette.text}">${label}</text>
     </svg>`;
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
