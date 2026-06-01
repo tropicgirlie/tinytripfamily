@@ -295,18 +295,24 @@ const flightAlerts = [
     airline: "Aer Lingus",
     route: "Dublin to Faro",
     status: "Seats showing",
+    trend: "Direct route",
+    action: "Book soon",
     nudge: "Book soon for the Christmas week return window.",
   },
   {
     airline: "Ryanair",
     route: "Dublin to Faro",
     status: "Low fare watch",
+    trend: "Price watch",
+    action: "Track weekly",
     nudge: "Good option for family members booking separately.",
   },
   {
     airline: "TAP / connection",
     route: "Lisbon or Porto to Faro",
     status: "Backup route",
+    trend: "Fallback",
+    action: "Keep open",
     nudge: "Useful if direct flights get expensive.",
   },
 ];
@@ -569,6 +575,15 @@ function getAgeGroup(age) {
   return "adults";
 }
 
+function getInitials(name) {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0].toUpperCase())
+    .join("");
+}
+
 function saveAndRenderFamily() {
   localStorage.setItem("tinyTripFamilyMembers", JSON.stringify(familyMembers));
   renderFamily();
@@ -599,9 +614,12 @@ function renderFamily() {
       .map(
         (member, index) => `
           <article class="member-card">
-            <div>
-              <strong>${member.name}</strong>
-              <span>${member.age} years old - ${getAgeGroup(member.age)}</span>
+            <div class="member-person">
+              <span class="member-avatar" aria-hidden="true">${getInitials(member.name)}</span>
+              <div>
+                <strong>${member.name}</strong>
+                <span>${member.age} years old - ${getAgeGroup(member.age)}</span>
+              </div>
             </div>
             <button type="button" data-remove-member="${index}">Remove</button>
           </article>
@@ -799,9 +817,16 @@ function renderFlights() {
     .map(
       (alert) => `
         <article class="flight-card">
-          <span>${alert.status}</span>
+          <div class="flight-card-top">
+            <span>${alert.status}</span>
+            <strong>${alert.action}</strong>
+          </div>
           <h3>${alert.airline}</h3>
           <p><b>${alert.route}</b> - ${alert.nudge}</p>
+          <div class="flight-meta">
+            <span>${alert.trend}</span>
+            <span>Faro airport</span>
+          </div>
         </article>
       `,
     )
@@ -826,6 +851,7 @@ function renderActivities() {
             <p><b>${activity.area}</b> - ${activity.note}</p>
           </div>
           <div class="chips">
+            ${activity.ages.map((age) => `<span class="chip age-chip">${age}</span>`).join("")}
             ${activity.type.map((type) => `<span class="chip">${type}</span>`).join("")}
           </div>
         </article>
