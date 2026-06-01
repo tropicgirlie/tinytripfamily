@@ -778,7 +778,8 @@ function renderPinnedPlan() {
   if (!hasPinnedVilla) {
     pinnedContent.innerHTML = `
       <div class="mystery-board">
-        <div>
+        <div class="mystery-copy-panel">
+          <span class="status-pill"><i class="ph ph-lock-key" aria-hidden="true"></i>Not revealed yet</span>
           <p class="mystery-copy">
             Luana is still holding the final choice. Pick which villa you think will win, then spin the reveal.
           </p>
@@ -788,9 +789,10 @@ function renderPinnedPlan() {
               .map(
                 (option, index) => `
                   <button class="guess-card ${selectedGuessName === option.name ? "selected" : ""}" type="button" data-mystery-guess="${option.name}">
-                    <span>Villa ${index + 1}</span>
+                    <span>Option ${index + 1}</span>
                     <img src="${option.image}" alt="Blurred mystery villa ${index + 1}" />
                     <strong>${option.area}</strong>
+                    <small>${currency.format(option.price)} estimate - ${option.bedrooms} bedrooms</small>
                   </button>
                 `,
               )
@@ -799,7 +801,7 @@ function renderPinnedPlan() {
         </div>
         <div class="reveal-wheel">
           <div class="wheel" id="wheel">?</div>
-          <button class="button primary" type="button" id="spinReveal">Spin the reveal</button>
+          <button class="button primary" type="button" id="spinReveal"><i class="ph ph-shuffle" aria-hidden="true"></i>Spin the reveal</button>
           <p id="revealResult">No final villa has been revealed yet. The spin will tell the family to keep guessing.</p>
         </div>
       </div>
@@ -825,6 +827,7 @@ function renderPinnedPlan() {
     <div class="pinned-layout">
       <img src="${villa.image}" alt="${villa.area} pinned villa location" />
       <div class="pinned-summary">
+        <span class="status-pill"><i class="ph ph-check-circle" aria-hidden="true"></i>Final villa pinned</span>
         <div class="pinned-meta">
           <span>${villa.area}</span>
           <span>${currency.format(villa.price)} total estimate</span>

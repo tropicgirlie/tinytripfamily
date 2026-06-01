@@ -107,6 +107,7 @@ h3 {
 
 .powered-strip,
 .hero-grid,
+.guest-snapshot,
 .planner-band,
 .pinned-plan,
 .trip-pulse,
@@ -517,6 +518,47 @@ h3 {
   font-size: 0.9rem;
 }
 
+.guest-snapshot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-block: 24px 8px;
+}
+
+.guest-snapshot article {
+  flex: 1 1 220px;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  background: #ffffff;
+}
+
+.guest-snapshot i {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--brand);
+  background: #fff1f4;
+  font-size: 1.2rem;
+}
+
+.guest-snapshot strong,
+.guest-snapshot span {
+  display: block;
+}
+
+.guest-snapshot span {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
 .host-view .guest-only,
 .guest-view .host-only {
   display: none !important;
@@ -544,6 +586,10 @@ h3 {
 .activities-section,
 .api-section {
   margin-block: 32px;
+}
+
+.guest-view .pinned-plan {
+  margin-top: 24px;
 }
 
 .planner-band,
@@ -643,9 +689,21 @@ input[type="range"] {
 
 .mystery-board {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 260px;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 260px);
   gap: 24px;
   align-items: center;
+}
+
+.mystery-copy-panel {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+}
+
+.mystery-copy {
+  max-width: 46rem;
+  margin-bottom: 0;
+  font-size: 1rem;
 }
 
 .guess-grid {
@@ -658,10 +716,17 @@ input[type="range"] {
   flex: 1 1 160px;
   display: grid;
   gap: 10px;
+  align-content: start;
   padding: 12px;
   color: var(--text);
   text-align: left;
   cursor: pointer;
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.guess-card:hover {
+  border-color: var(--line-strong);
+  transform: translateY(-1px);
 }
 
 .guess-card.selected {
@@ -672,6 +737,17 @@ input[type="range"] {
   height: 130px;
   border-radius: var(--radius-md);
   filter: blur(7px) saturate(0.8);
+}
+
+.guess-card span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
+.guess-card small {
+  color: var(--muted);
+  font-size: 0.8rem;
 }
 
 .reveal-wheel {
@@ -717,6 +793,12 @@ input[type="range"] {
   display: grid;
   grid-template-columns: 300px minmax(0, 1fr);
   gap: 22px;
+}
+
+.pinned-summary {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
 }
 
 .pinned-layout img {
@@ -1030,6 +1112,14 @@ code {
 
   .hero-app-card {
     display: none;
+  }
+
+  .guest-snapshot {
+    margin-top: 18px;
+  }
+
+  .guest-snapshot article {
+    flex-basis: 100%;
   }
 
   .button,
