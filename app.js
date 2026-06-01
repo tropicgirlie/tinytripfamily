@@ -7,6 +7,10 @@ const trip = {
 
 let pinnedVillaName = localStorage.getItem("michellesFamilyTripPinned") || "";
 let selectedGuessName = "";
+let familyMembers = JSON.parse(localStorage.getItem("tinyTripFamilyMembers") || "null") || [
+  { name: "Toddler", age: 2 },
+  { name: "Michelle", age: 36 },
+];
 
 const brandDefaults = {
   name: "Micheau Family Trip",
@@ -217,6 +221,7 @@ const activities = [
     area: "Lagos",
     type: ["christmas", "toddler", "rainy"],
     status: "2026 dates to verify",
+    ages: ["toddler", "kids", "adults"],
     note:
       "Good family evening option if the market returns in late December. Keep this as a festive candidate until official 2026 dates are published.",
   },
@@ -225,6 +230,7 @@ const activities = [
     area: "Eastern Algarve",
     type: ["christmas", "toddler"],
     status: "Likely seasonal pattern",
+    ages: ["toddler", "kids", "adults", "grandparents"],
     note:
       "Past editions have run from late November into early January, which makes it useful for the 27 Dec to 7 Jan trip window.",
   },
@@ -233,6 +239,7 @@ const activities = [
     area: "Portimao",
     type: ["christmas", "toddler", "rainy"],
     status: "2026 dates to verify",
+    ages: ["toddler", "kids", "adults"],
     note:
       "A practical family option when running, with Santa-style programming, lights, and simple child-friendly entertainment.",
   },
@@ -241,6 +248,7 @@ const activities = [
     area: "Carvoeiro",
     type: ["outdoors"],
     status: "Weather dependent",
+    ages: ["kids", "adults", "grandparents"],
     note:
       "Best for calm dry days. With a 2-year-old, plan a short viewpoint stop rather than a long cliff walk.",
   },
@@ -249,6 +257,7 @@ const activities = [
     area: "Albufeira / Guia",
     type: ["toddler", "rainy"],
     status: "Seasonal opening to verify",
+    ages: ["toddler", "kids"],
     note:
       "Keep as a rainy-day candidate, but opening calendars should be checked close to travel.",
   },
@@ -257,8 +266,27 @@ const activities = [
     area: "Pinned villa area",
     type: ["toddler", "rainy"],
     status: "Day-one essential",
+    ages: ["toddler", "adults"],
     note:
       "Add nappies, snacks, milk, wipes, child medicine basics, and breakfast food before everyone arrives.",
+  },
+  {
+    name: "Private chef and early family dinner",
+    area: "Pinned villa",
+    type: ["rainy"],
+    status: "Book after villa is final",
+    ages: ["toddler", "kids", "adults", "grandparents"],
+    note:
+      "Best for a mixed-age group because the toddler can sleep while adults still get a proper dinner.",
+  },
+  {
+    name: "Older kids beach photo challenge",
+    area: "Nearest beach",
+    type: ["outdoors"],
+    status: "Low-cost idea",
+    ages: ["kids", "teens"],
+    note:
+      "Give children and teens a scavenger list: shells, cliffs, funny family photo, sunset, and best snack.",
   },
 ];
 
@@ -318,6 +346,11 @@ const heroVillaImage = document.querySelector("#heroVillaImage");
 const heroVillaName = document.querySelector("#heroVillaName");
 const heroVillaMeta = document.querySelector("#heroVillaMeta");
 const heroBeds = document.querySelector("#heroBeds");
+const memberForm = document.querySelector("#memberForm");
+const memberName = document.querySelector("#memberName");
+const memberAge = document.querySelector("#memberAge");
+const memberList = document.querySelector("#memberList");
+const matchedActivities = document.querySelector("#matchedActivities");
 
 function initAreaOptions() {
   areas.forEach((area) => {
@@ -457,6 +490,18 @@ function bindFilters() {
     });
     reader.readAsDataURL(file);
   });
+
+  memberForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const name = memberName.value.trim();
+    const age = Number(memberAge.value);
+    if (!name || Number.isNaN(age)) return;
+
+    familyMembers.push({ name, age });
+    memberName.value = "";
+    memberAge.value = "";
+    saveAndRenderFamily();
+  });
 }
 
 function normalizeSubdomain(value) {
@@ -495,6 +540,113 @@ function renderBrand() {
 
 function renderList(items) {
   return items.map((item) => `<li>${item}</li>`).join("");
+}
+
+function getAgeGroup(age) {
+  if (age <= 3) return "toddler";
+  if (age <= 12) return "kids";
+  if (age <= 17) return "teens";
+  if (age >= 65) return "grandparents";
+  return "adults";
+}
+
+function saveAndRenderFamily() {
+  localStorage.setItem("tinyTripFamilyMembers", JSON.stringify(familyMembers));
+  renderFamily();
+  renderActivities();
+  renderPinnedPlan();
+}
+
+function removeMember(index) {
+  familyMembers = familyMembers.filter((_, memberIndex) => memberIndex !== index);
+  saveAndRenderFamily();
+}
+
+function getActivityScore(activity) {
+  const groups = familyMembers.map((member) => getAgeGroup(member.age));
+  const matches = groups.filter((group) => activity.ages.includes(group)).length;
+  return matches;
+}
+
+function renderFamily() {
+  if (!familyMembers.length) {
+    memberList.innerHTML = `
+      <article class="empty">
+        Add family members to personalize activities and room preferences.
+      </article>
+    `;
+  } else {
+    memberList.innerHTML = familyMembers
+      .map(
+        (member, index) => `
+          <article class="member-card">
+            <div>
+              <strong>${member.name}</strong>
+              <span>${member.age} years old - ${getAgeGroup(member.age)}</span>
+            </div>
+            <button type="button" data-remove-member="${index}">Remove</button>
+          </article>
+        `,
+      )
+      .join("");
+  }
+
+  document.querySelectorAll("[data-remove-member]").forEach((button) => {
+    button.addEventListener("click", () => removeMember(Number(button.dataset.removeMember)));
+  });
+
+  const ranked = activities
+    .map((activity) => ({ ...activity, score: getActivityScore(activity) }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 4);
+
+  matchedActivities.innerHTML = `
+    <h3>Best matches for this group</h3>
+    ${ranked
+      .map(
+        (activity) => `
+          <article class="match-card">
+            <span>${activity.score} family match${activity.score === 1 ? "" : "es"}</span>
+            <strong>${activity.name}</strong>
+            <p>${activity.note}</p>
+          </article>
+        `,
+      )
+      .join("")}
+  `;
+}
+
+function renderRoomPreferences(villa) {
+  if (!pinnedVillaName) return "";
+
+  const grouped = familyMembers.reduce(
+    (acc, member) => {
+      acc[getAgeGroup(member.age)].push(member);
+      return acc;
+    },
+    { toddler: [], kids: [], teens: [], adults: [], grandparents: [] },
+  );
+
+  const roomIdeas = [
+    grouped.toddler.length
+      ? `Keep ${grouped.toddler.map((member) => member.name).join(", ")} near parents and away from pool doors.`
+      : "No toddler room needs added yet.",
+    grouped.grandparents.length
+      ? `Prioritize ground-floor or easiest-access room for ${grouped.grandparents.map((member) => member.name).join(", ")}.`
+      : "No mobility-first room request added yet.",
+    grouped.kids.length || grouped.teens.length
+      ? "Group children or teens near shared bathroom if the villa layout allows it."
+      : "Add children or teens to generate room grouping ideas.",
+  ];
+
+  return `
+    <article>
+      <h3>Room preferences</h3>
+      <p>This is not room booking yet. It is a lightweight preference board for the organizer after the villa is final.</p>
+      <ul>${renderList(roomIdeas)}</ul>
+      <p><b>Villa capacity:</b> ${villa.bedrooms} bedrooms, ${villa.bathrooms} bathrooms.</p>
+    </article>
+  `;
 }
 
 function renderPinnedPlan() {
@@ -596,6 +748,7 @@ function renderPinnedPlan() {
         <h3>2-year-old checklist</h3>
         <ul>${renderList(villa.childAmenities)}</ul>
       </article>
+      ${renderRoomPreferences(villa)}
       <article>
         <h3>Flights and arrival</h3>
         <p>${villa.flights}</p>
@@ -637,7 +790,10 @@ function renderFlights() {
 
 function renderActivities() {
   const selectedType = activityFilter.value;
-  const visible = activities.filter((activity) => selectedType === "all" || activity.type.includes(selectedType));
+  const visible = activities
+    .filter((activity) => selectedType === "all" || activity.type.includes(selectedType))
+    .map((activity) => ({ ...activity, score: getActivityScore(activity) }))
+    .sort((a, b) => b.score - a.score);
 
   activityGrid.innerHTML = visible
     .map(
@@ -646,6 +802,7 @@ function renderActivities() {
           <div>
             <span class="status-pill">${activity.status}</span>
             <h3>${activity.name}</h3>
+            <p class="match-score">${activity.score} personalized match${activity.score === 1 ? "" : "es"}</p>
             <p><b>${activity.area}</b> - ${activity.note}</p>
           </div>
           <div class="chips">
@@ -661,6 +818,7 @@ initAreaOptions();
 renderAreas();
 bindFilters();
 renderBrand();
+renderFamily();
 renderPinnedPlan();
 renderCountdown();
 renderFlights();

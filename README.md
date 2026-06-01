@@ -14,6 +14,7 @@ The app is currently a static prototype focused on:
 - Countdown, sample flight-watch nudges, and a mystery-villa guessing game before the organizer reveals the pinned choice
 - White-label branding controls for trip name, subdomain preview, logo URL, and uploaded logo/photo
 - Parent product attribution as "Powered by TinyTripIndex"
+- Family roster with names and ages, personalized activity matching, and light room preference planning after a villa is pinned
 - Notes on which supplier APIs can later provide live pricing and availability
 
 ## Run
@@ -29,3 +30,9 @@ Airbnb does not provide a simple public search API for general-purpose apps. For
 - Airbnb only through approved partner or channel-manager access
 
 The UI data model in `app.js` is intentionally shaped like normalized provider results so the sample records can be replaced by API responses later.
+
+## Backlog
+
+- Family member profile photos: allow each person to upload a picture/avatar.
+- Activity attendee bubbles: show small overlapping profile circles on activity cards for people interested in or joining that activity.
+- Social activity animations: animate avatar bubbles when someone joins, guesses the villa, or reacts to a pinned plan.

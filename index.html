@@ -194,6 +194,30 @@
           <div class="flight-watch" id="flightWatch"></div>
         </section>
 
+        <section class="family-section" aria-labelledby="familyTitle">
+          <div class="family-heading">
+            <div>
+              <p class="eyebrow">Family profile</p>
+              <h2 id="familyTitle">Add names and ages for smarter activity ideas.</h2>
+            </div>
+            <form class="member-form" id="memberForm">
+              <label>
+                Name
+                <input id="memberName" type="text" placeholder="e.g. Sofia" />
+              </label>
+              <label>
+                Age
+                <input id="memberAge" type="number" min="0" max="100" placeholder="2" />
+              </label>
+              <button class="button primary" type="submit">Add person</button>
+            </form>
+          </div>
+          <div class="family-grid">
+            <div class="member-list" id="memberList"></div>
+            <div class="matched-activities" id="matchedActivities"></div>
+          </div>
+        </section>
+
         <section class="content-grid" id="results">
           <div class="section-intro">
             <p class="eyebrow">Shortlist</p>
