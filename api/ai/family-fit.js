@@ -96,12 +96,11 @@ export default async function handler(request, response) {
 
   try {
     const geminiResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-goog-api-key": apiKey,
         },
         body: JSON.stringify({
           contents: [{ role: "user", parts: [{ text: prompt }] }],
@@ -130,6 +129,8 @@ export default async function handler(request, response) {
       error:
         error instanceof Error && error.message.includes("API_KEY_INVALID")
           ? "Gemini key is not valid yet. Add a valid GEMINI_API_KEY to use AI scoring."
+          : error instanceof Error && error.message.includes("RESOURCE_EXHAUSTED")
+            ? "Gemini key is valid, but billing/prepayment credits are depleted in Google AI Studio."
           : "Gemini was unavailable, so local scoring was used.",
     });
   }
