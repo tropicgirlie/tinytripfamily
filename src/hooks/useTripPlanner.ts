@@ -9,15 +9,30 @@ import {
   villaPricePerNight,
 } from "../lib/format";
 
-export type FamilyMember = { name: string; age: number };
+export type FamilyMember = {
+  name: string;
+  age: number;
+  photo?: string;
+  foodPreference?: string;
+  allergies?: string;
+};
 export type BrandState = { name: string; subdomain: string; logo: string };
 export type ViewMode = "guest" | "host";
+export type ManualVillaInput = {
+  name: string;
+  area: string;
+  price: number;
+  bedrooms: number;
+  url: string;
+  image: string;
+};
 
 const pinnedStorageKey = "micheauFamilyTripPinned";
 const brandStorageKey = "tinyTripIndexBrand";
 const familyStorageKey = "tinyTripFamilyMembers";
 const viewStorageKey = "tinyTripViewMode";
 const originStorageKey = "tinyTripOriginCity";
+const manualVillaStorageKey = "tinyTripManualVillas";
 
 const brandDefaults: BrandState = {
   name: "Micheau Family Trip",
@@ -75,6 +90,9 @@ export function useTripPlanner() {
   const [activityFilter, setActivityFilter] = useState("all");
   const [pinnedVillaName, setPinnedVillaName] = useState(() => localStorage.getItem(pinnedStorageKey) || "");
   const [selectedGuessName, setSelectedGuessName] = useState("");
+  const [manualVillas, setManualVillas] = useState<Villa[]>(
+    () => JSON.parse(localStorage.getItem(manualVillaStorageKey) || "null") || [],
+  );
   const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>(
     () =>
       JSON.parse(localStorage.getItem(familyStorageKey) || "null") || [
@@ -123,10 +141,10 @@ export function useTripPlanner() {
 
   const matchedVillas = useMemo(
     () =>
-      villas
+      [...villas, ...manualVillas]
         .filter(villaMatches)
         .sort((a, b) => b.fit - a.fit || b.rating - a.rating),
-    [villaMatches],
+    [manualVillas, villaMatches],
   );
 
   const flightInsights = useMemo(
@@ -150,15 +168,65 @@ export function useTripPlanner() {
     localStorage.setItem(pinnedStorageKey, name);
   }, []);
 
+  const addManualVilla = useCallback(
+    (input: ManualVillaInput) => {
+      const villa: Villa = {
+        destinationId: destination.id,
+        name: input.name.trim(),
+        area: input.area.trim() || destination.areas[0]?.name || destination.label,
+        price: input.price,
+        bedrooms: input.bedrooms,
+        bathrooms: Math.max(2, Math.round(input.bedrooms * 0.8)),
+        rating: 0,
+        distance: "Manual pick - verify exact address before sharing",
+        fit: 82,
+        source: input.url.includes("airbnb") ? "Manual Airbnb pick" : "Manual host pick",
+        amenities: ["manual pick", "host reviewed"],
+        childAmenities: ["verify crib", "verify high chair", "verify child safety"],
+        bestFor: ["host pick", "needs verification"],
+        activities: ["Check exact address", "Confirm family amenities", "Review cancellation policy"],
+        bring: ["booking link", "house rules", "host contact", "child amenity confirmation"],
+        flights: `Fly into ${destination.airport.name}, then confirm transfer time after exact address is known.`,
+        note:
+          "Manually added listing. Use this to compare Airbnb or direct villa options while live partner APIs are being connected.",
+        image: input.image,
+        imageFallback: input.name.trim() || "Manual villa",
+        bookingUrl: input.url,
+      };
+
+      setManualVillas((current) => {
+        const next = [villa, ...current.filter((item) => item.name !== villa.name)];
+        localStorage.setItem(manualVillaStorageKey, JSON.stringify(next));
+        return next;
+      });
+    },
+    [destination],
+  );
+
+  const clearManualVillas = useCallback(() => {
+    setManualVillas([]);
+    localStorage.removeItem(manualVillaStorageKey);
+  }, []);
+
   const resetMystery = useCallback(() => {
     setPinnedVillaName("");
     setSelectedGuessName("");
     localStorage.removeItem(pinnedStorageKey);
   }, []);
 
-  const addMember = useCallback((name: string, age: number) => {
+  const addMember = useCallback((member: FamilyMember) => {
     setFamilyMembers((current) => {
-      const next = [...current, { name, age }];
+      const next = [...current, member];
+      localStorage.setItem(familyStorageKey, JSON.stringify(next));
+      return next;
+    });
+  }, []);
+
+  const updateMember = useCallback((index: number, patch: Partial<FamilyMember>) => {
+    setFamilyMembers((current) => {
+      const next = current.map((member, memberIndex) =>
+        memberIndex === index ? { ...member, ...patch } : member,
+      );
       localStorage.setItem(familyStorageKey, JSON.stringify(next));
       return next;
     });
@@ -203,9 +271,12 @@ export function useTripPlanner() {
     selectedGuessName,
     setSelectedGuessName,
     pinVilla,
+    addManualVilla,
+    clearManualVillas,
     resetMystery,
     familyMembers,
     addMember,
+    updateMember,
     removeMember,
     matchedVillas,
     flightInsights,

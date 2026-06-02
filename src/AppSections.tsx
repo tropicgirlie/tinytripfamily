@@ -231,7 +231,7 @@ export function AppSections({
                   e.preventDefault();
                   const age = Number(memberAge);
                   if (!memberName.trim() || Number.isNaN(age)) return;
-                  addMember(memberName.trim(), age);
+                  addMember({ name: memberName.trim(), age });
                   setMemberName("");
                   setMemberAge("");
                 }}
@@ -470,6 +470,19 @@ export function AppSections({
         <Grid columns={{ initial: "1", md: "2" }} gap="5" className="travel-weather guest-only">
           <Card>
             <Text size="1" weight="bold" className="eyebrow" as="p">
+              {destination.label} in late December
+            </Text>
+            <Heading size="5">Mild days, cool evenings.</Heading>
+            <div className="weather-row">
+              <span>Mon 18°C</span>
+              <span>Tue 17°C</span>
+              <span>Wed 18°C</span>
+              <span>Thu 17°C</span>
+              <span>Fri 16°C</span>
+            </div>
+          </Card>
+          <Card>
+            <Text size="1" weight="bold" className="eyebrow" as="p">
               Flights &amp; travel tips
             </Text>
             <Heading size="5">Find the best routes into {destination.airport.city}.</Heading>
@@ -483,19 +496,6 @@ export function AppSections({
                 Search on Google Flights
               </a>
             </Button>
-          </Card>
-          <Card>
-            <Text size="1" weight="bold" className="eyebrow" as="p">
-              {destination.label} in late December
-            </Text>
-            <Heading size="5">Mild days, cool evenings.</Heading>
-            <div className="weather-row">
-              <span>Mon 18°C</span>
-              <span>Tue 17°C</span>
-              <span>Wed 18°C</span>
-              <span>Thu 17°C</span>
-              <span>Fri 16°C</span>
-            </div>
           </Card>
         </Grid>
       )}

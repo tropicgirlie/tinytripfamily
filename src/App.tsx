@@ -1,18 +1,12 @@
 import { useMemo, useState } from "react";
-import { Box, Card, Flex, Grid, Heading, Select, Slider, Text, TextField } from "@radix-ui/themes";
-import { AirplaneTakeoff, MapPin, Sparkle } from "@phosphor-icons/react";
+import { Box, Grid, Select, Slider, Text, TextField } from "@radix-ui/themes";
 import { currency } from "./lib/format";
-import { buildGoogleFlightsUrl } from "./lib/flights";
 import { useTripPlanner } from "./hooks/useTripPlanner";
-import { AppSections } from "./AppSections";
 import { GuestDashboard } from "./components/dashboard/GuestDashboard";
 import { HostDashboard } from "./components/dashboard/HostDashboard";
-import { PinnedSection } from "./components/PinnedSection";
 
 export default function App() {
   const planner = useTripPlanner();
-  const [memberName, setMemberName] = useState("");
-  const [memberAge, setMemberAge] = useState("");
   const [spinning, setSpinning] = useState(false);
 
   const {
@@ -45,7 +39,6 @@ export default function App() {
     resetMystery,
     familyMembers,
     matchedVillas,
-    flightInsights,
     countdownDays,
     activeAreas,
     getAgeGroup,
@@ -69,15 +62,6 @@ export default function App() {
     if (adults && kids) return `${adults} adult${adults === 1 ? "" : "s"}, ${kids} kid${kids === 1 ? "" : "s"}`;
     return `${familyMembers.length} guest${familyMembers.length === 1 ? "" : "s"}`;
   }, [familyMembers, getAgeGroup, trip.guests]);
-
-  const googleFlightsSearchUrl = buildGoogleFlightsUrl({
-    originCity,
-    originCode: "DUB",
-    destinationCity: destination.airport.city,
-    destinationCode: destination.airport.code,
-    departDate: trip.checkIn,
-    returnDate: trip.checkOut,
-  });
 
   const isHost = viewMode === "host";
 
@@ -262,81 +246,12 @@ export default function App() {
         resetMystery={resetMystery}
         spinning={spinning}
         setSpinning={setSpinning}
-        pinVilla={pinVilla}
         brandSubdomain={normalizeSubdomain(brand.subdomain)}
       />
     );
   }
 
   const displayVilla = hasPinnedVilla ? pinnedVilla : matchedVillas[0] ?? null;
-
-  const guestDeepSections = (
-    <>
-      {!hasPinnedVilla && pinnedVilla ? (
-        <PinnedSection
-          hasPinnedVilla={hasPinnedVilla}
-          pinnedVilla={pinnedVilla}
-          pinnedVillaName={pinnedVillaName}
-          selectedGuessName={selectedGuessName}
-          setSelectedGuessName={setSelectedGuessName}
-          matchedVillas={matchedVillas}
-          resetMystery={resetMystery}
-          spinning={spinning}
-          setSpinning={setSpinning}
-          villaImageSrc={villaImageSrc}
-        />
-      ) : null}
-      <section className="trip-pulse guest-only" aria-label="Flight reminders">
-        <div className="flight-watch">
-          {flightInsights.map((flight) => (
-            <Card key={flight.airline + flight.route} className="flight-card">
-              <Flex justify="between" wrap="wrap" gap="2" className="flight-card-top">
-                <Text size="1" className="status-pill" as="span">
-                  <AirplaneTakeoff size={14} aria-hidden /> {flight.status}
-                </Text>
-                <Text size="1" weight="bold" color="blue" as="span">
-                  {flight.action}
-                </Text>
-              </Flex>
-              <Heading size="4">{flight.airline}</Heading>
-              <Text size="2" as="p">
-                <Text weight="bold" as="span">
-                  {flight.route}
-                </Text>{" "}
-                — {flight.nudge}
-              </Text>
-              <Flex gap="2" wrap="wrap" className="flight-meta">
-                <span className="chip">
-                  <Sparkle size={14} aria-hidden /> {flight.trend}
-                </span>
-                <span className="chip">
-                  <MapPin size={14} aria-hidden /> {destination.airport.name}
-                </span>
-              </Flex>
-              <a
-                href={flight.searchUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flight-card-link"
-              >
-                Search on Google Flights
-              </a>
-            </Card>
-          ))}
-        </div>
-      </section>
-      <AppSections
-        planner={planner}
-        memberName={memberName}
-        setMemberName={setMemberName}
-        memberAge={memberAge}
-        setMemberAge={setMemberAge}
-        guestSummary={guestSummary}
-        googleFlightsSearchUrl={googleFlightsSearchUrl}
-        sectionsOnly
-      />
-    </>
-  );
 
   return (
     <GuestDashboard
@@ -348,8 +263,7 @@ export default function App() {
       displayVilla={displayVilla}
       hasPinnedVilla={hasPinnedVilla}
       villaImageSrc={villaImageSrc}
-      deepSections={guestDeepSections}
+      deepSections={null}
     />
   );
 }
-

@@ -31,6 +31,7 @@ export type Villa = {
   note: string;
   image: string;
   imageFallback: string;
+  bookingUrl?: string;
 };
 
 export type Activity = {

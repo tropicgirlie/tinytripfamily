@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Heading, Text } from "@radix-ui/themes";
-import { Question, PushPin, Sparkle, Star, Bed } from "@phosphor-icons/react";
+import { ArrowSquareOut, Question, PushPin, Sparkle, Star, Bed } from "@phosphor-icons/react";
 import type { Villa } from "../data/trip";
 import { currency, placeholderImage } from "../lib/format";
 import { Chip } from "./Chip";
@@ -23,6 +23,10 @@ export function VillaCard({
   onPin,
   onGuess,
 }: VillaCardProps) {
+  const bookingSearchUrl =
+    villa.bookingUrl ||
+    `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(`${villa.area} villa ${villa.bedrooms} bedrooms Algarve`)}`;
+
   return (
     <article className="villa-card">
       <Flex direction={{ initial: "column", sm: "row" }} gap="0">
@@ -117,6 +121,12 @@ export function VillaCard({
             {villa.distance}.
           </Text>
           <Flex gap="3" wrap="wrap" className="villa-actions" pt="1">
+            <Button asChild variant="outline" color="gray">
+              <a href={bookingSearchUrl} target="_blank" rel="noopener noreferrer">
+                <ArrowSquareOut size={18} aria-hidden />
+                Check availability
+              </a>
+            </Button>
             <Button variant="outline" color="gray" onClick={onGuess}>
               <Question size={18} aria-hidden />
               Guess final villa

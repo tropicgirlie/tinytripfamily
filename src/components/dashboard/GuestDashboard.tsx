@@ -1,6 +1,7 @@
 import { type ReactNode, useMemo } from "react";
 import {
   ArrowRight,
+  AirplaneTakeoff,
   Bell,
   CalendarBlank,
   CaretRight,
@@ -49,9 +50,10 @@ export function GuestDashboard({
   villaImageSrc,
   deepSections,
 }: Props) {
-  const { destination, trip, formatDisplayDate, activities } = planner;
+  const { destination, trip, formatDisplayDate, activities, flightInsights } = planner;
 
   const heroStyle = { ["--hero-beach" as string]: `url("${destination.heroImage}")` };
+  const topFlight = flightInsights[0];
 
   const featuredActivities = useMemo(() => {
     const fromData = activities.slice(0, 5).map((a, i) => ({
@@ -106,7 +108,7 @@ export function GuestDashboard({
                 height={36}
               />
               <div>
-                <strong>Michelle</strong>
+                <strong>Luana</strong>
               </div>
               <CaretRight size={16} aria-hidden />
             </div>
@@ -179,6 +181,58 @@ export function GuestDashboard({
               <strong>16–19°C · Partly sunny</strong>
             </div>
           </div>
+        </section>
+
+        <section className="guest-travel-priority" aria-label="Flights and seasonal weather">
+          <article className="dashboard-panel guest-flight-card">
+            <div className="dashboard-panel-header">
+              <div>
+                <h2>Flights &amp; travel tips</h2>
+                <p>Find the best routes into {destination.airport.city} for the family dates.</p>
+              </div>
+              <AirplaneTakeoff size={22} aria-hidden />
+            </div>
+            <div className="dashboard-panel-body">
+              <strong>{topFlight?.route ?? `Dublin → ${destination.airport.code}`}</strong>
+              <span>{topFlight?.action ?? "Search fares and book soon"}</span>
+              <p>{topFlight?.nudge ?? "Christmas travel can move quickly, so compare outbound and return seats early."}</p>
+              <a
+                href={topFlight?.searchUrl ?? "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="guest-btn-primary"
+              >
+                Search on Google Flights <ArrowRight size={16} aria-hidden />
+              </a>
+            </div>
+          </article>
+
+          <article className="dashboard-panel guest-weather-panel guest-weather-priority">
+            <div className="dashboard-panel-header">
+              <div>
+                <h2>{destination.label} in late December</h2>
+                <p>Typical winter planning range for the trip window.</p>
+              </div>
+              <Sun size={24} weight="fill" aria-hidden />
+            </div>
+            <div className="dashboard-panel-body">
+              <div className="guest-weather-row">
+                {weatherForecast.map((day) => {
+                  const Icon = day.icon;
+                  return (
+                    <div key={day.day} className="guest-weather-day">
+                      <span>{day.day}</span>
+                      <Icon size={24} aria-hidden />
+                      <strong>
+                        {day.high}° / {day.low}°
+                      </strong>
+                    </div>
+                  );
+                })}
+              </div>
+              <p className="guest-weather-note">Partly sunny · Mild days · Cool evenings</p>
+            </div>
+          </article>
         </section>
 
         <nav className="guest-quick-nav" aria-label="Quick links">
@@ -309,10 +363,13 @@ export function GuestDashboard({
           </div>
         </section>
 
-        <div className="guest-grid-3">
+        <div className="guest-grid-2 guest-support-grid">
           <article className="dashboard-panel" id="amenities">
             <div className="dashboard-panel-header">
-              <h2>Nearby amenities</h2>
+              <div>
+                <h2>Nearby amenities</h2>
+                <p>Based on the pinned villa area and family needs.</p>
+              </div>
             </div>
             <div className="dashboard-panel-body guest-amenity-grid">
               {nearbyAmenities.map((item) => {
@@ -325,29 +382,6 @@ export function GuestDashboard({
                   </div>
                 );
               })}
-            </div>
-          </article>
-
-          <article className="dashboard-panel guest-weather-panel">
-            <div className="dashboard-panel-header">
-              <h2>Weather in {destination.label}</h2>
-            </div>
-            <div className="dashboard-panel-body">
-              <div className="guest-weather-row">
-                {weatherForecast.map((day) => {
-                  const Icon = day.icon;
-                  return (
-                    <div key={day.day} className="guest-weather-day">
-                      <span>{day.day}</span>
-                      <Icon size={24} aria-hidden />
-                      <strong>
-                        {day.high}° / {day.low}°
-                      </strong>
-                    </div>
-                  );
-                })}
-              </div>
-              <p className="guest-weather-note">Partly sunny · Mild · Low chance of rain</p>
             </div>
           </article>
 
@@ -385,7 +419,7 @@ export function GuestDashboard({
           </div>
         </section>
 
-        <div className="guest-deep-sections">{deepSections}</div>
+        {deepSections ? <div className="guest-deep-sections">{deepSections}</div> : null}
 
         <footer className="guest-powered">
           <span>{brand.name}</span>
