@@ -1,7 +1,8 @@
 {
   "name": "family-trip",
   "private": true,
-  "version": "0.2.0",
+  "version": "1.0.0",
+  "description": "Beta MVP — TinyTripIndex family trip planner (host + guest dashboards)",
   "type": "module",
   "scripts": {
     "dev": "vite",

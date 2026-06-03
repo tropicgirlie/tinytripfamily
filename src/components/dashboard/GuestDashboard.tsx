@@ -30,7 +30,6 @@ type Planner = ReturnType<typeof useTripPlanner>;
 type Props = {
   planner: Planner;
   brand: BrandState;
-  switchView: (mode: "guest" | "host") => void;
   guestSummary: string;
   countdownDays: number;
   displayVilla: Villa | null;
@@ -42,7 +41,6 @@ type Props = {
 export function GuestDashboard({
   planner,
   brand,
-  switchView,
   guestSummary,
   countdownDays,
   displayVilla,
@@ -84,13 +82,9 @@ export function GuestDashboard({
               <span>Family trip</span>
             </div>
           </a>
-          <div className="dashboard-view-toggle" role="tablist" aria-label="View mode">
-            <button type="button" className="is-active" aria-current="page">
-              Guest view
-            </button>
-            <button type="button" onClick={() => switchView("host")}>
-              Host view
-            </button>
+          <div className="guest-access-pill" aria-label="Guest access">
+            <span>Beta</span>
+            Guest trip page
           </div>
           <div className="dashboard-topbar-actions">
             <button type="button" className="dashboard-icon-btn" aria-label="Notifications">

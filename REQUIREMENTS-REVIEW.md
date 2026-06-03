@@ -1,59 +1,65 @@
 # Requirements review — Micheau Family Trip
 
-This document maps your **original brief** and follow-up requests to what is implemented today (Vite + React 19 + Radix Themes + Phosphor + MD3 tokens).
+**Current release:** Beta MVP (v1.0) — see [product-mvp-and-full-app.md](product-mvp-and-full-app.md).
+
+## MVP definition of done
+
+| Criterion | Status |
+|-----------|--------|
+| Guest page has no visible host controls | **Done** |
+| Host page requires passcode | **Done** |
+| Host can add manual villa options | **Done** |
+| Host can manage guest profiles | **Done** |
+| Host can pin final villa | **Done** |
+| Guest page reflects chosen villa | **Done** |
+| AI family-fit panel with Gemini + fallback | **Done** (needs `GEMINI_API_KEY` for live AI) |
+| API setup visible to host only | **Done** |
+| App builds locally | **Done** (`npm run build`) |
+| Deploy to Vercel | **Ready** (env vars per `tasks.md`) |
 
 ## Original brief (first message)
 
 | Requirement | Status | Notes |
 |-------------|--------|-------|
-| Keep existing functionality | **Met** | Host/guest modes, filters, pin villa, mystery reveal, family roster, activities, amenities, flight nudges, white-label brand fields |
-| Airbnb-level polish | **Partial** | New host + guest dashboards align with mockups; some legacy sections remain below the fold on guest |
-| Change colour palette | **Met** | Teal/coral/sand system in `styles.css` + dashboard tokens in `src/theme/dashboard.css` |
-| Document every step | **Partial** | This file + `README.md` + `PRODUCT.md`; no full design changelog yet |
-| UI/UX changes + animations | **Partial** | Hover lifts, wheel spin, reduced-motion respected; no broad motion system |
-| TinyTripIndex sub-product | **Met** | Footer + host sidebar subdomain + brand controls |
-| Europe / family-with-kids positioning | **Met** | Copy, toddler filters, age-based activity matching |
-| Path to Android/iOS | **Partial** | React SPA is embeddable; no PWA manifest or native shell yet |
+| Keep existing functionality | **Met** | Host/guest, pin, mystery reveal, family roster, activities, flights, brand |
+| Airbnb-level polish | **Met (MVP)** | Host + guest dashboard shells; deep sections use shared card styles |
+| Change colour palette | **Met** | Teal/coral/sand + dashboard tokens |
+| Document every step | **Met** | README, PRODUCT, product plan, tasks, this file |
+| UI/UX + animations | **Partial** | Hover, wheel spin, reduced-motion; not full motion system |
+| TinyTripIndex sub-product | **Met** | Attribution + subdomain preview |
+| Europe / family-with-kids | **Met** | Toddler filters, age-based activities, Algarve focus |
+| Path to Android/iOS | **Partial** | React SPA; PWA/native shell backlog |
 
-## Follow-up requests (conversation)
+## Follow-up UI requests
 
-| Request | Status | Notes |
-|---------|--------|-------|
-| Hero mockup (beach, script tagline, date strip, countdown) | **Met (guest)** | Guest hero matches mockup: title, Caveat tagline, inline dates, countdown card |
-| Host workspace padding/layout | **Met** | Form grid in host dashboard `#host-planning` |
-| Shortlist real photos + padding | **Met** | Unsplash on villas; host shortlist + full list in dashboard |
-| Destination-aware host + flights | **Met** | `destinations.ts`, `buildFlightInsights`, Google Flights deep links |
-| Radix + Phosphor + Material | **Met** | `src/main.tsx`, `material-radix.css` |
-| Logo asset | **Met** | `assets/micheau-logo.jpg` |
-| Top nav single row | **Met (guest shell)** | Guest top bar: logo, view toggle, actions |
-| Date icon red boxes fix | **Met** | White Phosphor icons on coral tiles (legacy hero CSS still in `styles.css` if old markup used) |
-| Countdown card whitespace | **Met** | Trip-pulse card no longer stretches to flight column height |
-| Member card photo placeholder | **Met** | `member-photo-placeholder` in family section |
-| Host dashboard mockup | **Met** | `HostDashboard` — sidebar, hero, quick actions, grids, planning workspace |
-| Guest dashboard mockup | **Met** | `GuestDashboard` — info strip, quick nav, villa reveal, itinerary, activities scroll, amenities/weather/packing, footer CTA |
+| Request | Status |
+|---------|--------|
+| Guest / host dashboard mockups | **Done** |
+| Hero, shortlist photos, host workspace | **Done** |
+| Radix + Phosphor + Material | **Done** |
+| Date icons, countdown whitespace, member photo placeholder | **Done** |
 
 ## Product principles (`PRODUCT.md`)
 
 | Principle | Status |
 |-----------|--------|
-| Host work separate from guest view | **Met** — `?view=host` vs `?view=guest` |
-| Pinned decision feels official | **Met** — pin + guest villa panel |
-| Personalize by family ages | **Met** — roster + activity scores |
-| Playful reveal | **Met** — mystery board when not pinned |
+| Host work separate from guest view | **Met** |
+| Pinned decision feels official | **Met** |
+| Personalize by family ages | **Met** |
+| Playful reveal | **Met** |
 | TinyTripIndex attribution | **Met** |
-| WCAG-minded UX | **Partial** — labels/focus exist; full audit not run |
+| WCAG-minded UX | **Partial** |
 
-## Gaps / backlog (recommended next)
+## Post-MVP backlog
 
-1. **Single shell consistency** — Guest deep sections (family form, full activity list) still use older card styles below the new dashboard; restyle or collapse into panels.
-2. **Live APIs** — Still prototype data; backend adapters per `README.md`.
-3. **Map** — Quick nav “Map” links to `#overview`; no map component yet.
-4. **Messages / budget** — Host UI placeholders; no real messaging or payments.
-5. **Design changelog** — Optional `DESIGN-CHANGELOG.md` for step-by-step UX iterations.
-6. **PWA** — `manifest.json` + service worker for installable mobile web.
-7. **Next.js** — Optional migration for SSR/SEO; not required for private family links.
+1. Connect Places API fully to guest amenities card (live fetch vs static fallback).
+2. Restyle guest “deep” sections to match dashboard cards.
+3. Real auth (Clerk / Supabase Auth) replacing passcode.
+4. Expedia Rapid lodging search after partner approval.
+5. PWA manifest for installable mobile web.
+6. Map component for quick-nav “Map”.
 
-## How to verify
+## Verify
 
 ```bash
 npm run dev
@@ -66,7 +72,8 @@ npm run dev
 
 | Area | Files |
 |------|--------|
-| Guest UI | `src/components/dashboard/GuestDashboard.tsx`, `src/theme/guest-dashboard.css`, `src/data/guest-dashboard.ts` |
-| Host UI | `src/components/dashboard/HostDashboard.tsx`, `src/theme/dashboard.css`, `src/data/dashboard.ts` |
-| Shared logic | `src/hooks/useTripPlanner.ts`, `src/data/trip.ts`, `src/data/destinations.ts` |
-| Deep sections | `src/AppSections.tsx` (`sectionsOnly` on guest) |
+| Guest UI | `src/components/dashboard/GuestDashboard.tsx`, `src/theme/guest-dashboard.css` |
+| Host UI | `src/components/dashboard/HostDashboard.tsx`, `src/theme/dashboard.css` |
+| State | `src/hooks/useTripPlanner.ts` |
+| APIs | `api/places/nearby.js`, `api/ai/family-fit.js` |
+| Data | `src/data/trip.ts`, `src/data/destinations.ts` |

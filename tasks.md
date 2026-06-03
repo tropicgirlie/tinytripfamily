@@ -1,5 +1,15 @@
 # Micheau Family Trip Tasks
 
+Product plan: see `product-mvp-and-full-app.md`.
+
+## Beta access
+
+- Host/admin beta login is enabled.
+  - Host passcode for local MVP: `luana2026`
+  - Host session is stored in local storage.
+  - Guest page no longer shows the Host view switch.
+  - Full product should replace this with real auth and role permissions.
+
 ## API setup
 
 - Restrict the Google Places API key in Google Cloud Console.

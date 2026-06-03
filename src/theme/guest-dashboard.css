@@ -25,6 +25,33 @@
   margin: 0 auto;
 }
 
+.guest-access-pill {
+  margin: 0 auto;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--dash-line);
+  border-radius: 999px;
+  padding: 0 18px;
+  color: var(--dash-teal-dark);
+  background: var(--dash-surface);
+  box-shadow: var(--dash-shadow);
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.guest-access-pill span {
+  border-radius: 999px;
+  padding: 3px 8px;
+  color: var(--dash-teal-dark);
+  background: var(--dash-teal-soft);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 .guest-hero h1 {
   margin: 0;
   max-width: 20ch;

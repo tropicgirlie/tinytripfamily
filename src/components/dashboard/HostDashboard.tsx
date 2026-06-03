@@ -70,6 +70,7 @@ type Props = {
   spinning: boolean;
   setSpinning: (v: boolean) => void;
   brandSubdomain: string;
+  onSignOut: () => void;
 };
 
 function villaMeta(villa: Villa) {
@@ -98,6 +99,7 @@ export function HostDashboard({
   spinning,
   setSpinning,
   brandSubdomain,
+  onSignOut,
 }: Props) {
   const {
     switchView,
@@ -310,6 +312,7 @@ export function HostDashboard({
               Host view
             </button>
             <span className="dashboard-planning-label">Luana controls</span>
+            <span className="dashboard-beta-label">Beta</span>
           </div>
           <div className="dashboard-topbar-actions">
             <button type="button" className="dashboard-icon-btn" aria-label="Notifications">
@@ -323,7 +326,7 @@ export function HostDashboard({
               <div>
                 <strong>Control page</strong>
               </div>
-              <CaretRight size={16} aria-hidden />
+              <button type="button" onClick={onSignOut}>Sign out</button>
             </div>
           </div>
         </header>

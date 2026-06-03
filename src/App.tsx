@@ -1,13 +1,19 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, type FormEvent } from "react";
 import { Box, Grid, Select, Slider, Text, TextField } from "@radix-ui/themes";
 import { currency } from "./lib/format";
 import { useTripPlanner } from "./hooks/useTripPlanner";
 import { GuestDashboard } from "./components/dashboard/GuestDashboard";
 import { HostDashboard } from "./components/dashboard/HostDashboard";
 
+const hostSessionKey = "micheauHostSession";
+const hostPasscode = "luana2026";
+
 export default function App() {
   const planner = useTripPlanner();
   const [spinning, setSpinning] = useState(false);
+  const [hostAuthed, setHostAuthed] = useState(() => localStorage.getItem(hostSessionKey) === "true");
+  const [hostLoginValue, setHostLoginValue] = useState("");
+  const [hostLoginError, setHostLoginError] = useState("");
 
   const {
     viewMode,
@@ -64,6 +70,24 @@ export default function App() {
   }, [familyMembers, getAgeGroup, trip.guests]);
 
   const isHost = viewMode === "host";
+
+  const submitHostLogin = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (hostLoginValue.trim() !== hostPasscode) {
+      setHostLoginError("That passcode is not correct.");
+      return;
+    }
+    localStorage.setItem(hostSessionKey, "true");
+    setHostAuthed(true);
+    setHostLoginError("");
+    setHostLoginValue("");
+  };
+
+  const signOutHost = () => {
+    localStorage.removeItem(hostSessionKey);
+    setHostAuthed(false);
+    switchView("guest");
+  };
 
   const hostPlanning = (
     <Grid columns={{ initial: "1", sm: "2", lg: "3" }} gap="4" className="host-workspace-form">
@@ -229,6 +253,37 @@ export default function App() {
     </Grid>
   );
 
+  if (isHost && !hostAuthed) {
+    return (
+      <main className="host-login-shell">
+        <section className="host-login-card" aria-labelledby="hostLoginTitle">
+          <div className="host-login-brand">
+            <img src={brand.logo} alt="" />
+            <span>Beta</span>
+          </div>
+          <h1 id="hostLoginTitle">Host access</h1>
+          <p>Luana&apos;s private planning workspace for villa search, family details, API setup and the final reveal.</p>
+          <form onSubmit={submitHostLogin}>
+            <label htmlFor="hostPasscode">Host passcode</label>
+            <input
+              id="hostPasscode"
+              type="password"
+              value={hostLoginValue}
+              onChange={(event) => setHostLoginValue(event.target.value)}
+              placeholder="Enter host passcode"
+              autoComplete="current-password"
+            />
+            {hostLoginError ? <span className="host-login-error">{hostLoginError}</span> : null}
+            <button type="submit">Log in as host</button>
+          </form>
+          <button type="button" className="host-login-guest" onClick={() => switchView("guest")}>
+            Back to guest trip page
+          </button>
+        </section>
+      </main>
+    );
+  }
+
   if (isHost) {
     return (
       <HostDashboard
@@ -247,6 +302,7 @@ export default function App() {
         spinning={spinning}
         setSpinning={setSpinning}
         brandSubdomain={normalizeSubdomain(brand.subdomain)}
+        onSignOut={signOutHost}
       />
     );
   }
@@ -257,7 +313,6 @@ export default function App() {
     <GuestDashboard
       planner={planner}
       brand={brand}
-      switchView={switchView}
       guestSummary={guestSummary}
       countdownDays={countdownDays}
       displayVilla={displayVilla}

@@ -1,51 +1,68 @@
-# Micheau Family Trip
+# Micheau Family Trip (Beta MVP)
 
-A first-version family villa planning web app for Algarve trips of 10+ people.
+A **TinyTripIndex** sub-product for host-led family holidays. Luana plans privately; the family gets a calm guest trip page with countdown, villa reveal, flights, itinerary, activities, amenities, and packing guidance.
 
-The app is currently a static prototype focused on:
+**Product plan:** [product-mvp-and-full-app.md](product-mvp-and-full-app.md)  
+**Tasks & APIs:** [tasks.md](tasks.md)  
+**Requirements map:** [REQUIREMENTS-REVIEW.md](REQUIREMENTS-REVIEW.md)
 
-- Algarve only
-- 27 December 2026 to 7 January 2027
-- 10+ guests
-- Villa-style stays with price, bedroom, area, rating, and amenity filters
-- Admin-pinned family choice with confirmed location, amenities, activities, packing notes, and flight guidance
-- Toddler-friendly filtering for cribs, high chairs, pool safety, and nearby playgrounds
-- Seasonal activity suggestions for Christmas/New Year, rainy days, and gentle outdoor days
-- Countdown, sample flight-watch nudges, and a mystery-villa guessing game before the organizer reveals the pinned choice
-- White-label branding controls for trip name, subdomain preview, logo URL, and uploaded logo/photo
-- Parent product attribution as "Powered by TinyTripIndex"
-- Family roster with names and ages, personalized activity matching, and light room preference planning after a villa is pinned
-- Notes on which supplier APIs can later provide live pricing and availability
+## MVP status (v1.0)
 
-## Run
+| Area | What works today |
+|------|------------------|
+| **Guest page** | Dashboard mockup: hero, countdown, trip facts, quick nav, villa reveal, itinerary, activities, amenities, weather, packing, footer CTA. No host switch. |
+| **Host page** | Passcode gate, dashboard mockup, villa filters, manual Airbnb/direct picks, pin final villa, guest profiles (name, age, food, allergies, photo URL), API status panel, sign out. |
+| **Data** | Local storage for brand, family, pinned villa, manual picks, host session. Curated Algarve trip + destination catalog. |
+| **Flights** | Google Flights deep links (no public API). |
+| **Places** | `/api/places/nearby` when `GOOGLE_PLACES_API_KEY` is set (Vercel or `.env.local`). |
+| **AI** | `/api/ai/family-fit` with Gemini when `GEMINI_API_KEY` is set; local fallback scoring otherwise. |
+
+### Out of scope for this MVP
+
+- Real auth (passcode + localStorage only)
+- Live Expedia/Booking inventory
+- In-app payments
+- Multi-trip accounts
+
+## Run locally
 
 ```bash
 npm install
+cp .env.example .env.local   # optional: Places + Gemini
 npm run dev
 ```
 
-Opens at [http://localhost:8080](http://localhost:8080) with React, Radix UI Themes, Phosphor icons, and Material Design 3 styling.
+| URL | Purpose |
+|-----|---------|
+| http://localhost:8080/?view=guest | Family trip page (default) |
+| http://localhost:8080/?view=host | Host workspace (passcode required) |
 
 Production build: `npm run build` then `npm run preview`.
 
-Legacy static files (`app.js`, old flow) are kept for reference; the app entry is `src/main.tsx`.
+## Stack
 
-## API Direction
+- **Vite 6** + **React 19** + **TypeScript**
+- **Radix UI Themes**, **Phosphor Icons**, MD3 tokens (`src/theme/material-radix.css`)
+- **Vercel** serverless routes in `api/` for Places and Gemini
 
-Airbnb does not provide a simple public search API for general-purpose apps. For a production version, build a backend provider layer with adapters for approved supplier APIs:
+Legacy static files (`app.js`, older HTML flow) remain for reference; entry point is `src/main.tsx`.
 
-- Booking.com Demand API for search, availability, pricing, details, and reviews
-- Expedia Rapid API / Vrbo inventory for lodging rates, availability, content, and reviews
-- Airbnb only through approved partner or channel-manager access
-- Google Flights: no public API — use dated deep links in the UI; add Amadeus, Duffel, or SerpApi on a server for live fares
-- Google Places, Viator, or GetYourGuide partner feeds for activities, amenities, and opening-hour context
-- OpenAI Responses API for structured villa scoring, family-fit explanations, and itinerary JSON
-- Gemini API with Google Search grounding if the product needs Google-grounded answers for live/opening-hour style questions
+## Environment variables
 
-The UI data model in `src/data/trip.ts` is shaped like normalized provider results so sample records can be replaced by API responses later.
+See [.env.example](.env.example). Server-side only (never `VITE_` prefix for secrets):
 
-## Backlog
+- `GOOGLE_PLACES_API_KEY` — nearby amenities
+- `GEMINI_API_KEY` — family-fit scoring
+- `GEMINI_MODEL` — optional (default `gemini-2.5-flash-lite`)
 
-- Family member profile photos: allow each person to upload a picture/avatar.
-- Activity attendee bubbles: show small overlapping profile circles on activity cards for people interested in or joining that activity.
-- Social activity animations: animate avatar bubbles when someone joins, guesses the villa, or reacts to a pinned plan.
+Pull from Vercel when needed: `vercel env pull`.
+
+## Deploy
+
+Deploy to **Vercel** after `npm run build` succeeds. Configure env vars in the Vercel project (Production + Preview). Restrict Google API keys to your domains in Google Cloud Console.
+
+## API roadmap (post-MVP)
+
+Documented in [tasks.md](tasks.md): Expedia Rapid (lodging), Amadeus (fares), Viator (activities), Postgres/Supabase (shared trips), Stripe (optional).
+
+The UI model in `src/data/trip.ts` is shaped for normalized provider responses when adapters are added.
