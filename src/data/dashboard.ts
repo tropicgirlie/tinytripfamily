@@ -1,4 +1,4 @@
-import type { Icon } from "@phosphor-icons/react";
+import type { Icon } from "../lib/icons";
 import {
   Airplane,
   CalendarBlank,
@@ -13,7 +13,7 @@ import {
   SquaresFour,
   UsersThree,
   Wallet,
-} from "@phosphor-icons/react";
+} from "../lib/icons";
 
 export type NavItem = {
   id: string;

@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import type { IconProps } from "@phosphor-icons/react";
+import type { IconProps } from "../lib/icons";
 import {
   Baby,
   Buildings,
@@ -21,7 +21,7 @@ import {
   UserCircle,
   UsersThree,
   Waves,
-} from "@phosphor-icons/react";
+} from "../lib/icons";
 
 const chipIconMap: Record<string, ComponentType<IconProps>> = {
   adults: User,

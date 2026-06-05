@@ -22,6 +22,7 @@ export type Villa = {
   distance: string;
   fit: number;
   source: string;
+  address?: string;
   amenities: string[];
   childAmenities: string[];
   bestFor: string[];
@@ -44,7 +45,7 @@ export type Activity = {
 };
 
 export const tripDefaults: TripDefaults = {
-  guests: 10,
+  guests: 13,
   checkIn: "2026-12-27",
   checkOut: "2027-01-07",
   nights: 11,
@@ -52,8 +53,14 @@ export const tripDefaults: TripDefaults = {
 
 export const areas: AreaGuide[] = [
   {
+    name: "Albufeira / Olhos de Agua",
+    verdict: "Confirmed family base",
+    detail:
+      "Best MVP base for this trip: larger winter infrastructure, strong villa inventory, easy Guia shopping, beaches, restaurants, and New Year's options.",
+  },
+  {
     name: "Carvoeiro / Ferragudo",
-    verdict: "Best overall first search",
+    verdict: "Best scenic backup",
     detail:
       "Central Algarve base with coves, restaurants, supermarkets, and easy day trips to Lagos, Albufeira, and Faro.",
   },
@@ -80,12 +87,6 @@ export const areas: AreaGuide[] = [
     verdict: "Best quieter suggestion",
     detail:
       "Lovely eastern Algarve towns with a local feel; farther from many classic central/western beach outings.",
-  },
-  {
-    name: "Albufeira / Olhos de Agua",
-    verdict: "Best for broad inventory",
-    detail:
-      "Large supply of villas and restaurants; choose carefully for winter calm and family-friendly surroundings.",
   },
 ];
 
@@ -205,9 +206,9 @@ export const villas: Villa[] = [
     price: 7600,
     bedrooms: 5,
     bathrooms: 4,
-    rating: 4.6,
+    rating: 4.8,
     distance: "15 min walk to local beach",
-    fit: 84,
+    fit: 95,
     source: "Booking.com / Expedia style match",
     amenities: ["walkable restaurants", "beach nearby", "supermarket nearby", "pool"],
     childAmenities: ["high chair", "playground nearby"],
@@ -220,7 +221,7 @@ export const villas: Villa[] = [
     bring: ["comfortable shoes", "beach layers", "shared grocery list", "portable chargers"],
     flights: "Fly into Faro Airport, then plan a 35-45 minute transfer. Check the exact street for calm.",
     note:
-      "Good value and broad inventory. Best when the exact street is calm and away from late-night zones.",
+      "Best current Albufeira match: practical for winter, close to essentials, and still calm if the exact street is away from late-night zones.",
     image:
       "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=900&h=650&q=80",
     imageFallback: "Villa placeholder 5",

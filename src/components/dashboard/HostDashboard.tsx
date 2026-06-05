@@ -9,6 +9,7 @@ import {
   Circle,
   FileText,
   HouseLine,
+  MapPin,
   PencilSimple,
   PushPin,
   SlidersHorizontal,
@@ -18,7 +19,7 @@ import {
   UserCircle,
   UsersThree,
   Wallet,
-} from "@phosphor-icons/react";
+} from "../../lib/icons";
 import type { useTripPlanner } from "../../hooks/useTripPlanner";
 import type { Villa } from "../../data/trip";
 import { currency } from "../../lib/format";
@@ -117,10 +118,21 @@ export function HostDashboard({
     removeMember,
     getAgeGroup,
     villaPricePerNight,
+    guestContentCache,
+    refreshGuestNearbyPlaces,
+    placesRefreshLoading,
+    placesRefreshError,
   } = planner;
 
   const heroStyle = { ["--hero-beach" as string]: `url("${destination.heroImage}")` };
   const topVilla = matchedVillas[0];
+  const placesArea =
+    (hasPinnedVilla && pinnedVilla?.address) ||
+    topVilla?.address ||
+    (hasPinnedVilla && pinnedVilla?.area) ||
+    topVilla?.area ||
+    destination.areas[0]?.name ||
+    destination.label;
   const [tasks, setTasks] = useState(hostTasks);
   const [newGuest, setNewGuest] = useState({
     name: "",
@@ -131,6 +143,7 @@ export function HostDashboard({
   const [manualPick, setManualPick] = useState({
     name: "",
     area: "",
+    address: "",
     price: "",
     bedrooms: "",
     url: "",
@@ -173,9 +186,15 @@ export function HostDashboard({
     },
     {
       name: "Gemini family fit",
-      detail: "Scoring endpoint and host UI ready",
-      status: "Add valid GEMINI_API_KEY",
+      detail: "Fallback AI provider for family-fit scoring",
+      status: "Optional fallback",
       ready: false,
+    },
+    {
+      name: "OpenRouter AI",
+      detail: "Primary family-fit provider for cheaper testing",
+      status: "Local + Vercel env added",
+      ready: true,
     },
     {
       name: "Expedia Rapid",
@@ -220,16 +239,17 @@ export function HostDashboard({
     addManualVilla({
       name: manualPick.name.trim(),
       area: manualPick.area.trim() || topVilla?.area || destination.areas[0]?.name || destination.label,
+      address: manualPick.address.trim(),
       price,
       bedrooms,
       url: manualPick.url.trim(),
       image: manualPick.image.trim(),
     });
-    setManualPick({ name: "", area: "", price: "", bedrooms: "", url: "", image: "" });
+    setManualPick({ name: "", area: "", address: "", price: "", bedrooms: "", url: "", image: "" });
   };
 
   const clearManualPickForm = () => {
-    setManualPick({ name: "", area: "", price: "", bedrooms: "", url: "", image: "" });
+    setManualPick({ name: "", area: "", address: "", price: "", bedrooms: "", url: "", image: "" });
   };
 
   const scoreFamilyFit = async () => {
@@ -255,12 +275,24 @@ export function HostDashboard({
             childAmenities: villa.childAmenities,
             bestFor: villa.bestFor,
             distance: villa.distance,
+            address: villa.address,
             note: villa.note,
           })),
+          validatedResearchPolicy:
+            "Use only validated Algarve baseline research and the host-entered villa details. Mark 2026/27 festive dates, live fares, opening hours and exact distances as verification items unless supplied by an API/cache.",
         }),
       });
-      if (!response.ok) throw new Error("Family fit request failed");
-      setFamilyFit(await response.json());
+      const data = (await response.json()) as FamilyFitResponse;
+      setFamilyFit(data);
+      if (data.error) {
+        setFamilyFitError(String(data.error));
+      } else if (String(data.provider).toLowerCase().includes("fallback")) {
+        setFamilyFitError(
+          "AI did not run — local rules-based score shown. Check OPENROUTER_API_KEY or GEMINI_API_KEY in .env.local / Vercel.",
+        );
+      } else {
+        setFamilyFitError("");
+      }
     } catch (error) {
       setFamilyFitError(error instanceof Error ? error.message : "Could not score villas");
     } finally {
@@ -613,6 +645,35 @@ export function HostDashboard({
                     <em>{row.status}</em>
                   </div>
                 ))}
+                <div className="host-guest-content-refresh">
+                  <div>
+                    <strong>Nearby places for guest page</strong>
+                    <span>
+                      Calls Google Places once for <em>{placesArea}</em>, then saves for guests. Family
+                      views do not use your API quota.
+                    </span>
+                    {guestContentCache ? (
+                      <span className="host-cache-meta">
+                        Cached {new Date(guestContentCache.updatedAt).toLocaleString()} ·{" "}
+                        {guestContentCache.nearbyAmenities.length} places
+                      </span>
+                    ) : (
+                      <span className="host-cache-meta">Not loaded yet — guests see sample distances.</span>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    className="dashboard-outline-btn"
+                    disabled={placesRefreshLoading}
+                    onClick={() => refreshGuestNearbyPlaces(placesArea)}
+                  >
+                    <MapPin size={16} aria-hidden />
+                    {placesRefreshLoading ? "Loading..." : "Refresh for guests"}
+                  </button>
+                  {placesRefreshError ? (
+                    <p className="host-ai-error">{placesRefreshError}</p>
+                  ) : null}
+                </div>
               </div>
             </div>
           </article>
@@ -622,7 +683,7 @@ export function HostDashboard({
           <div className="dashboard-panel-header">
             <div>
               <h2>AI family fit</h2>
-              <p>Private Gemini scoring for Luana: child needs, allergies, budget and villa tradeoffs.</p>
+              <p>Private AI scoring for Luana: child needs, allergies, budget and villa tradeoffs.</p>
             </div>
             <Sparkle size={22} weight="duotone" aria-hidden />
           </div>
@@ -635,7 +696,7 @@ export function HostDashboard({
                 </span>
               </div>
               <button type="button" onClick={scoreFamilyFit} disabled={familyFitLoading}>
-                {familyFitLoading ? "Scoring..." : "Score with Gemini"}
+                {familyFitLoading ? "Scoring..." : "Score with AI"}
               </button>
             </div>
             {familyFitError ? <p className="host-ai-error">{familyFitError}</p> : null}
@@ -819,6 +880,15 @@ export function HostDashboard({
                   value={manualPick.area}
                   onChange={(event) => setManualPick((current) => ({ ...current, area: event.target.value }))}
                   placeholder="Lagos"
+                />
+              </label>
+              <label className="host-manual-pick-wide">
+                Exact address
+                <input
+                  type="text"
+                  value={manualPick.address}
+                  onChange={(event) => setManualPick((current) => ({ ...current, address: event.target.value }))}
+                  placeholder="Paste villa address for real nearby amenities"
                 />
               </label>
               <label>

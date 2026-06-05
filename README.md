@@ -3,6 +3,7 @@
 A **TinyTripIndex** sub-product for host-led family holidays. Luana plans privately; the family gets a calm guest trip page with countdown, villa reveal, flights, itinerary, activities, amenities, and packing guidance.
 
 **Product plan:** [product-mvp-and-full-app.md](product-mvp-and-full-app.md)  
+**API costs & setup (read this):** [API-GUIDE.md](API-GUIDE.md)
 **Tasks & APIs:** [tasks.md](tasks.md)  
 **Requirements map:** [REQUIREMENTS-REVIEW.md](REQUIREMENTS-REVIEW.md)
 
@@ -14,8 +15,8 @@ A **TinyTripIndex** sub-product for host-led family holidays. Luana plans privat
 | **Host page** | Passcode gate, dashboard mockup, villa filters, manual Airbnb/direct picks, pin final villa, guest profiles (name, age, food, allergies, photo URL), API status panel, sign out. |
 | **Data** | Local storage for brand, family, pinned villa, manual picks, host session. Curated Algarve trip + destination catalog. |
 | **Flights** | Google Flights deep links (no public API). |
-| **Places** | `/api/places/nearby` when `GOOGLE_PLACES_API_KEY` is set (Vercel or `.env.local`). |
-| **AI** | `/api/ai/family-fit` with Gemini when `GEMINI_API_KEY` is set; local fallback scoring otherwise. |
+| **Places** | Host clicks **Refresh for guests** → Google Places once → saved locally; guest page reads cache (**no per-visit API cost**). |
+| **AI** | Host clicks **Score with Gemini** only; guest page never calls Gemini. Fallback scoring if key/billing missing. |
 
 ### Out of scope for this MVP
 

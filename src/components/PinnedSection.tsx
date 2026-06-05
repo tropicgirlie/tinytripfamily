@@ -1,5 +1,5 @@
 import { Box, Button, Heading, Text } from "@radix-ui/themes";
-import { Shuffle } from "@phosphor-icons/react";
+import { Shuffle } from "../lib/icons";
 import { Chip } from "./Chip";
 import { currency } from "../lib/format";
 import type { Villa } from "../data/trip";

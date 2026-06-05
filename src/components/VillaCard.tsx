@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Heading, Text } from "@radix-ui/themes";
-import { ArrowSquareOut, Question, PushPin, Sparkle, Star, Bed } from "@phosphor-icons/react";
+import { ArrowSquareOut, Bed, PushPin, Question, Sparkle, Star } from "../lib/icons";
 import type { Villa } from "../data/trip";
 import { currency, placeholderImage } from "../lib/format";
 import { Chip } from "./Chip";

@@ -23,6 +23,13 @@ export type Destination = {
   country: string;
   displayName: string;
   airport: DestinationAirport;
+  airportTransfer?: {
+    distance: string;
+    driveTime: string;
+    taxiEstimate: string;
+    privateTransferEstimate: string;
+    note: string;
+  };
   areas: AreaGuide[];
   flightRoutes: FlightRouteTemplate[];
   heroImage: string;
@@ -34,12 +41,20 @@ export const destinationCatalog: Record<string, Destination> = {
     id: "algarve",
     label: "Algarve",
     country: "Portugal",
-    displayName: "Algarve, Portugal",
+    displayName: "Albufeira, Algarve, Portugal",
     airport: {
       name: "Faro Airport",
       code: "FAO",
       city: "Faro",
       country: "Portugal",
+    },
+    airportTransfer: {
+      distance: "46 km from Faro Airport to central Albufeira",
+      driveTime: "35-50 min in normal traffic",
+      taxiEstimate: "Approx. €50-€65 by airport taxi",
+      privateTransferEstimate: "Plan €65-€90 for a pre-booked family transfer",
+      note:
+        "Exact fare changes with vehicle size, time of day, luggage and the villa address. For 13 travellers, pre-booking vans with child seats is the practical option.",
     },
     areas: algarveAreas,
     flightRoutes: [
@@ -70,7 +85,7 @@ export const destinationCatalog: Record<string, Destination> = {
     ],
     heroImage: "./assets/hero-algarve-beach.jpg",
     overview:
-      "We couldn't get to Paphos directly, so we've chosen Algarve, Portugal. Central coves, marina evenings, and easy Faro transfers make it a strong Christmas-week base for the whole family.",
+      "We couldn't get to Paphos directly, so Albufeira is now the family base. It keeps Faro transfers simple, has more winter infrastructure, and gives the group better Christmas and New Year's options.",
   },
   paphos: {
     id: "paphos",
@@ -159,7 +174,12 @@ export function resolveDestinationFromInput(input: string): Destination {
   if (normalized.includes("paphos") || normalized.includes("cyprus")) {
     return destinationCatalog.paphos;
   }
-  if (normalized.includes("algarve") || normalized.includes("portugal") || normalized.includes("faro")) {
+  if (
+    normalized.includes("albufeira") ||
+    normalized.includes("algarve") ||
+    normalized.includes("portugal") ||
+    normalized.includes("faro")
+  ) {
     return destinationCatalog.algarve;
   }
   return destinationCatalog.algarve;

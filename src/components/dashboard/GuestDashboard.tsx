@@ -1,23 +1,30 @@
-import { type ReactNode, useMemo } from "react";
+import { type ReactNode } from "react";
 import {
   ArrowRight,
   AirplaneTakeoff,
   Bell,
+  BellRinging,
   CalendarBlank,
   CaretRight,
   ChatCircle,
   CloudSun,
+  DownloadSimple,
   Heart,
   MapPin,
   Star,
   Sun,
   UsersThree,
-} from "@phosphor-icons/react";
+  WhatsappLogo,
+} from "../../lib/icons";
 import type { useTripPlanner } from "../../hooks/useTripPlanner";
 import type { BrandState } from "../../hooks/useTripPlanner";
 import type { Villa } from "../../data/trip";
 import {
-  defaultFeaturedActivities,
+  activityBoards,
+  familyGroups,
+  guestFlightOptions,
+  guestFullItinerary,
+  guestHostUpdates,
   guestItineraryPreview,
   guestQuickNav,
   nearbyAmenities,
@@ -48,20 +55,34 @@ export function GuestDashboard({
   villaImageSrc,
   deepSections,
 }: Props) {
-  const { destination, trip, formatDisplayDate, activities, flightInsights } = planner;
+  const { destination, trip, formatDisplayDate, flightInsights, guestContentCache } = planner;
 
   const heroStyle = { ["--hero-beach" as string]: `url("${destination.heroImage}")` };
   const topFlight = flightInsights[0];
-
-  const featuredActivities = useMemo(() => {
-    const fromData = activities.slice(0, 5).map((a, i) => ({
-      name: a.name,
-      meta: a.area,
-      badge: i === 0 ? "Top pick" : undefined,
-      image: defaultFeaturedActivities[i]?.image ?? defaultFeaturedActivities[0].image,
-    }));
-    return fromData.length >= 4 ? fromData : defaultFeaturedActivities;
-  }, [activities]);
+  const tripBrief = [
+    "Micheau Family Trip",
+    `${destination.displayName}`,
+    `${formatDisplayDate(trip.checkIn)} - ${formatDisplayDate(trip.checkOut)} (${trip.nights} nights)`,
+    `${trip.guests} travellers: ${guestSummary}`,
+    "",
+    "Flight watch",
+    "Check direct Dublin (DUB) to Faro (FAO) routes first: Aer Lingus and Ryanair.",
+    destination.airportTransfer
+      ? `Airport transfer: ${destination.airportTransfer.distance}; ${destination.airportTransfer.driveTime}; ${destination.airportTransfer.taxiEstimate}.`
+      : "",
+    "",
+    "Host note",
+    "Luana is validating villas, nearby amenities, child needs, flights and seasonal activities before final sharing.",
+  ].join("\n");
+  const tripBriefUrl = `data:text/plain;charset=utf-8,${encodeURIComponent(tripBrief)}`;
+  const whatsappMessage = encodeURIComponent(
+    `Hi family, I checked the Micheau Family Trip page. Let's talk flights and plans for ${destination.displayName}.`,
+  );
+  const hostWhatsAppNumber = import.meta.env.VITE_HOST_WHATSAPP_NUMBER;
+  const whatsappGroupUrl = import.meta.env.VITE_HOST_WHATSAPP_GROUP_URL;
+  const whatsappUrl = whatsappGroupUrl || (hostWhatsAppNumber
+    ? `https://wa.me/${hostWhatsAppNumber}?text=${whatsappMessage}`
+    : `https://wa.me/?text=${whatsappMessage}`);
 
   const villaPhotos = displayVilla
     ? [
@@ -89,11 +110,17 @@ export function GuestDashboard({
           <div className="dashboard-topbar-actions">
             <button type="button" className="dashboard-icon-btn" aria-label="Notifications">
               <Bell size={20} />
-              <span className="badge">3</span>
+              <span className="badge">{guestHostUpdates.length}</span>
             </button>
-            <button type="button" className="dashboard-icon-btn" aria-label="Messages">
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="dashboard-icon-btn"
+              aria-label="Message Luana on WhatsApp"
+            >
               <ChatCircle size={20} />
-            </button>
+            </a>
             <div className="dashboard-host-profile">
               <img
                 src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&h=120&q=80"
@@ -169,11 +196,69 @@ export function GuestDashboard({
             </div>
           </div>
           <div>
+            <AirplaneTakeoff size={22} aria-hidden />
+            <div>
+              <span>Airport transfer</span>
+              <strong>
+                {destination.airportTransfer?.driveTime ?? "Confirm after villa address"} ·{" "}
+                {destination.airportTransfer?.taxiEstimate ?? "fare varies"}
+              </strong>
+            </div>
+          </div>
+          <div>
             <CloudSun size={22} aria-hidden />
             <div>
               <span>Weather</span>
               <strong>16–19°C · Partly sunny</strong>
             </div>
+          </div>
+        </section>
+
+        <section className="guest-family-channel" aria-label="Family trip channel">
+          <div className="guest-section-head">
+            <div>
+              <h2>Family trip channel</h2>
+              <p>One shared place for flights, the villa reveal, plans and updates for all 13 travellers.</p>
+            </div>
+            <div className="guest-channel-actions">
+              <a href={tripBriefUrl} download="micheau-family-trip-brief.txt">
+                <DownloadSimple size={16} aria-hidden />
+                Download trip brief
+              </a>
+              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+                <WhatsappLogo size={17} aria-hidden />
+                Family WhatsApp
+              </a>
+            </div>
+          </div>
+          <div className="guest-live-updates" aria-label="Host updates">
+            <div className="guest-live-updates-head">
+              <BellRinging size={20} weight="duotone" aria-hidden />
+              <div>
+                <strong>Luana updates</strong>
+                <span>Notifications from the host will appear here first.</span>
+              </div>
+            </div>
+            <div className="guest-update-list">
+              {guestHostUpdates.map((update) => (
+                <article key={update.title} className="guest-update-card">
+                  <span>{update.time}</span>
+                  <strong>{update.title}</strong>
+                  <p>{update.body}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+          <div className="guest-family-groups">
+            {familyGroups.map((group) => (
+              <article key={group.label} className="guest-family-group-card">
+                <span>{group.count}</span>
+                <div>
+                  <strong>{group.label}</strong>
+                  <p>{group.detail}</p>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
 
@@ -190,6 +275,54 @@ export function GuestDashboard({
               <strong>{topFlight?.route ?? `Dublin → ${destination.airport.code}`}</strong>
               <span>{topFlight?.action ?? "Search fares and book soon"}</span>
               <p>{topFlight?.nudge ?? "Christmas travel can move quickly, so compare outbound and return seats early."}</p>
+              {destination.airportTransfer ? (
+                <div className="guest-transfer-card" aria-label="Airport transfer estimate">
+                  <div>
+                    <span>Faro Airport to Albufeira</span>
+                    <strong>{destination.airportTransfer.distance}</strong>
+                  </div>
+                  <dl>
+                    <div>
+                      <dt>Drive</dt>
+                      <dd>{destination.airportTransfer.driveTime}</dd>
+                    </div>
+                    <div>
+                      <dt>Taxi</dt>
+                      <dd>{destination.airportTransfer.taxiEstimate}</dd>
+                    </div>
+                    <div>
+                      <dt>Family transfer</dt>
+                      <dd>{destination.airportTransfer.privateTransferEstimate}</dd>
+                    </div>
+                  </dl>
+                  <p>{destination.airportTransfer.note}</p>
+                </div>
+              ) : null}
+              <div className="guest-flight-options">
+                {guestFlightOptions.map((flight) => (
+                  <article key={flight.airline}>
+                    <div>
+                      <strong>{flight.airline}</strong>
+                      <span>{flight.status}</span>
+                    </div>
+                    <p>{flight.route}</p>
+                    <dl>
+                      <div>
+                        <dt>Best time</dt>
+                        <dd>{flight.depart}</dd>
+                      </div>
+                      <div>
+                        <dt>Why</dt>
+                        <dd>{flight.bestFor}</dd>
+                      </div>
+                    </dl>
+                  </article>
+                ))}
+              </div>
+              <p className="guest-flight-source-note">
+                Current route data shows direct Aer Lingus and Ryanair options from Dublin to Faro.
+                Christmas 2026 times and fares must be checked before booking.
+              </p>
               <a
                 href={topFlight?.searchUrl ?? "#"}
                 target="_blank"
@@ -309,7 +442,7 @@ export function GuestDashboard({
           <article className="dashboard-panel" id="plan">
             <div className="dashboard-panel-header">
               <h2>Itinerary overview</h2>
-              <a href="#plan">View full itinerary →</a>
+              <a href="#full-itinerary">View full itinerary →</a>
             </div>
             <div className="dashboard-panel-body">
               <div className="guest-itinerary-timeline">
@@ -335,26 +468,65 @@ export function GuestDashboard({
           </article>
         </div>
 
-        <section className="guest-activities-section" id="activitiesTitle" aria-labelledby="guestActivitiesTitle">
-          <div className="guest-section-head">
-            <h2 id="guestActivitiesTitle">Things to do</h2>
-            <a href="#activitiesTitle">See all activities →</a>
+        <section className="dashboard-panel guest-full-itinerary" id="full-itinerary">
+          <div className="dashboard-panel-header">
+            <div>
+              <h2>Full itinerary</h2>
+              <p>Draft family plan for the full Algarve stay. Luana can update it as bookings firm up.</p>
+            </div>
+            <a href="#plan">Back to overview ↑</a>
           </div>
-          <div className="guest-activities-scroll">
-            {featuredActivities.map((activity) => (
-              <article key={activity.name} className="guest-activity-card">
-                <img src={activity.image} alt="" loading="lazy" />
-                {activity.badge ? <span className="guest-activity-badge">{activity.badge}</span> : null}
-                <button type="button" className="guest-activity-heart" aria-label="Save activity">
-                  <Heart size={18} />
-                </button>
-                <div className="guest-activity-body">
-                  <strong>{activity.name}</strong>
-                  <span>{activity.meta}</span>
+          <div className="dashboard-panel-body guest-full-itinerary-list">
+            {guestFullItinerary.map((item) => (
+              <article key={`${item.date}-${item.title}`} className="guest-full-itinerary-row">
+                <time>{item.date}</time>
+                <div>
+                  <strong>{item.title}</strong>
+                  <p>{item.plan}</p>
+                  <span>{item.familyNote}</span>
                 </div>
               </article>
             ))}
           </div>
+        </section>
+
+        <section className="guest-activities-section" id="activitiesTitle" aria-labelledby="guestActivitiesTitle">
+          <div className="guest-section-head">
+            <div>
+              <h2 id="guestActivitiesTitle">Things to do by age and moment</h2>
+              <p>Researched Algarve ideas for toddler needs, older kids, Christmas and New Year.</p>
+            </div>
+          </div>
+          <div className="guest-activity-board">
+            {activityBoards.map((board) => (
+              <article key={board.title} className="guest-activity-board-card">
+                <div className="guest-activity-board-head">
+                  <h3>{board.title}</h3>
+                  <p>{board.intro}</p>
+                </div>
+                <div className="guest-activity-list">
+                  {board.items.map((activity) => (
+                    <article key={activity.name} className="guest-activity-card">
+                      <img src={activity.image} alt="" loading="lazy" />
+                      <span className="guest-activity-badge">{activity.tag}</span>
+                      <button type="button" className="guest-activity-heart" aria-label="Save activity">
+                        <Heart size={18} />
+                      </button>
+                      <div className="guest-activity-body">
+                        <strong>{activity.name}</strong>
+                        <span>{activity.meta}</span>
+                        <p>{activity.note}</p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+          <p className="guest-research-note">
+            Seasonal event dates for 2026/27 are not fully published yet. This page uses validated
+            seasonal patterns and should be refreshed when official winter calendars go live.
+          </p>
         </section>
 
         <div className="guest-grid-2 guest-support-grid">
@@ -362,21 +534,44 @@ export function GuestDashboard({
             <div className="dashboard-panel-header">
               <div>
                 <h2>Nearby amenities</h2>
-                <p>Based on the pinned villa area and family needs.</p>
+                <p>
+                  Populated from the pinned villa area. Host can refresh this after adding the
+                  Albufeira villa address or exact location.
+                </p>
               </div>
             </div>
             <div className="dashboard-panel-body guest-amenity-grid">
-              {nearbyAmenities.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <div key={item.label} className="guest-amenity-tile">
-                    <Icon size={22} aria-hidden />
-                    <strong>{item.label}</strong>
-                    <span>{item.distance}</span>
-                  </div>
-                );
-              })}
+              {guestContentCache?.nearbyAmenities?.length
+                ? guestContentCache.nearbyAmenities.map((item) => (
+                    <div key={item.label} className="guest-amenity-tile guest-amenity-tile-live">
+                      <MapPin size={22} aria-hidden />
+                      <strong>{item.name}</strong>
+                      <span>
+                        {item.label} · {item.distance}
+                      </span>
+                    </div>
+                  ))
+                : nearbyAmenities.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <div key={item.label} className="guest-amenity-tile">
+                        <Icon size={22} aria-hidden />
+                        <strong>{item.label}</strong>
+                        <span>{item.distance}</span>
+                      </div>
+                    );
+                  })}
             </div>
+            {guestContentCache ? (
+              <p className="guest-cache-note">
+                Google Places refreshed by host ({new Date(guestContentCache.updatedAt).toLocaleDateString()}
+                ).
+              </p>
+            ) : (
+              <p className="guest-cache-note">
+                Placeholder distances until Luana refreshes nearby places from the chosen villa area.
+              </p>
+            )}
           </article>
 
           <article className="dashboard-panel" id="packing">
@@ -397,20 +592,23 @@ export function GuestDashboard({
           </article>
         </div>
 
-        <section className="guest-footer-cta" aria-label="Trip encouragement">
-          <Heart size={48} weight="regular" className="guest-footer-heart" aria-hidden />
+        <section className="guest-family-memory" aria-label="Family travel note">
+          <div className="guest-memory-orbit" aria-hidden>
+            <span />
+            <span />
+            <span />
+          </div>
           <div>
-            <h2>Let&apos;s make this trip unforgettable</h2>
-            <p>Relax, explore and enjoy every moment together.</p>
+            <span className="guest-memory-kicker">A little family thread</span>
+            <h2>Everyone has one thing they want from this trip.</h2>
+            <p>
+              Warm mornings, easy dinners, kids with sand in their shoes, and a plan simple enough
+              that nobody has to hold the whole holiday in their head.
+            </p>
           </div>
-          <div className="guest-footer-actions">
-            <a href="#plan" className="guest-btn-primary">
-              See full itinerary <ArrowRight size={16} aria-hidden />
-            </a>
-            <a href="#activitiesTitle" className="guest-btn-outline">
-              Explore things to do <ArrowRight size={16} aria-hidden />
-            </a>
-          </div>
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="guest-memory-link">
+            Tell the family group what matters to you <WhatsappLogo size={16} aria-hidden />
+          </a>
         </section>
 
         {deepSections ? <div className="guest-deep-sections">{deepSections}</div> : null}

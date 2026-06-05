@@ -1,5 +1,5 @@
 import { Box, Button, Card, Flex, Grid, Heading, Select, Text, TextField } from "@radix-ui/themes";
-import { AirplaneTakeoff, Sparkle, UserCircle } from "@phosphor-icons/react";
+import { AirplaneTakeoff, Sparkle, UserCircle } from "./lib/icons";
 import { Chip } from "./components/Chip";
 import { VillaCard } from "./components/VillaCard";
 import type { useTripPlanner } from "./hooks/useTripPlanner";

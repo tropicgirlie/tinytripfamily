@@ -8,6 +8,12 @@ import {
   villaImageSrc,
   villaPricePerNight,
 } from "../lib/format";
+import {
+  fetchNearbyPlacesForArea,
+  readTripContentCache,
+  writeTripContentCache,
+  type TripContentCache,
+} from "../lib/tripContentCache";
 
 export type FamilyMember = {
   name: string;
@@ -21,6 +27,7 @@ export type ViewMode = "guest" | "host";
 export type ManualVillaInput = {
   name: string;
   area: string;
+  address: string;
   price: number;
   bedrooms: number;
   url: string;
@@ -29,7 +36,7 @@ export type ManualVillaInput = {
 
 const pinnedStorageKey = "micheauFamilyTripPinned";
 const brandStorageKey = "tinyTripIndexBrand";
-const familyStorageKey = "tinyTripFamilyMembers";
+const familyStorageKey = "tinyTripFamilyMembersV2";
 const viewStorageKey = "tinyTripViewMode";
 const originStorageKey = "tinyTripOriginCity";
 const manualVillaStorageKey = "tinyTripManualVillas";
@@ -78,12 +85,12 @@ export function useTripPlanner() {
     }
     return stored;
   });
-  const [destinationInput, setDestinationInput] = useState("Algarve, Portugal");
+  const [destinationInput, setDestinationInput] = useState("Albufeira, Algarve, Portugal");
   const [dateInput, setDateInput] = useState("27 Dec 2026 - 7 Jan 2027");
   const [originCity, setOriginCity] = useState(() => localStorage.getItem(originStorageKey) || "Dublin");
   const [trip, setTrip] = useState<TripDefaults>(tripDefaults);
   const [maxPrice, setMaxPrice] = useState(12000);
-  const [areaFilter, setAreaFilter] = useState("all");
+  const [areaFilter, setAreaFilter] = useState("Albufeira / Olhos de Agua");
   const [bedFilter, setBedFilter] = useState(0);
   const [amenityFilter, setAmenityFilter] = useState("all");
   const [childFilter, setChildFilter] = useState("all");
@@ -96,10 +103,26 @@ export function useTripPlanner() {
   const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>(
     () =>
       JSON.parse(localStorage.getItem(familyStorageKey) || "null") || [
-        { name: "Toddler", age: 2 },
         { name: "Luana", age: 36 },
+        { name: "Adult 2", age: 38 },
+        { name: "Toddler", age: 2, foodPreference: "snacks and early meals" },
+        { name: "Family 2 adult 1", age: 40 },
+        { name: "Family 2 adult 2", age: 39 },
+        { name: "Child age 7", age: 7 },
+        { name: "Child age 11", age: 11 },
+        { name: "Family 3 adult 1", age: 42 },
+        { name: "Family 3 adult 2", age: 41 },
+        { name: "Family 4 adult 1", age: 45 },
+        { name: "Family 4 adult 2", age: 44 },
+        { name: "Family 4 adult 3", age: 22 },
+        { name: "Family 4 adult 4", age: 20 },
       ],
   );
+  const [guestContentCache, setGuestContentCache] = useState<TripContentCache | null>(() =>
+    readTripContentCache(),
+  );
+  const [placesRefreshLoading, setPlacesRefreshLoading] = useState(false);
+  const [placesRefreshError, setPlacesRefreshError] = useState("");
 
   const destination = useMemo(() => resolveDestinationFromInput(destinationInput), [destinationInput]);
 
@@ -174,11 +197,14 @@ export function useTripPlanner() {
         destinationId: destination.id,
         name: input.name.trim(),
         area: input.area.trim() || destination.areas[0]?.name || destination.label,
+        address: input.address.trim(),
         price: input.price,
         bedrooms: input.bedrooms,
         bathrooms: Math.max(2, Math.round(input.bedrooms * 0.8)),
         rating: 0,
-        distance: "Manual pick - verify exact address before sharing",
+        distance: input.address.trim()
+          ? "Exact address added by host - refresh nearby places before sharing"
+          : "Manual pick - verify exact address before sharing",
         fit: 82,
         source: input.url.includes("airbnb") ? "Manual Airbnb pick" : "Manual host pick",
         amenities: ["manual pick", "host reviewed"],
@@ -242,6 +268,24 @@ export function useTripPlanner() {
 
   const activeAreas = destination.areas.length ? destination.areas : areas;
 
+  const refreshGuestNearbyPlaces = useCallback(async (area: string) => {
+    setPlacesRefreshLoading(true);
+    setPlacesRefreshError("");
+    try {
+      const cache = await fetchNearbyPlacesForArea(area);
+      writeTripContentCache(cache);
+      setGuestContentCache(cache);
+      return cache;
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Could not refresh nearby places";
+      setPlacesRefreshError(message);
+      throw error;
+    } finally {
+      setPlacesRefreshLoading(false);
+    }
+  }, []);
+
   return {
     viewMode,
     switchView,
@@ -289,5 +333,9 @@ export function useTripPlanner() {
     villaPricePerNight: (villa: Villa) => villaPricePerNight(villa, trip.nights),
     normalizeSubdomain,
     getDestination,
+    guestContentCache,
+    refreshGuestNearbyPlaces,
+    placesRefreshLoading,
+    placesRefreshError,
   };
 }

@@ -1,8 +1,13 @@
 import { defineConfig, loadEnv, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import familyFitHandler from "./api/ai/family-fit.js";
+import nearbyPlacesHandler from "./api/places/nearby.js";
 
-function jsonResponse(res: { statusCode?: number; setHeader: (key: string, value: string) => void; end: (body: string) => void }) {
+function jsonResponse(res: {
+  statusCode?: number;
+  setHeader: (key: string, value: string) => void;
+  end: (body: string) => void;
+}) {
   return {
     setHeader: res.setHeader.bind(res),
     status(statusCode: number) {
@@ -51,6 +56,17 @@ function localApiPlugin(): Plugin {
           jsonResponse(res),
         );
       });
+
+      server.middlewares.use("/api/places/nearby", async (req, res) => {
+        const url = new URL(req.url || "", "http://localhost");
+        await nearbyPlacesHandler(
+          {
+            method: req.method,
+            query: Object.fromEntries(url.searchParams),
+          },
+          jsonResponse(res),
+        );
+      });
     },
   };
 }
@@ -59,12 +75,16 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   process.env.GEMINI_API_KEY = process.env.GEMINI_API_KEY || env.GEMINI_API_KEY;
   process.env.GEMINI_MODEL = process.env.GEMINI_MODEL || env.GEMINI_MODEL;
+  process.env.OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || env.OPENROUTER_API_KEY;
+  process.env.OPENROUTER_MODEL = process.env.OPENROUTER_MODEL || env.OPENROUTER_MODEL;
+  process.env.GOOGLE_PLACES_API_KEY =
+    process.env.GOOGLE_PLACES_API_KEY || env.GOOGLE_PLACES_API_KEY;
 
   return {
-  plugins: [react(), localApiPlugin()],
-  server: {
-    port: 8080,
-    open: true,
-  },
+    plugins: [react(), localApiPlugin()],
+    server: {
+      port: 8080,
+      open: true,
+    },
   };
 });

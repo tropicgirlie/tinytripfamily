@@ -25,6 +25,13 @@ Product plan: see `product-mvp-and-full-app.md`.
   - Keep the key server-side only, like Google Places.
   - Add `GEMINI_API_KEY` to `.env.local` for local use.
   - Add `GEMINI_API_KEY` to Vercel Production/Development before deploying AI scoring.
+- Add OpenRouter for cheaper AI testing.
+  - OpenRouter is preferred first in `/api/ai/family-fit`.
+  - Gemini remains a fallback provider.
+  - Keep the key server-side only.
+  - Env vars:
+    - `OPENROUTER_API_KEY`
+    - `OPENROUTER_MODEL`
 - Review Expedia Rapid API as the first real lodging provider.
   - Docs/API Explorer: https://developers.expediagroup.com/rapid/api/explorer
   - Create or confirm an Expedia Group Developer / Rapid account.
@@ -52,6 +59,25 @@ Product plan: see `product-mvp-and-full-app.md`.
     - `GEMINI_MODEL`
   - Status: endpoint and host UI are wired; add a real key to use Gemini instead of local fallback scoring.
   - Recommended model: Gemini Flash or Flash-Lite for cost control.
+- OpenRouter API.
+  - Purpose: cheaper AI testing through OpenRouter-compatible models.
+  - Used for: same family-fit intelligence endpoint as Gemini.
+  - Env vars:
+    - `OPENROUTER_API_KEY`
+    - `OPENROUTER_MODEL`
+  - Status: wired as the first AI provider before Gemini; local endpoint tested successfully.
+  - Current default model: `google/gemini-2.5-flash-lite`.
+
+## Validated research source of truth
+
+- Keep `validated-algarve-research.md` updated before asking AI to summarize trip plans.
+- OpenRouter/Gemini should use validated research plus host-entered villa details.
+- AI must not invent:
+  - Exact 2026/27 Christmas market dates.
+  - Live flight prices or exact Christmas-week schedules.
+  - Exact villa-to-amenity distances before Google Places or host confirmation.
+  - Opening hours or availability without an API/source.
+- Refresh this research again in autumn 2026 when official festive calendars are published.
 - Expedia Rapid API.
   - Purpose: real lodging/villa inventory.
   - Used for: lodging content, shopping availability, rates, property details, Vrbo/vacation rental inventory if approved.
@@ -67,6 +93,14 @@ Product plan: see `product-mvp-and-full-app.md`.
   - Used for: outbound links to Google Flights with origin, destination, dates.
   - Env var: none.
   - Status: already suitable for MVP.
+- Host WhatsApp contact.
+  - Purpose: guest page opens the family WhatsApp group, or Luana directly if no group link is set.
+  - Env vars:
+    - `VITE_HOST_WHATSAPP_GROUP_URL`
+    - `VITE_HOST_WHATSAPP_NUMBER`
+  - Format: country code and number only, for example `353000000000`.
+  - Group format: full WhatsApp invite URL, for example `https://chat.whatsapp.com/...`.
+  - Status: UI is wired; add the real group URL locally and in Vercel when ready.
 
 ### Strong next additions
 

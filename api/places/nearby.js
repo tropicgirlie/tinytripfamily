@@ -1,11 +1,12 @@
 const areaCoordinates = {
+  Albufeira: { lat: 37.0891, lng: -8.2479 },
   "Carvoeiro / Ferragudo": { lat: 37.0976, lng: -8.4701 },
   "Vilamoura / Quarteira": { lat: 37.0774, lng: -8.1179 },
   "Lagos / Praia da Luz": { lat: 37.1028, lng: -8.6726 },
   "Vale do Lobo / Quinta do Lago": { lat: 37.0513, lng: -8.0274 },
   "Albufeira / Olhos de Agua": { lat: 37.0922, lng: -8.1918 },
   "Tavira / Cabanas": { lat: 37.1256, lng: -7.6499 },
-  Algarve: { lat: 37.1028, lng: -8.6726 },
+  Algarve: { lat: 37.0891, lng: -8.2479 },
 };
 
 const categoryRequests = [
@@ -23,7 +24,39 @@ const cacheTtlMs = 1000 * 60 * 60 * 12;
 function getCoordinates(area) {
   if (areaCoordinates[area]) return areaCoordinates[area];
   const match = Object.entries(areaCoordinates).find(([name]) => area?.includes(name.split(" / ")[0]));
-  return match?.[1] ?? areaCoordinates.Algarve;
+  return match?.[1] ?? null;
+}
+
+async function resolveTextLocation(apiKey, query) {
+  const response = await fetch("https://places.googleapis.com/v1/places:searchText", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Goog-Api-Key": apiKey,
+      "X-Goog-FieldMask": "places.displayName,places.formattedAddress,places.location,places.googleMapsUri",
+    },
+    body: JSON.stringify({
+      textQuery: `${query}, Algarve, Portugal`,
+      maxResultCount: 1,
+    }),
+  });
+
+  if (!response.ok) {
+    const detail = await response.text();
+    throw new Error(`Google Places text search ${response.status}: ${detail}`);
+  }
+
+  const data = await response.json();
+  const place = data.places?.[0];
+  if (!place?.location) return null;
+
+  return {
+    lat: place.location.latitude,
+    lng: place.location.longitude,
+    resolvedAddress: place.formattedAddress,
+    mapsUrl: place.googleMapsUri,
+    name: place.displayName?.text,
+  };
 }
 
 function distanceInMeters(from, to) {
@@ -111,22 +144,31 @@ export default async function handler(request, response) {
     return;
   }
 
-  const area = String(request.query.area || "Algarve").slice(0, 80);
-  const origin = getCoordinates(area);
-  const cacheKey = `${area}:${origin.lat},${origin.lng}`;
-  const cached = responseCache.get(cacheKey);
-
-  if (cached && Date.now() - cached.createdAt < cacheTtlMs) {
-    response.setHeader("Cache-Control", "s-maxage=3600, stale-while-revalidate=86400");
-    response.status(200).json(cached.payload);
-    return;
-  }
-
   try {
+    const area = String(request.query.area || "Algarve").slice(0, 140);
+    const knownOrigin = getCoordinates(area);
+    const resolved = knownOrigin ? null : await resolveTextLocation(apiKey, area);
+    const origin = knownOrigin || resolved || areaCoordinates.Algarve;
+    const cacheKey = `${area}:${origin.lat},${origin.lng}`;
+    const cached = responseCache.get(cacheKey);
+
+    if (cached && Date.now() - cached.createdAt < cacheTtlMs) {
+      response.setHeader("Cache-Control", "s-maxage=3600, stale-while-revalidate=86400");
+      response.status(200).json(cached.payload);
+      return;
+    }
+
     const amenities = await Promise.all(
       categoryRequests.map((category) => fetchCategory(apiKey, origin, category)),
     );
-    const payload = { area, origin, amenities, updatedAt: new Date().toISOString() };
+    const payload = {
+      area,
+      origin,
+      resolvedAddress: resolved?.resolvedAddress,
+      mapsUrl: resolved?.mapsUrl,
+      amenities,
+      updatedAt: new Date().toISOString(),
+    };
     responseCache.set(cacheKey, { createdAt: Date.now(), payload });
     response.setHeader("Cache-Control", "s-maxage=3600, stale-while-revalidate=86400");
     response.status(200).json(payload);
