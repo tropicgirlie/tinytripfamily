@@ -4,6 +4,7 @@ import { currency } from "./lib/format";
 import { useTripPlanner } from "./hooks/useTripPlanner";
 import { GuestDashboard } from "./components/dashboard/GuestDashboard";
 import { HostDashboard } from "./components/dashboard/HostDashboard";
+import { villas } from "./data/trip";
 
 const hostSessionKey = "micheauHostSession";
 const hostPasscode = "luana2026";
@@ -307,7 +308,9 @@ export default function App() {
     );
   }
 
-  const displayVilla = hasPinnedVilla ? pinnedVilla : matchedVillas[0] ?? null;
+  const displayVilla =
+    villas.find((villa) => villa.name === "Luxury villa with pool bar and heatable pool") ?? null;
+  const showingOriginalPin = Boolean(displayVilla);
 
   return (
     <GuestDashboard
@@ -316,7 +319,7 @@ export default function App() {
       guestSummary={guestSummary}
       countdownDays={countdownDays}
       displayVilla={displayVilla}
-      hasPinnedVilla={hasPinnedVilla}
+      hasPinnedVilla={showingOriginalPin}
       villaImageSrc={villaImageSrc}
       deepSections={null}
     />

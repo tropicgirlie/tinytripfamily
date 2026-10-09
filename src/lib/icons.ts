@@ -58,6 +58,7 @@ export { Suitcase } from "@phosphor-icons/react/dist/csr/Suitcase";
 export { Sun } from "@phosphor-icons/react/dist/csr/Sun";
 export { SwimmingPool } from "@phosphor-icons/react/dist/csr/SwimmingPool";
 export { Trash } from "@phosphor-icons/react/dist/csr/Trash";
+export { Train } from "@phosphor-icons/react/dist/csr/Train";
 export { Tree } from "@phosphor-icons/react/dist/csr/Tree";
 export { Umbrella } from "@phosphor-icons/react/dist/csr/Umbrella";
 export { User } from "@phosphor-icons/react/dist/csr/User";

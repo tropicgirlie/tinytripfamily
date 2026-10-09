@@ -8,8 +8,10 @@ import {
   MapTrifold,
   Package,
   ShoppingBag,
+  ShoppingCart,
   Sparkle,
   Suitcase,
+  Train,
   Sun,
   UsersThree,
   WifiHigh,
@@ -23,6 +25,9 @@ export const guestQuickNav = [
   { id: "amenities", label: "Eat & shop", icon: ForkKnife, href: "#amenities", tone: "coral" },
   { id: "map", label: "Map", icon: MapPin, href: "#overview", tone: "teal" },
   { id: "packing", label: "Packing list", icon: Suitcase, href: "#packing", tone: "brown" },
+  { id: "lisbon", label: "Lisbon day", icon: Train, href: "#lisbon-day", tone: "blue" },
+  { id: "food", label: "Food & shops", icon: ShoppingCart, href: "#stay-food", tone: "coral" },
+  { id: "kids", label: "Kids nearby", icon: UsersThree, href: "#stay-kids", tone: "violet" },
 ] as const;
 
 export const guestItineraryPreview = [
@@ -87,7 +92,6 @@ export const guestFlightOptions = [
 ];
 
 export const nearbyAmenities = [
-  { label: "Supermarket", distance: "7 min walk", icon: ShoppingBag },
   { label: "Pharmacy", distance: "8 min walk", icon: Package },
   { label: "Playground", distance: "6 min walk", icon: UsersThree },
   { label: "Café", distance: "5 min walk", icon: ForkKnife },

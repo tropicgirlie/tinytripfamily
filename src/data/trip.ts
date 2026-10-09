@@ -32,6 +32,7 @@ export type Villa = {
   note: string;
   image: string;
   imageFallback: string;
+  galleryImages?: string[];
   bookingUrl?: string;
 };
 
@@ -90,7 +91,72 @@ export const areas: AreaGuide[] = [
   },
 ];
 
+const villaSapphireGallery = [
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/afc2d6c1-71df-4a8b-bd32-79e657bdd936.jpeg?im_w=1200",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/36bc6d8a-eba3-4c16-8a96-0334c120fa76.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/06e20464-3496-43f0-9fee-0961394d0bd1.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/c557d961-572a-47a1-91a4-a725baea30e2.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/6ac4326a-42e5-4218-8e6c-f42222508d8c.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/7a760b83-e86c-419f-a6c1-b00a172e2285.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/8a092d33-87f6-4911-9146-9ffd2d5ceb23.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/b744cc14-b54a-49e0-946d-b032e97cd7db.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/66a801d4-49b1-455b-8485-9e6a1a50ec7b.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/fc023d91-3063-4675-ba8a-b466e577cd1e.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/b59e8930-420e-454f-8d98-b66e752f5f63.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/5a4204b2-32e9-4e17-9ca4-10507cd0bba7.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/db2e0424-160f-4e94-8315-8f3cfe946365.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/ba46bc3f-db45-402e-9273-dd7244d263c0.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/b4c2e925-6881-4dfc-bdec-f43e7c1985a4.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/0a128fd8-180d-42d0-8d31-1d4805d74105.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/555ebc33-4ac2-46e1-8af6-cece2b7c205f.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/3745b026-61dd-4518-98a2-1cf3005af935.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/a3ad3901-b81c-4cb2-a719-0da99fb71cfb.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/00620edf-93fd-4343-ac01-c7d8e066708b.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/a80cea7f-c3ee-4130-ae99-7fa9549555dc.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/b3e84161-ee9d-421a-ae6c-c9ec079792dc.jpeg?im_w=800",
+  "https://a0.muscache.com/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTM1NjQ5ODY5NzMzODEzNDA5Mw==/original/0e564715-9a85-485c-934f-d8951b6135bb.jpeg?im_w=800",
+];
+
 export const villas: Villa[] = [
+  {
+    destinationId: "algarve",
+    name: "Luxury villa with pool bar and heatable pool",
+    area: "Albufeira / Olhos de Agua",
+    address: "Rua Almeida Garrett 69, Albufeira, Faro 8200-272, Portugal",
+    price: 11000,
+    bedrooms: 5,
+    bathrooms: 5.5,
+    rating: 4.9,
+    distance:
+      "Rua Almeida Garrett base near Oura, Albufeira old town routes, beaches, restaurants, supermarkets and taxi pickup points",
+    fit: 99,
+    source: "Airbnb listing",
+    amenities: ["heated pool", "pool", "walkable restaurants", "beach nearby", "supermarket nearby", "family kitchen"],
+    childAmenities: ["crib available", "high chair", "verify child safety", "playground nearby"],
+    bestFor: ["confirmed villa", "toddler", "walkable basics", "large family"],
+    activities: [
+      "Praia da Oura and Praia dos Alemaes beach walks",
+      "Early dinner around Oura or Albufeira old town",
+      "Zoomarine or Algarve Shopping in Guia for a weather backup",
+      "Family pool afternoon and BBQ at the villa",
+    ],
+    bring: [
+      "pool towels",
+      "light layers for cool evenings",
+      "walking shoes for Oura and old town",
+      "child pool safety plan",
+      "shared grocery order",
+    ],
+    flights:
+      "Fly into Faro Airport, then plan a 35-45 minute transfer to Rua Almeida Garrett 69. For 13 travellers, pre-book vans and child seats.",
+    note:
+      "Confirmed Airbnb base in Albufeira: Villa Sapphire is a modern renovated holiday home with a pool bar and heatable pool, strong for a large family group that wants villa time plus quick access to beaches, restaurants and supermarkets.",
+    image: villaSapphireGallery[0],
+    galleryImages: villaSapphireGallery,
+    imageFallback: "Villa Sapphire",
+    bookingUrl:
+      "https://www.airbnb.ie/rooms/1356498697338134093?infants=0&children=0&adults=1&locale=en&source_impression_id=p3_1781345034_P3leFoc07BCXXNvW",
+  },
   {
     destinationId: "algarve",
     name: "Cove House for a Christmas Crew",

@@ -1,23 +1,25 @@
 .dashboard-app {
-  --dash-bg: #f3f6f8;
+  --dash-bg: #f7f9fb;
   --dash-surface: #ffffff;
-  --dash-ink: #0f2d3d;
-  --dash-muted: #5f7383;
-  --dash-line: #e2e9ee;
-  --dash-teal: #0f9aa1;
-  --dash-teal-soft: #e6f6f4;
-  --dash-teal-dark: #08747a;
-  --dash-coral: #ff5a5f;
-  --dash-sun: #f6a800;
-  --dash-violet: #7c5cff;
-  --dash-blue: #2f6fed;
-  --dash-green: #1f9d63;
-  --dash-red: #e5484d;
+  --dash-ink: #17212b;
+  --dash-muted: #565d6d;
+  --dash-line: #d6dee5;
+  --dash-ink-line: #17212b;
+  --dash-teal: #00a99b;
+  --dash-teal-soft: #d9f7e9;
+  --dash-teal-dark: #007d73;
+  --dash-coral: #ff684d;
+  --dash-sun: #ffd84d;
+  --dash-violet: #b99cff;
+  --dash-blue: #2f58ff;
+  --dash-sky: #dff4ff;
+  --dash-green: #00a99b;
+  --dash-red: #ff684d;
   --dash-sidebar: 248px;
-  --dash-radius: 14px;
-  --dash-shadow: 0 8px 24px rgba(15, 45, 61, 0.06);
-  --dash-font: "DM Sans", "Nunito Sans", system-ui, sans-serif;
-  --dash-serif: "Playfair Display", "Fraunces", Georgia, serif;
+  --dash-radius: 2px;
+  --dash-shadow: 5px 5px 0 #17212b;
+  --dash-font: "Atkinson Hyperlegible", "DM Sans", system-ui, sans-serif;
+  --dash-serif: "Bricolage Grotesque", "Fraunces", sans-serif;
 
   display: grid;
   grid-template-columns: var(--dash-sidebar) minmax(0, 1fr);
@@ -305,17 +307,20 @@
 }
 
 .host-login-shell {
-  --dash-bg: #f3f6f8;
+  --dash-bg: #f7f9fb;
   --dash-surface: #ffffff;
-  --dash-ink: #0f2d3d;
-  --dash-muted: #5f7383;
-  --dash-line: #e2e9ee;
-  --dash-teal: #0f9aa1;
-  --dash-teal-soft: #e6f6f4;
-  --dash-teal-dark: #08747a;
-  --dash-red: #e5484d;
-  --dash-font: "DM Sans", "Nunito Sans", system-ui, sans-serif;
-  --dash-serif: "Playfair Display", "Fraunces", Georgia, serif;
+  --dash-ink: #17212b;
+  --dash-muted: #565d6d;
+  --dash-line: #d6dee5;
+  --dash-ink-line: #17212b;
+  --dash-teal: #00a99b;
+  --dash-teal-soft: #d9f7e9;
+  --dash-teal-dark: #007d73;
+  --dash-coral: #ff684d;
+  --dash-sun: #ffd84d;
+  --dash-red: #ff684d;
+  --dash-font: "Atkinson Hyperlegible", "DM Sans", system-ui, sans-serif;
+  --dash-serif: "Bricolage Grotesque", "Fraunces", sans-serif;
 
   min-height: 100vh;
   display: grid;
@@ -332,11 +337,11 @@
   width: min(100%, 430px);
   display: grid;
   gap: 16px;
-  border: 1px solid rgba(226, 233, 238, 0.9);
-  border-radius: 20px;
+  border: 2px solid var(--dash-ink-line);
+  border-radius: 2px;
   padding: 28px;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 18px 48px rgba(15, 45, 61, 0.12);
+  background: #fff;
+  box-shadow: 6px 6px 0 #17212b;
 }
 
 .host-login-brand {
@@ -394,8 +399,8 @@
 .host-login-card input {
   width: 100%;
   min-height: 46px;
-  border: 1px solid var(--dash-line);
-  border-radius: 12px;
+  border: 2px solid var(--dash-ink-line);
+  border-radius: 2px;
   padding: 0 13px;
   color: var(--dash-ink);
   background: #fff;
@@ -403,30 +408,37 @@
 }
 
 .host-login-card input:focus {
-  outline: 3px solid rgba(15, 154, 161, 0.18);
-  border-color: var(--dash-teal);
+  outline: 3px solid #ffd84d;
+  border-color: var(--dash-ink-line);
 }
 
 .host-login-card form button,
 .host-login-guest {
   min-height: 44px;
-  border: 0;
-  border-radius: 999px;
+  border: 2px solid var(--dash-ink-line);
+  border-radius: 2px;
   padding: 0 18px;
   font: inherit;
   font-size: 0.9rem;
   font-weight: 800;
   cursor: pointer;
+  box-shadow: 4px 4px 0 #17212b;
+}
+
+.host-login-card form button:hover,
+.host-login-guest:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 #17212b;
 }
 
 .host-login-card form button {
   color: #fff;
-  background: var(--dash-teal);
+  background: var(--dash-coral);
 }
 
 .host-login-guest {
-  color: var(--dash-teal-dark);
-  background: var(--dash-teal-soft);
+  color: var(--dash-ink);
+  background: var(--dash-sun);
 }
 
 .host-login-error {
@@ -615,7 +627,7 @@
 }
 
 .dashboard-panel {
-  border: 1px solid var(--dash-line);
+  border: 2px solid var(--dash-ink-line);
   border-radius: var(--dash-radius);
   background: var(--dash-surface);
   box-shadow: var(--dash-shadow);
@@ -1192,7 +1204,8 @@
 }
 
 .host-action-strip {
-  margin-bottom: 14px;
+  margin-bottom: 28px;
+  padding-bottom: 6px;
 }
 
 .host-function-grid {

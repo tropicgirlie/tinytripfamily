@@ -32,6 +32,7 @@ import {
   villaAmenityIcons,
   weatherForecast,
 } from "../../data/guest-dashboard";
+import { GuestStayGuide } from "./GuestStayGuide";
 type Planner = ReturnType<typeof useTripPlanner>;
 
 type Props = {
@@ -57,7 +58,6 @@ export function GuestDashboard({
 }: Props) {
   const { destination, trip, formatDisplayDate, flightInsights, guestContentCache } = planner;
 
-  const heroStyle = { ["--hero-beach" as string]: `url("${destination.heroImage}")` };
   const topFlight = flightInsights[0];
   const tripBrief = [
     "Micheau Family Trip",
@@ -84,13 +84,14 @@ export function GuestDashboard({
     ? `https://wa.me/${hostWhatsAppNumber}?text=${whatsappMessage}`
     : `https://wa.me/?text=${whatsappMessage}`);
 
-  const villaPhotos = displayVilla
-    ? [
-        villaImageSrc(displayVilla),
-        "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=400&h=280&q=80",
-        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=400&h=280&q=80",
-      ]
-    : [];
+  const villaPhotos = displayVilla?.galleryImages?.length
+    ? displayVilla.galleryImages
+    : displayVilla
+      ? [villaImageSrc(displayVilla)]
+      : [];
+  const villaThumbs = villaPhotos.slice(1, 11);
+  const villaMoreCount = Math.max(0, villaPhotos.length - 11);
+  const heroPhoto = villaPhotos[0] || destination.heroImage;
 
   return (
     <div className="dashboard-app guest-app" id="overview">
@@ -136,22 +137,26 @@ export function GuestDashboard({
           </div>
         </header>
 
-        <section className="guest-hero dashboard-hero" style={heroStyle} aria-label="Trip welcome">
-          <div className="guest-hero-inner dashboard-hero-inner">
-            <div>
-              <h1>
-                Our <span>{destination.label}</span> family escape
-              </h1>
-              <p className="guest-hero-tagline">
-                Sun, sea and memories
-                <Heart size={18} weight="regular" className="guest-heart-outline" aria-hidden />
-              </p>
-              <p className="guest-hero-dates">
-                <CalendarBlank size={18} aria-hidden />
-                {formatDisplayDate(trip.checkIn)} – {formatDisplayDate(trip.checkOut)} · {trip.nights}{" "}
-                nights
-              </p>
-            </div>
+        <section className="tti-hero" aria-label="Trip welcome">
+          <div className="tti-hero-copy">
+            <p className="tti-kicker">
+              <span aria-hidden="true" /> For the Micheau family
+            </p>
+            <h1>
+              Our <span className="tti-mark">{destination.label}</span> family escape
+            </h1>
+            <p className="guest-hero-tagline">
+              Sun, sea and memories
+              <Heart size={18} weight="regular" className="guest-heart-outline" aria-hidden />
+            </p>
+            <p className="guest-hero-dates">
+              <CalendarBlank size={18} aria-hidden />
+              {formatDisplayDate(trip.checkIn)} – {formatDisplayDate(trip.checkOut)} · {trip.nights}{" "}
+              nights
+            </p>
+          </div>
+          <div className="tti-hero-side">
+            <img src={heroPhoto} alt={displayVilla?.imageFallback || ""} />
             <aside className="dashboard-countdown-float" aria-label="Trip countdown">
               <div className="dashboard-countdown-top">
                 <p className="eyebrow">Trip countdown</p>
@@ -213,6 +218,81 @@ export function GuestDashboard({
             </div>
           </div>
         </section>
+
+        <article className="dashboard-panel guest-villa-panel guest-villa-feature" id="pinned">
+          <div className="dashboard-panel-header">
+            <h2>Your villa reveal</h2>
+            <a
+              href={displayVilla?.bookingUrl || "#pinned"}
+              target={displayVilla?.bookingUrl ? "_blank" : undefined}
+              rel={displayVilla?.bookingUrl ? "noopener noreferrer" : undefined}
+            >
+              Airbnb listing
+            </a>
+          </div>
+          <div className="dashboard-panel-body">
+            {displayVilla ? (
+              <>
+                <div className="guest-villa-gallery">
+                    <img
+                      className="guest-villa-main"
+                      src={villaPhotos[0]}
+                      alt={displayVilla.name}
+                      loading="eager"
+                    />
+                    <div className="guest-villa-thumbs">
+                      {villaThumbs.map((src, index) => (
+                        <img key={src} src={src} alt={`Villa preview ${index + 2}`} loading="eager" />
+                      ))}
+                      {villaMoreCount > 0 ? (
+                        <span className="guest-villa-more">+{villaMoreCount} photos</span>
+                      ) : null}
+                    </div>
+                  </div>
+                  <div className="guest-villa-headline">
+                    <div>
+                      {hasPinnedVilla ? (
+                        <span className="dashboard-pill-top">Top pick</span>
+                      ) : (
+                        <span className="dashboard-pill-top guest-pill-muted">Shortlist preview</span>
+                      )}
+                      <h3>{displayVilla.name}</h3>
+                      <p>
+                        {displayVilla.area.split("/")[0]?.trim()} · {displayVilla.bedrooms} bed ·{" "}
+                        {displayVilla.bathrooms} bath · Heatable pool
+                      </p>
+                      {displayVilla.address ? <p>{displayVilla.address}</p> : null}
+                    </div>
+                    <p className="guest-villa-rating">
+                      <Star size={16} weight="fill" aria-hidden />
+                      {displayVilla.rating} <span>{displayVilla.source}</span>
+                    </p>
+                  </div>
+                  <p className="guest-villa-copy">{displayVilla.note}</p>
+                <div className="guest-villa-amenities">
+                  {villaAmenityIcons.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <span key={item.label}>
+                        <Icon size={16} aria-hidden /> {item.label}
+                      </span>
+                    );
+                  })}
+                </div>
+                  <a
+                    href={displayVilla.bookingUrl || "#pinned"}
+                    target={displayVilla.bookingUrl ? "_blank" : undefined}
+                    rel={displayVilla.bookingUrl ? "noopener noreferrer" : undefined}
+                    className="guest-text-link"
+                  >
+                    See Airbnb listing <ArrowRight size={14} aria-hidden />
+                  </a>
+              </>
+            ) : (
+              <p>No villa shortlisted yet. Ask your host to pin the final stay.</p>
+            )}
+          </div>
+        </article>
 
         <section className="guest-family-channel" aria-label="Family trip channel">
           <div className="guest-section-head">
@@ -379,66 +459,6 @@ export function GuestDashboard({
         </nav>
 
         <div className="guest-grid-2">
-          <article className="dashboard-panel guest-villa-panel" id="pinned">
-            <div className="dashboard-panel-header">
-              <h2>Your villa reveal</h2>
-              <a href="#pinned">View details</a>
-            </div>
-            <div className="dashboard-panel-body">
-              {displayVilla ? (
-                <>
-                  <div className="guest-villa-gallery">
-                    <img
-                      className="guest-villa-main"
-                      src={villaPhotos[0]}
-                      alt={displayVilla.name}
-                      loading="lazy"
-                    />
-                    <div className="guest-villa-thumbs">
-                      <img src={villaPhotos[1]} alt="" loading="lazy" />
-                      <img src={villaPhotos[2]} alt="" loading="lazy" />
-                      <span className="guest-villa-more">+12 photos</span>
-                    </div>
-                  </div>
-                  <div className="guest-villa-headline">
-                    <div>
-                      {hasPinnedVilla ? (
-                        <span className="dashboard-pill-top">Top pick</span>
-                      ) : (
-                        <span className="dashboard-pill-top guest-pill-muted">Shortlist preview</span>
-                      )}
-                      <h3>{displayVilla.name}</h3>
-                      <p>
-                        {displayVilla.area.split("/")[0]?.trim()} · {displayVilla.bedrooms} bed · Pool
-                        · Sea view
-                      </p>
-                    </div>
-                    <p className="guest-villa-rating">
-                      <Star size={16} weight="fill" aria-hidden />
-                      {displayVilla.rating} <span>(48 reviews)</span>
-                    </p>
-                  </div>
-                  <p className="guest-villa-copy">{displayVilla.note}</p>
-                  <div className="guest-villa-amenities">
-                    {villaAmenityIcons.map((item) => {
-                      const Icon = item.icon;
-                      return (
-                        <span key={item.label}>
-                          <Icon size={16} aria-hidden /> {item.label}
-                        </span>
-                      );
-                    })}
-                  </div>
-                  <a href="#pinned" className="guest-text-link">
-                    See villa details <ArrowRight size={14} aria-hidden />
-                  </a>
-                </>
-              ) : (
-                <p>No villa shortlisted yet. Ask your host to pin the final stay.</p>
-              )}
-            </div>
-          </article>
-
           <article className="dashboard-panel" id="plan">
             <div className="dashboard-panel-header">
               <h2>Itinerary overview</h2>
@@ -529,6 +549,8 @@ export function GuestDashboard({
           </p>
         </section>
 
+        <GuestStayGuide />
+
         <div className="guest-grid-2 guest-support-grid">
           <article className="dashboard-panel" id="amenities">
             <div className="dashboard-panel-header">
@@ -593,11 +615,6 @@ export function GuestDashboard({
         </div>
 
         <section className="guest-family-memory" aria-label="Family travel note">
-          <div className="guest-memory-orbit" aria-hidden>
-            <span />
-            <span />
-            <span />
-          </div>
           <div>
             <span className="guest-memory-kicker">A little family thread</span>
             <h2>Everyone has one thing they want from this trip.</h2>
@@ -606,6 +623,20 @@ export function GuestDashboard({
               that nobody has to hold the whole holiday in their head.
             </p>
           </div>
+          <ol className="guest-thread" aria-label="Dublin to the villa">
+            <li>
+              <span>Dublin</span>
+              <small>Leave from here</small>
+            </li>
+            <li>
+              <span>Faro</span>
+              <small>Land and transfer</small>
+            </li>
+            <li>
+              <span>Albufeira</span>
+              <small>Villa Sapphire</small>
+            </li>
+          </ol>
           <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="guest-memory-link">
             Tell the family group what matters to you <WhatsappLogo size={16} aria-hidden />
           </a>
