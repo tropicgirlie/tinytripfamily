@@ -458,85 +458,82 @@ export function GuestDashboard({
           })}
         </nav>
 
-        <div className="guest-grid-2">
-          <article className="dashboard-panel" id="plan">
-            <div className="dashboard-panel-header">
-              <h2>Itinerary overview</h2>
-              <a href="#full-itinerary">View full itinerary →</a>
-            </div>
-            <div className="dashboard-panel-body">
-              <div className="guest-itinerary-timeline">
-                {guestItineraryPreview.map((day) => {
-                  const Icon = day.icon;
-                  return (
-                    <div key={day.date} className="guest-itinerary-day">
-                      <span className="guest-itinerary-date">{day.date}</span>
-                      <span className="guest-itinerary-icon">
-                        <Icon size={20} aria-hidden />
-                      </span>
-                      <strong>{day.label}</strong>
-                      <span>{day.sub}</span>
-                    </div>
-                  );
-                })}
-              </div>
-              <p className="guest-itinerary-footer">
-                <UsersThree size={16} aria-hidden />
-                {trip.nights} nights · {trip.guests} travellers
-              </p>
-            </div>
-          </article>
-        </div>
-
-        <section className="dashboard-panel guest-full-itinerary" id="full-itinerary">
-          <div className="dashboard-panel-header">
-            <div>
-              <h2>Full itinerary</h2>
-              <p>Draft family plan for the full Algarve stay. Luana can update it as bookings firm up.</p>
-            </div>
-            <a href="#plan">Back to overview ↑</a>
+        <section className="stay-block guest-plan" id="plan">
+          <div className="stay-block-head">
+            <p>The stay</p>
+            <h2>
+              Itinerary <span>overview</span>
+            </h2>
+            <p>
+              {trip.nights} nights · {trip.guests} travellers. The shape of the trip, before the
+              day-by-day plan.
+            </p>
           </div>
-          <div className="dashboard-panel-body guest-full-itinerary-list">
+          <ol className="guest-plan-days">
+            {guestItineraryPreview.map((day) => {
+              const Icon = day.icon;
+              return (
+                <li key={day.date}>
+                  <span className="guest-plan-date">{day.date}</span>
+                  <Icon size={18} aria-hidden />
+                  <strong>{day.label}</strong>
+                  <span>{day.sub}</span>
+                </li>
+              );
+            })}
+          </ol>
+          <a className="guest-ink-link" href="#full-itinerary">
+            View full itinerary <ArrowRight size={16} aria-hidden />
+          </a>
+        </section>
+
+        <section className="stay-block" id="full-itinerary">
+          <div className="stay-block-head">
+            <p>Day by day</p>
+            <h2>
+              Full <span>itinerary</span>
+            </h2>
+            <p>Draft family plan for the full Algarve stay. Luana can update it as bookings firm up.</p>
+          </div>
+          <ol className="guest-day-list">
             {guestFullItinerary.map((item) => (
-              <article key={`${item.date}-${item.title}`} className="guest-full-itinerary-row">
+              <li key={`${item.date}-${item.title}`}>
                 <time>{item.date}</time>
                 <div>
                   <strong>{item.title}</strong>
                   <p>{item.plan}</p>
                   <span>{item.familyNote}</span>
                 </div>
-              </article>
+              </li>
             ))}
-          </div>
+          </ol>
+          <a className="guest-ink-link" href="#plan">
+            Back to overview
+          </a>
         </section>
 
-        <section className="guest-activities-section" id="activitiesTitle" aria-labelledby="guestActivitiesTitle">
-          <div className="guest-section-head">
-            <div>
-              <h2 id="guestActivitiesTitle">Things to do by age and moment</h2>
-              <p>Researched Algarve ideas for toddler needs, older kids, Christmas and New Year.</p>
-            </div>
+        <section className="stay-block" id="activitiesTitle" aria-labelledby="guestActivitiesTitle">
+          <div className="stay-block-head">
+            <p>Around Albufeira</p>
+            <h2 id="guestActivitiesTitle">
+              Things to <span>do</span>
+            </h2>
+            <p>Researched Algarve ideas for toddler needs, older kids, Christmas and New Year.</p>
           </div>
-          <div className="guest-activity-board">
+          <div className="guest-do-boards">
             {activityBoards.map((board) => (
-              <article key={board.title} className="guest-activity-board-card">
-                <div className="guest-activity-board-head">
+              <article key={board.title}>
+                <div className="guest-do-head">
                   <h3>{board.title}</h3>
                   <p>{board.intro}</p>
                 </div>
-                <div className="guest-activity-list">
+                <div className="guest-do-list">
                   {board.items.map((activity) => (
-                    <article key={activity.name} className="guest-activity-card">
-                      <img src={activity.image} alt="" loading="lazy" />
-                      <span className="guest-activity-badge">{activity.tag}</span>
-                      <button type="button" className="guest-activity-heart" aria-label="Save activity">
-                        <Heart size={18} />
-                      </button>
-                      <div className="guest-activity-body">
-                        <strong>{activity.name}</strong>
-                        <span>{activity.meta}</span>
-                        <p>{activity.note}</p>
-                      </div>
+                    <article key={activity.name}>
+                      <span>{activity.tag}</span>
+                      <strong>{activity.name}</strong>
+                      <em>{activity.meta}</em>
+                      <p>{activity.note}</p>
                     </article>
                   ))}
                 </div>
