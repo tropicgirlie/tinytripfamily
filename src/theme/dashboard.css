@@ -15,7 +15,7 @@
   --dash-sky: #dff4ff;
   --dash-green: #00a99b;
   --dash-red: #ff684d;
-  --dash-sidebar: 248px;
+  --dash-sidebar: 292px;
   --dash-radius: 2px;
   --dash-shadow: 5px 5px 0 #17212b;
   --dash-font: "Atkinson Hyperlegible", "DM Sans", system-ui, sans-serif;
@@ -61,7 +61,7 @@
   display: block;
   width: 100%;
   height: auto;
-  padding: 8px 12px 4px;
+  padding: 6px 8px 2px;
   object-fit: contain;
 }
 
@@ -362,7 +362,7 @@
 }
 
 .host-login-brand .dashboard-brand-logo {
-  width: min(220px, 100%);
+  width: min(260px, calc(100% - 72px));
   flex: none;
 }
 
@@ -1988,6 +1988,10 @@ body.host-view .guest-only {
   .dashboard-sidebar {
     position: static;
     min-height: auto;
+  }
+
+  .dashboard-sidebar .dashboard-brand {
+    width: min(320px, 100%);
   }
 
   .dashboard-grid-3,
