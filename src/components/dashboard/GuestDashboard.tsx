@@ -98,11 +98,9 @@ export function GuestDashboard({
       <div className="guest-main">
         <header className="guest-topbar dashboard-topbar">
           <a className="dashboard-brand" href="#overview">
-            <img src={brand.logo} alt="" />
-            <div className="dashboard-brand-text">
-              <strong>Micheau</strong>
-              <span>Family trip</span>
-            </div>
+            <span className="dashboard-brand-logo">
+              <img src="./assets/micheau-logo.svg" alt="Micheau Family Trip" />
+            </span>
           </a>
           <div className="guest-access-pill" aria-label="Guest access">
             <span>Beta</span>
@@ -123,12 +121,7 @@ export function GuestDashboard({
               <ChatCircle size={20} />
             </a>
             <div className="dashboard-host-profile">
-              <img
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&h=120&q=80"
-                alt=""
-                width={36}
-                height={36}
-              />
+              <img src="./assets/micheau-profile.jpg" alt="" width={36} height={36} />
               <div>
                 <strong>Luana</strong>
               </div>

@@ -259,7 +259,9 @@ export default function App() {
       <main className="host-login-shell">
         <section className="host-login-card" aria-labelledby="hostLoginTitle">
           <div className="host-login-brand">
-            <img src={brand.logo} alt="" />
+            <span className="dashboard-brand-logo">
+              <img src="./assets/micheau-logo.svg" alt="Micheau Family Trip" />
+            </span>
             <span>Beta</span>
           </div>
           <h1 id="hostLoginTitle">Host access</h1>

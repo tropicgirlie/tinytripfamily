@@ -304,11 +304,9 @@ export function HostDashboard({
     <div className="dashboard-app host-clean-app" id="dashboard">
       <aside className="dashboard-sidebar" aria-label="Host navigation">
         <a className="dashboard-brand" href="#dashboard">
-          <img src={brand.logo} alt="" />
-          <div className="dashboard-brand-text">
-            <strong>Micheau</strong>
-            <span>Family trip</span>
-          </div>
+          <span className="dashboard-brand-logo">
+            <img src="./assets/micheau-logo.svg" alt="Micheau Family Trip" />
+          </span>
         </a>
         <nav className="dashboard-nav" aria-label="Main">
           <a href="#host-planning" className="is-active">
@@ -354,7 +352,7 @@ export function HostDashboard({
               <ChatCircle size={20} />
             </button>
             <div className="dashboard-host-profile">
-              <img src={brand.logo} alt="" width={36} height={36} />
+              <img src="./assets/micheau-profile.jpg" alt="" width={36} height={36} />
               <div>
                 <strong>Control page</strong>
               </div>
@@ -367,7 +365,9 @@ export function HostDashboard({
           <div className="dashboard-hero-inner">
             <div>
               <span className="dashboard-hero-badge">Host workspace</span>
-              <h1>Plan the {destination.label} family escape.</h1>
+              <h1>
+                Plan the <span>{destination.label}</span> family escape.
+              </h1>
               <p>
                 Search villas, tune family filters, pin the final choice, then share one clean
                 guest page with the family.
